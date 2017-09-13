@@ -1,0 +1,23 @@
+{
+  "name": "cpfrontend",
+  "version": "0.1.0",
+  "description": "Analytics Platform Control Panel frontend",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ministryofjustice/analytics-platform-control-panel-frontend.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ministryofjustice/analytics-platform-control-panel-frontend/issues"
+  },
+  "homepage": "https://github.com/ministryofjustice/analytics-platform-control-panel-frontend#readme",
+  "dependencies": {
+    "express": "4.15.4",
+    "nunjucks": "3.0.1"
+  }
+}

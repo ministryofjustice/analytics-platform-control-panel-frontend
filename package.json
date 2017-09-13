@@ -2,13 +2,13 @@
   "name": "cpfrontend",
   "version": "0.1.0",
   "description": "Analytics Platform Control Panel frontend",
-  "main": "app.js",
+  "main": "./app/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./app/server.js | bistre"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ministryofjustice/analytics-platform-control-panel-frontend.git"
+    "url": "https://github.com/ministryofjustice/analytics-platform-control-panel-frontend.git"
   },
   "author": "",
   "license": "MIT",
@@ -17,7 +17,11 @@
   },
   "homepage": "https://github.com/ministryofjustice/analytics-platform-control-panel-frontend#readme",
   "dependencies": {
+    "bole": "3.0.2",
     "express": "4.15.4",
     "nunjucks": "3.0.1"
+  },
+  "devDependencies": {
+    "bistre": "1.0.1"
   }
 }

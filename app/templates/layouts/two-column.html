@@ -1,0 +1,31 @@
+{% extends "layouts/base.html" %}
+
+{% block page_title %}
+  {{ page_title }} | Analytics Platform Control Panel
+{% endblock %}
+
+{% block content %}
+
+<main id="content" role="main">
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      <h1 class="heading-xlarge">
+        {{ page_title }}
+      </h1>
+
+      {% block main_column %}{% endblock %}
+
+    </div>
+
+    <div class="column-one-third">
+
+      <div class="demo clearfix">
+        {% block right_column %}{% endblock %}
+      </div>
+
+    </div>
+  </div>
+</main>
+
+{% endblock %}

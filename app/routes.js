@@ -28,3 +28,13 @@ function add_route(app_name) {
     return route;
   };
 }
+
+// static routes
+Object.keys(config.static.paths).forEach(function (pattern) {
+  var source_paths = config.static.paths[pattern];
+
+  source_paths.forEach(function (path) {
+
+    exports.router.use(pattern, express.static(path));
+  });
+});

@@ -1,5 +1,9 @@
-{% extends "base.html" %}
+{% extends "layouts/two-column.html" %}
 
-{% block content %}
+{% set page_title = "Home" %}
+
+{% block main_column %}
 <a href="{{ url_for('users.list') }}">Users</a>
 {% endblock %}
+
+{% block right_column %}&nbsp;{% endblock %}

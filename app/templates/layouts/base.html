@@ -1,0 +1,41 @@
+{% set homepage_url = '/' %}
+{% set logo_link_title = 'Return to sign in' %}
+{% extends "govuk_template.html" %}
+
+{% block head %}
+  {% include "includes/head.html" %}
+{% endblock %}
+
+{% block cookie_message %}
+  <p>{{cookieText | safe }}</p>
+{% endblock %}
+
+{% block proposition_header %}
+
+  <div class="header-proposition">
+    <div class="content">
+      <a href="#proposition-links" class="js-header-toggle menu">Menu</a>
+      <nav id="proposition-menu">
+        <a href="{{ homeUrl }}" id="proposition-name">
+          {% block service_name %}
+            Analytics Platform Control Panel
+          {% endblock %}
+        </a>
+
+        {% include "includes/proposition-links.html" %}
+
+      </nav>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block header_class %}
+  with-proposition
+{% endblock %}
+
+{% block body_end %}
+  {% block scripts %}
+    {% block page_scripts %}{% endblock %}
+  {% endblock %}
+{% endblock %}

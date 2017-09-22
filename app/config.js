@@ -12,9 +12,15 @@ config.log = {
 };
 
 config.apps = [
-  'base'
+  'base',
+  'users'
 ];
 
+config.api = {
+  base_url: process.env.API_URL || 'http://localhost:8000',
+  username: process.env.API_USER,
+  password: process.env.API_PASSWORD
+};
 
 if (PROD) {
   config.express.host = '0.0.0.0';

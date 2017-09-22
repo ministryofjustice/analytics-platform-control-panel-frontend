@@ -4,7 +4,7 @@
   "description": "Analytics Platform Control Panel frontend",
   "main": "./app/server.js",
   "scripts": {
-    "start": "node ./app/server.js | bistre"
+    "start": "nodemon ./app/server.js | bistre"
   },
   "repository": {
     "type": "git",
@@ -20,12 +20,18 @@
     "bole": "3.0.2",
     "dotenv": "^4.0.0",
     "express": "4.15.4",
+    "glob": "^7.1.2",
+    "govuk-elements-sass": "3.0.1",
+    "govuk_frontend_toolkit": "7.0.0",
+    "govuk_template_jinja": "0.22.1",
+    "node-sass": "^4.5.3",
     "nunjucks": "3.0.1",
     "request": "^2.82.0",
     "request-promise": "^4.2.1",
     "request-promise-core": "^1.1.1"
   },
   "devDependencies": {
-    "bistre": "1.0.1"
+    "bistre": "1.0.1",
+    "nodemon": "^1.11.0"
   }
 }

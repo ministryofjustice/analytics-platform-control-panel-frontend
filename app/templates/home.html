@@ -1,6 +1,5 @@
-<!doctype html>
-<html lang="en">
-  <body>
-    Hello from nunjucks
-  </body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+<a href="{{ url_for('users.list', {test: 1}) }}">Users</a>
+{% endblock %}

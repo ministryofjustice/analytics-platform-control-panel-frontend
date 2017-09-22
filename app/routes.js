@@ -1,15 +1,30 @@
+var config = require('./config');
+var log = require('bole')('routes');
 var express = require('express');
 var join = require('path').join;
 
-var router = new express.Router();
+
+exports.router = new express.Router();
+
+exports.routes = [].concat.apply([], config.apps.map(add_app_routes));
 
 
-function home(req, res) {
-  res.render('home.html');
+function add_app_routes(app_name) {
+
+  var routes = join(__dirname, app_name, 'routes.js');
+
+  return require(routes).map(add_route(app_name));
 }
 
 
-router.use(express.static(join(__dirname, '../static')));
-router.get('/', home);
+function add_route(app_name) {
+  return function (route) {
+    route.name = app_name + '.' + route.name;
 
-module.exports = router;
+    log.debug(route.name + ': ' + route.pattern);
+
+    exports.router.all(route.pattern, route.view);
+
+    return route;
+  };
+}

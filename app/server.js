@@ -1,10 +1,7 @@
 var app = require('./index');
 var config = require('./config');
-var bole = require('bole');
+var log = require('bole')('server');
 
-
-bole.output({level: config.log.level, stream: process.stdout});
-var log = bole('server');
 
 log.info('Server process starting');
 

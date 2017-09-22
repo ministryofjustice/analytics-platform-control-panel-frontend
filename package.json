@@ -18,8 +18,12 @@
   "homepage": "https://github.com/ministryofjustice/analytics-platform-control-panel-frontend#readme",
   "dependencies": {
     "bole": "3.0.2",
+    "dotenv": "^4.0.0",
     "express": "4.15.4",
-    "nunjucks": "3.0.1"
+    "nunjucks": "3.0.1",
+    "request": "^2.82.0",
+    "request-promise": "^4.2.1",
+    "request-promise-core": "^1.1.1"
   },
   "devDependencies": {
     "bistre": "1.0.1"

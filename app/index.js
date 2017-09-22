@@ -66,7 +66,7 @@ function build_url(pattern, args) {
 
   var url = pattern.replace(placeholders, matching_argument);
 
-  if (query.length && url.indexOf('?') === -1) {
+  if (Object.keys(query).length && url.indexOf('?') === -1) {
     url += '?';
   }
 

@@ -24,3 +24,8 @@ npm start
 ```
 
 Then you can browse to http://localhost:3000/ in your browser
+
+To run tests, enter
+```sh
+npm test
+```

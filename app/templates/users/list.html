@@ -1,8 +1,8 @@
 {% extends "layouts/two-column.html" %}
 
-{% block main_column %}
+{% set page_title = "Users" %}
 
-<h1>Users</h1>
+{% block main_column %}
 
 <ul>
   {% for user in users.results %}

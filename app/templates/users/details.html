@@ -1,0 +1,12 @@
+{% extends "layouts/two-column.html" %}
+
+{% set page_title = user.username %}
+
+{% block main_column %}
+<p>
+Name: {{ user.name }}
+</p>
+<p>
+Email: {{ user.email }}
+</p>
+{% endblock %}

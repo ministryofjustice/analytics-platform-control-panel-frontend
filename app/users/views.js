@@ -18,7 +18,7 @@ exports.list_users = function (req, res) {
 
 exports.user_details = function (req, res) {
 
-  api.get_user(user_id).then(function (user) {
+  api.get_user(req.params.id).then(function (user) {
 
     res.render('users/details.html', {
       user: user

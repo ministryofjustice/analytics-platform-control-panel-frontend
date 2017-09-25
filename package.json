@@ -4,7 +4,8 @@
   "description": "Analytics Platform Control Panel frontend",
   "main": "./app/server.js",
   "scripts": {
-    "start": "nodemon ./app/server.js | bistre"
+    "start": "nodemon ./app/server.js | bistre",
+    "test": "mocha -C -R list --recursive --use_strict"
   },
   "repository": {
     "type": "git",
@@ -32,6 +33,11 @@
   },
   "devDependencies": {
     "bistre": "1.0.1",
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "chai-spies": "^0.7.1",
+    "mocha": "^3.5.3",
+    "nock": "^9.0.20",
     "nodemon": "^1.11.0"
   }
 }

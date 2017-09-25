@@ -22,14 +22,15 @@ config.apps = [
 config.sass = {
   sources: [
     {
-      file: join(__dirname, 'assets/sass/*.scss'),
+      files: join(__dirname, 'assets/sass/**.scss'),
       includePaths: [
         join(node_modules, 'govuk_frontend_toolkit/stylesheets'),
         join(node_modules, 'govuk_template_jinja/assets/stylesheets'),
         join(node_modules, 'govuk-elements-sass/public/sass')
       ],
       outputStyle: 'expanded',
-      outFile: join(__dirname, '../static/stylesheets/')
+      sourceMap: true,
+      outDir: join(__dirname, '../static/stylesheets/')
     }
   ]
 };

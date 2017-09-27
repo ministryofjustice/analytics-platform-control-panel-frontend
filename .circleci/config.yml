@@ -31,7 +31,10 @@ jobs:
       - attach_workspace:
           at: .
       - setup_remote_docker
-      - run: ls -al
+      - run:
+          name: Install dependencies
+          command: |
+            apk update && apk add --no-progress curl curl-dev
       - restore_cache:
           keys:
             - image-cache-{{ .Branch }}
@@ -60,13 +63,13 @@ jobs:
           command: |
             docker login -u ${QUAY_USERNAME} -p ${QUAY_PASSWORD} quay.io
             docker tag app "quay.io/mojanalytics/control-panel-frontend:${CIRCLE_BRANCH}"
-            docker push "quay.io/mojanalytics/control-panel:${CIRCLE_BRANCH}"
+            docker push "quay.io/mojanalytics/control-panel-frontend:${CIRCLE_BRANCH}"
       - deploy:
           name: Deploy to Kubernetes
           command: |
-            curl ${JENKINS_URL}/job/control-panel-frontend/job/${CIRCLE_BRANCH}/buildWithParamaters \
+            curl ${JENKINS_URL}/job/control-panel/job/frontend/buildWithParameters \
               --data token=${JENKINS_JOB_TRIGGER_TOKEN} \
-              --data BRANCH=${CIRCLE_BRANCH} \
+              --data BRANCH_NAME=${CIRCLE_BRANCH} \
               --user ${JENKINS_USER}:${JENKINS_TOKEN}
 workflows:
   version: 2

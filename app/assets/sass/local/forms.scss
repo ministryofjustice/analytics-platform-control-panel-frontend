@@ -1,0 +1,13 @@
+.form-label,
+.form-control,
+.form-hint {
+  @include core-16;
+}
+
+.form-control-1 {
+  width: 100%;
+
+  @include media(tablet) {
+    width: 100%;
+  }
+}

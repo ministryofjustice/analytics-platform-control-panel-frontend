@@ -1,0 +1,8 @@
+.button-secondary {
+  @include button($grey-3);
+}
+
+.button,
+.button-secondary {
+  @include core-16;
+}

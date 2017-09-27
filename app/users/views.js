@@ -20,7 +20,12 @@ exports.user_details = function (req, res) {
 
   api.get_user(req.params.id).then(function (user) {
 
+    user.apps = [
+      {'name': 'Test App', 'role': 0, 'id': 1}
+    ];
+
     res.render('users/details.html', {
+      signedInUser: (user.username == 'andy'),
       user: user
     });
 

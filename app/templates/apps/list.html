@@ -1,0 +1,13 @@
+{% extends "layouts/two-column.html" %}
+
+{% set page_title = "Apps" %}
+
+{% block main_column %}
+
+<ul>
+  {% for app in apps.results %}
+  <li><a href="{{ url_for('apps.details', {id: app.id}) }}">{{ app.name }}</a></li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

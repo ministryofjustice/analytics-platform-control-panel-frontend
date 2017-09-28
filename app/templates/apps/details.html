@@ -1,0 +1,9 @@
+{% extends "layouts/two-column.html" %}
+
+{% set page_title = app.name %}
+
+{% block main_column %}
+<p>
+Github URL: {{ app.repo_url }}
+</p>
+{% endblock %}

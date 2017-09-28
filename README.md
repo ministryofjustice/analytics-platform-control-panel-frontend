@@ -9,13 +9,26 @@ Install dependencies
 npm install
 ```
 
-The Control Panel communicates with the API and requires username and password
-environment variables to be set. You can set these directly with `export
+**Environment variables**
+
+You can set these directly with `export
 API_USER=<username>` or add them to a `.env` file, which will be automatically
 used to setup the environment when the Control Panel starts.
+
+*Required*
 ```sh
 API_USER=<username>
 API_PASSWORD=<password>
+```
+
+*Optional*
+```sh
+API_URL="http://localhost:8000"  # Base URL of the control panel API
+ENV=""  # Environment
+EXPRESS_HOST=127.0.0.1  # Express bind host
+EXPRESS_PORT=3000  # Express bind port
+LOG_LEVEL="debug"
+NODE_RESTART=1  # restart the app when file changes are detected
 ```
 
 To run the webapp, enter the following:

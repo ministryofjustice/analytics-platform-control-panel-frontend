@@ -4,8 +4,9 @@
   "description": "Analytics Platform Control Panel frontend",
   "main": "./app/server.js",
   "scripts": {
-    "start": "nodemon ./app/server.js | bistre",
-    "test": "mocha -C -R list --recursive --use_strict"
+    "start": "$([ $NODE_RESTART ] && echo nodemon || echo node) ./app/server.js | bistre",
+    "test": "mocha -C -R list --recursive --use_strict",
+    "collect-static": "node ./bin/collect-static.js | bistre"
   },
   "repository": {
     "type": "git",

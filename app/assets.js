@@ -14,17 +14,31 @@ exports.compile_sass = function () {
 
     glob(options.files).then(function (files) {
 
-      fs.mkdirAsync(options.outDir)
-
-        .finally(
-          compile_all(files, options))
-
-        .catch(function (error) {
-          // do nothing
-        });
+      mkdirp(options.outDir).then(compile_all(files, options));
 
     });
   });
+}
+
+
+function mkdirp(dir) {
+
+  return new Promise(function (resolve, reject) {
+
+    fs.mkdirAsync(dir)
+      .then(resolve)
+      .catch(function (error) {
+        if (error.code == 'ENOENT') {
+          mkdirp(path.dirname(dir))
+            .then(function () {
+              mkdirp(dir).then(resolve)
+            })
+            .catch(function (error) { reject(error); });
+        }
+      });
+
+  });
+
 }
 
 

@@ -16,8 +16,15 @@ config.log = {
 
 config.apps = [
   'base',
+  'apps',
   'users'
 ];
+
+config.session = {
+  secret: process.env.COOKIE_SECRET || 'shh-its-a-secret',
+  resave: true,
+  saveUninitialized: true
+};
 
 config.sass = {
   sources: [

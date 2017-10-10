@@ -1,19 +1,23 @@
 var api = require('../../lib/api-client');
 var bole = require('bole');
+var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 
 var log = bole('apps-views');
 
 
-exports.list_apps = function (req, res) {
+exports.list_apps = [
+  ensureLoggedIn('/login'),
+  function (req, res) {
 
-  api.list_apps({members: [current_user]}).then(function (apps) {
+    api.list_apps().then(function (apps) {
 
-    res.render('apps/list.html', {
-      apps: apps
+      res.render('apps/list.html', {
+        apps: apps
+      });
+
     });
-
-  });
-};
+  }
+];
 
 
 exports.list_user_apps = function (req, res) {

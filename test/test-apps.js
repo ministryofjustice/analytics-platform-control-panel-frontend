@@ -3,7 +3,7 @@ require('./conftest.js');
 var assert = require('chai').assert;
 var nock = require('nock');
 
-var api = require('../lib/api-client.js');
+var apps = require('../lib/api-client.js').apps;
 
 
 var mock_api = nock('http://localhost:8000');
@@ -20,7 +20,7 @@ describe('Apps API', function () {
         .get('/apps')
         .reply(200, response);
 
-      assert.eventually.deepEqual(api.list_apps(), response);
+      assert.eventually.deepEqual(apps.list(), response);
     });
 
   });
@@ -34,7 +34,7 @@ describe('Apps API', function () {
         .post('/apps', JSON.stringify({}))
         .reply(400, {'error': 'No app data provided'});
 
-      assert.isRejected(api.add_app({}));
+      assert.isRejected(apps.add({}));
     });
 
     it('throws an error if incomplete app data is provided', function () {
@@ -44,7 +44,7 @@ describe('Apps API', function () {
         .post('/apps', JSON.stringify(incomplete_app_data))
         .reply(400, {'error': 'Incomplete app data provided'});
 
-      assert.isRejected(api.add_app(incomplete_app_data));
+      assert.isRejected(apps.add(incomplete_app_data));
     });
 
     it('returns a app id after creating the app', function () {
@@ -69,7 +69,7 @@ describe('Apps API', function () {
         .post('/apps', JSON.stringify(test_app))
         .reply(201, response);
 
-      assert.eventually.propertyVal(api.add_app(test_app), 'id', 1);
+      assert.eventually.propertyVal(apps.add(test_app), 'id', 1);
 
     });
 

@@ -3,7 +3,7 @@ require('./conftest.js');
 var assert = require('chai').assert;
 var nock = require('nock');
 
-var api = require('../lib/api-client.js');
+var users = require('../lib/api-client.js').users;
 
 
 var mock_api = nock('http://localhost:8000');
@@ -20,7 +20,7 @@ describe('Users API', function () {
         .get('/users')
         .reply(200, response);
 
-      assert.eventually.deepEqual(api.list_users(), response);
+      assert.eventually.deepEqual(users.list(), response);
     });
 
   });
@@ -34,7 +34,7 @@ describe('Users API', function () {
         .post('/users', JSON.stringify({}))
         .reply(400, {'error': 'No user data provided'});
 
-      assert.isRejected(api.add_user({}));
+      assert.isRejected(users.add({}));
     });
 
     it('throws an error if incomplete user data is provided', function () {
@@ -44,7 +44,7 @@ describe('Users API', function () {
         .post('/users', JSON.stringify(incomplete_user_data))
         .reply(400, {'error': 'Incomplete user data provided'});
 
-      assert.isRejected(api.add_user(incomplete_user_data));
+      assert.isRejected(users.add(incomplete_user_data));
     });
 
     it('returns a user id after creating the user', function () {
@@ -66,7 +66,7 @@ describe('Users API', function () {
         .post('/users', JSON.stringify(test_user))
         .reply(201, response);
 
-      assert.eventually.propertyVal(api.add_user(test_user), 'id', 1);
+      assert.eventually.propertyVal(users.add(test_user), 'id', 1);
 
     });
 

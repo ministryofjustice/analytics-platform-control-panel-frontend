@@ -4,7 +4,7 @@
   "description": "Analytics Platform Control Panel frontend",
   "main": "./app/server.js",
   "scripts": {
-    "start": "$([ $NODE_RESTART ] && echo nodemon || echo node) ./app/server.js | bistre",
+    "start": "$([ $NODE_RESTART == 0 ] && echo node || echo nodemon ) ./app/server.js | bistre",
     "test": "mocha -C -R list --recursive --use_strict",
     "collect-static": "node ./bin/collect-static.js | bistre"
   },

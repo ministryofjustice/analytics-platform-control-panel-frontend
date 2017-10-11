@@ -3,17 +3,7 @@
 {% set page_title = "Home" %}
 
 {% block main_column %}
-<a href="{{ url_for('apps.list') }}">Apps</a>
 <a href="{{ url_for('users.list') }}">Users</a>
-{% endblock %}
-
-{% block right_column %}
-{% if session.passport.user %}
-Hello, {{ session.passport.user.name }}
-<a href="{{ url_for('base.logout') }}">Logout</a>
-{% else %}
-<button id="login">Login</button>
-{% endif %}
 {% endblock %}
 
 {% block page_scripts %}
@@ -31,11 +21,7 @@ function login() {
   });
 }
 
-(function () {
-
-  document.getElementById('login').addEventListener('click', login, false);
-
-})();
+(function () { login(); })();
 
 </script>
 {% endblock %}

@@ -1,0 +1,6 @@
+{% if session.passport.user %}
+<ul id="proposition-links">
+  <li><a href="{{ url_for('base.home') }}">Signed in as {{ session.passport.user.name }}</a></li>
+  <li><a href="{{ url_for('base.logout') }}">Sign out</a></li>
+</ul>
+{% endif %}

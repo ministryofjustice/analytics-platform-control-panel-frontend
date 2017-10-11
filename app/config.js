@@ -42,12 +42,22 @@ config.sass = {
   ]
 };
 
+config.js = {
+  sourceFiles: join(__dirname, 'assets/javascripts/**/*.js'),
+  ignorePaths: [
+    join(__dirname, 'assets/javascripts/vendor/**/*')
+  ],
+  outDir: join(__dirname, '../static/javascripts/'),
+  filename: 'app.js'
+};
+
 config.static = {
   paths: {
     '/static': [
       join(__dirname, '../static'),
       join(node_modules, 'govuk_template_jinja/assets'),
-      join(node_modules, 'govuk_frontend_toolkit')
+      join(node_modules, 'govuk_frontend_toolkit'),
+      join(node_modules, 'jquery/dist')
     ],
     '/static/images/icons': [
       join(node_modules, 'govuk_frontend_toolkit/images')

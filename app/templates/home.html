@@ -1,20 +1,23 @@
 {% extends "layouts/two-column.html" %}
 
-{% set page_title = "Home" %}
+{% set page_title = "Hello " + session.passport.user.name if session.passport.user else "Sign in" %}
 
 {% block main_column %}
 <a href="{{ url_for('apps.list') }}">Apps</a>
 <a href="{{ url_for('users.list') }}">Users</a>
+
+<p>user.id: {{ user.id }}</p>
+{% if session.passport.user %}
+{% for key, value in session.passport.user %}
+<p>{{ key }}: {{ value }}</p>
+{% endfor %}
+<a href="{{ url_for('base.home') }}" class="button button-secondary">Dashboard</a>
+{% else %}
+<a href="{{ url_for('base.login') }}" class="button" id="js-login">Sign in with Auth0</a>
+{% endif %}
+
 {% endblock %}
 
-{% block right_column %}
-{% if session.passport.user %}
-Hello, {{ session.passport.user.name }}
-<a href="{{ url_for('base.logout') }}">Logout</a>
-{% else %}
-<button id="login">Login</button>
-{% endif %}
-{% endblock %}
 
 {% block page_scripts %}
 <script src="https://cdn.auth0.com/js/lock-9.min.js"></script>
@@ -33,7 +36,7 @@ function login() {
 
 (function () {
 
-  document.getElementById('login').addEventListener('click', login, false);
+  document.getElementById('js-login').addEventListener('click', login, false);
 
 })();
 

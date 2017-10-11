@@ -1,5 +1,5 @@
-var bole = require('bole');
 var passport = require('passport');
+
 
 exports.home = function (req, res) {
   res.render('home.html', {

@@ -58,4 +58,4 @@ typings/
 .env
 
 # generated assets
-static/stylesheets/
+static/

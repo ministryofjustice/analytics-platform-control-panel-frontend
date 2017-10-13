@@ -1,42 +1,25 @@
-{% extends "layouts/two-column.html" %}
+{% extends "layouts/base.html" %}
 
 {% set page_title = "Hello " + session.passport.user.name if session.passport.user else "Sign in" %}
 
-{% block main_column %}
-<!-- <a href="{{ url_for('apps.list') }}">Apps</a>
-<a href="{{ url_for('users.list') }}">Users</a> -->
+{% block content %}
 
-<!-- <p>user.id: {{ user.id }}</p> -->
-{% if session.passport.user %}
-<a href="{{ url_for('base.home') }}" class="button button-secondary">Dashboard</a>
-{% for key, value in session.passport.user %}
-<p>{{ key }}: {{ value }}</p>
-{% endfor %}
-{% else %}
+<main id="content" role="main">
+  <!-- <a href="{{ url_for('apps.list') }}">Apps</a>
+  <a href="{{ url_for('users.list') }}">Users</a> -->
 
-<div id="js-login-container"></div>
-<script src="https://cdn.auth0.com/js/lock-9.min.js"></script>
-<script>
+  <!-- <p>user.id: {{ user.id }}</p> -->
+  {% if session.passport.user %}
+  <a href="{{ url_for('base.home') }}" class="button button-secondary">Dashboard</a>
+  {% for key, value in session.passport.user %}
+  <p>{{ key }}: {{ value }}</p>
+  {% endfor %}
+  {% else %}
 
-function renderAuth0() {
-  var lock = new Auth0Lock("{{env.AUTH0_CLIENT_ID}}", "{{env.AUTH0_DOMAIN}}");
-  lock.show({
-    callbackURL: "{{env.AUTH0_CALLBACK_URL}}",
-    responseType: "code",
-    authParams: {
-      scope: "openid offline_access",
-    },
-    container: 'js-login-container'
-  });
-}
+  <div class="login-container" id="js-login-container" data-auth0-clientid="{{env.AUTH0_CLIENT_ID}}" data-auth0-domain="{{env.AUTH0_DOMAIN}}" data-auth0-callbackurl="{{env.AUTH0_CALLBACK_URL}}"></div>
 
-(function () {
+  {% endif %}
 
-  renderAuth0();
-
-})();
-</script>
-
-{% endif %}
+</main>
 
 {% endblock %}

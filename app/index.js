@@ -16,6 +16,7 @@ app.set('views', __dirname);
 
 if (process.env.ENV !== 'prod') {
   assets.compile_sass();
+  assets.compile_js();
 }
 
 nunjucks.configure(join(__dirname, 'templates'), {

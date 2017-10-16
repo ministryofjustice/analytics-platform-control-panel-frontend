@@ -6,6 +6,7 @@ var Promise = require('bluebird');
 var fs = Promise.promisifyAll(require('fs'));
 var glob = Promise.promisify(require('glob').glob);
 var render = Promise.promisify(require('node-sass').render);
+var concatfiles = require('concat-files');
 
 
 exports.compile_sass = function () {
@@ -20,6 +21,24 @@ exports.compile_sass = function () {
   });
 }
 
+exports.compile_js = function () {
+
+    glob(config.js.sourceFiles, {'ignore': config.js.ignorePaths}).then(function (files) {
+
+      mkdirp(config.js.outDir).then(concat_js(files));
+
+    });
+};
+
+function concat_js (files) {
+  var outFile = [config.js.outDir, config.js.filename].join('');
+
+  log.info(
+    'compiling', path.relative(path.dirname(__dirname), config.js.sourceFiles),
+    '->', path.relative(path.dirname(__dirname), outFile));
+
+  concatfiles(files, outFile);
+}
 
 function mkdirp(dir) {
 

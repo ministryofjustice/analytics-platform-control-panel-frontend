@@ -44,7 +44,7 @@
           {% for app in user.apps %}
             <tr>
               <td>
-                <a href="/apps/show/{{ app.id }}">{{ app.name }}</a>
+                <a href="/apps/{{ app.id }}">{{ app.name }}</a>
               </td>
               <td>
                 {% if app.role == 0 %}

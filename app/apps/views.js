@@ -40,5 +40,48 @@ exports.app_details = function (req, res) {
       app: app
     });
 
+  }).catch(function (err) {
+
+    var dummyUsers = [
+        {
+          id: 'github|123456',
+          name: 'Harry Pierce',
+          admin: true // probably would be role: <integer> or something?
+        },
+        {
+          id: 'github|234567',
+          name: 'Tom Quinn',
+          admin: false
+        },
+        {
+          id: 'github|345678',
+          name: 'Zoe Reynolds',
+          admin: true
+        }
+      ],
+      dummyBuckets = [
+        {
+          id: 1,
+          name: 'dev-crest-optical-filtered'
+        }
+      ],
+      app = {
+        name: 'That Dummy App',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec ligula mollis, vestibulum mi eget, finibus lorem. Nulla ornare velit.',
+        repo_url: 'https://github.com/org-dummy-org/repo-dummy-repo',
+        apps3buckets: [
+          // array of numbers?
+        ],
+        userapps: [
+          // no idea - I'd have expected app users maybe?
+        ],
+        users: dummyUsers,
+        buckets: dummyBuckets
+      };
+
+    res.render('apps/details.html', {
+      app: app
+    });
+
   });
 };

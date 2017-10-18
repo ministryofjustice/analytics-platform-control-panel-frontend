@@ -1,19 +1,19 @@
 {% extends "layouts/base.html" %}
 
-{% set page_title = "Hello " + session.passport.user.name if session.passport.user else "Sign in" %}
+{% set page_title = "Hello " + req.user.name if req.user else "Sign in" %}
 
 {% block content %}
 
 <main id="content" role="main">
-  <!-- <a href="{{ url_for('apps.list') }}">Apps</a>
-  <a href="{{ url_for('users.list') }}">Users</a> -->
 
-  <!-- <p>user.id: {{ user.id }}</p> -->
-  {% if session.passport.user %}
+  {% if req.user %}
   <a href="{{ url_for('base.home') }}" class="button button-secondary">Dashboard</a>
-  {% for key, value in session.passport.user %}
-  <p>{{ key }}: {{ value }}</p>
-  {% endfor %}
+  {% if error %}
+    <p>{{ error }}</p>
+  {% else %}
+    {{ user | dump | safe }}
+  {% endif %}
+
   {% else %}
 
   <div class="login-container" id="js-login-container" data-auth0-clientid="{{env.AUTH0_CLIENT_ID}}" data-auth0-domain="{{env.AUTH0_DOMAIN}}" data-auth0-callbackurl="{{env.AUTH0_CALLBACK_URL}}"></div>

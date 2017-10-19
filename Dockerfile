@@ -16,6 +16,7 @@ RUN npm run-script collect-static
 ADD static static/
 
 ENV EXPRESS_HOST "0.0.0.0"
+ENV NODE_RESTART "0"
 
 EXPOSE 3000
 

@@ -39,3 +39,8 @@ Object.keys(config.static.paths).forEach(function (pattern) {
     exports.router.use(pattern, express.static(path));
   });
 });
+
+
+exports.router.use(function (req, res) {
+  res.status(404).render('errors/not-found.html');
+});

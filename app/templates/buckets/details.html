@@ -4,6 +4,6 @@
 
 {% block main_column %}
 
-<p>{{ bucket | dump | safe }}</p>
+<pre>{{ bucket | dump(2) | safe }}</pre>
 
 {% endblock %}

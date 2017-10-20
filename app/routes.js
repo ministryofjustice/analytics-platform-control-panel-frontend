@@ -6,7 +6,8 @@ var join = require('path').join;
 
 exports.router = new express.Router();
 
-exports.routes = [].concat.apply([], config.apps.map(add_app_routes));
+var routes = [].concat.apply([], config.apps.map(add_app_routes));
+exports.url_for = require('../lib/url_for')(routes);
 
 
 function add_app_routes(app_name) {

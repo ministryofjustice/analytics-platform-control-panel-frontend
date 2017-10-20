@@ -17,7 +17,8 @@ config.log = {
 config.apps = [
   'base',
   'apps',
-  'users'
+  'users',
+  'buckets'
 ];
 
 config.session = {

@@ -1,0 +1,9 @@
+{% extends "layouts/one-column.html" %}
+
+{% set page_title = "Bucket: " + bucket.name %}
+
+{% block main_column %}
+
+<p>{{ bucket | dump | safe }}</p>
+
+{% endblock %}

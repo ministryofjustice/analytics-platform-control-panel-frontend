@@ -15,6 +15,11 @@ services:
       AUTH0_CALLBACK_URL: "http://localhost:3000/callback"
       EXPRESS_HOST: "0.0.0.0"
       API_URL: "http://api:8000"
+      NODE_RESTART: "1"
+    volumes:
+      - ./app:/home/cpanel/app
+      - ./lib:/home/cpanel/lib
+      - ./static:/home/cpanel/static
   api:
     image: "quay.io/mojanalytics/control-panel:api"
     ports:

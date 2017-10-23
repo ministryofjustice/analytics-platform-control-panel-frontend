@@ -1,4 +1,4 @@
-var api = require('../../lib/api-client');
+var api = require('../api-client');
 var passport = require('passport');
 var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 

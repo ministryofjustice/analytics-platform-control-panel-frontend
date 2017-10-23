@@ -45,7 +45,7 @@
 {% if app.buckets.length %}
   <ul class="list list-bullet">
     {% for bucket in app.buckets %}
-      <li><a href="/buckets/show/{{ bucket.id }}">{{ bucket.name }}</a></li>
+      <li><a href="/buckets/{{ bucket.id }}">{{ bucket.name }}</a></li>
     {% endfor %}
   </ul>
 {% else %}

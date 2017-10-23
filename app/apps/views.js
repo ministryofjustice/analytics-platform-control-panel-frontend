@@ -62,7 +62,7 @@ exports.app_details = function (req, res) {
       dummyBuckets = [
         {
           id: 1,
-          name: 'dev-crest-optical-filtered'
+          name: 'dev-dummy-bucket'
         }
       ],
       app = {

@@ -21,6 +21,7 @@ exports.home = [
 exports.auth_callback = [
   passport.authenticate('auth0-oidc'),
   function (req, res) {
+    api.set_token(req.user.id_token);
     res.redirect(req.session.returnTo || '/');
   }
 ];
@@ -34,5 +35,6 @@ exports.login = function (req, res) {
 
 exports.logout = function (req, res) {
   req.logout();
+  api.unset_token();
   res.redirect('/');
 };

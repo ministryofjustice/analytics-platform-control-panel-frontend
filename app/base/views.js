@@ -15,7 +15,7 @@ exports.home = function (req, res) {
       .catch(function (error) { render({'error': error}); });
 
   } else {
-    render({'user': {}});
+    res.redirect('/login');
   }
 };
 

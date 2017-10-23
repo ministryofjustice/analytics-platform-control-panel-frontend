@@ -8,7 +8,8 @@
   {% if error %}
     <p>{{ error }}</p>
   {% else %}
-    <p>{{ current_user | dump | safe }}</p>
+    <p><a href="{{ url_for('apps.new') }}" class="button button-secondary">Create new app</a></p>
+    {{ current_user | dump | safe }}
   {% endif %}
 
 {% endblock %}

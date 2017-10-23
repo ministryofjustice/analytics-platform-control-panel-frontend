@@ -1,0 +1,77 @@
+{% extends "layouts/one-column.html" %}
+
+{% set page_title = "Create new app" %}
+
+{% block main_column %}
+
+<form action="/apps/create" method="post">
+
+  <div class="form-group">
+    <label for="name" class="form-label">Name</label>
+    <input class="form-control" type="text" id="name" name="name">
+  </div>
+
+  <div class="form-group">
+    <label for="description" class="form-label">
+      Description
+      <span class="form-hint">Optional</span>
+    </label>
+    <textarea class="form-control" name="description" id="description" cols="30" rows="10"></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="repoUrl" class="form-label">
+      Github repo url
+      <span class="form-hint">e.g. https://github.com/something-org/lorem-fantastic-app</span>
+    </label>
+    <input class="form-control" type="text" id="repoUrl" name="repoUrl">
+  </div>
+
+  <div class="form-group">
+
+    <fieldset>
+      <h2 class="heading-medium">Attach a datasource (S3 bucket)</h2>
+      <p>Attach an existing bucket to your app, or create a new bucket. This can also be done later.</p>
+      <p>Additional buckets can also be attached after your app is created.</p>
+      <div class="multiple-choice" data-target="new-app-datasource-create-new-source">
+        <input type="radio" id="new-app-datasource-create" name="new-app-datasource" value="create">
+        <label for="new-app-datasource-create">Create a new datasource</label>
+      </div>
+      <div class="panel panel-border-narrow js-hidden" id="new-app-datasource-create-new-source">
+        <p>This can be populated with data later.</p>
+        <label class="form-label" for="new-datasource-name">
+          App data source (bucket) name
+          <span class="form-hint">60 chars max, only lowercase letters, numbers, periods and hyphens, auto-prefixed with "{{ prefix }}"</span>
+        </label>
+        <input class="form-control" name="new-datasource-name" type="text" id="new-datasource-name" value="{{ prefix }}" data-prefix="{{ prefix }}" pattern="[a-z0-9.-]{1,60}" maxlength="60">
+      </div>
+
+      <div class="multiple-choice" data-target="new-app-datasource-existing-source">
+        <input type="radio" id="new-app-datasource-select" name="new-app-datasource" value="select">
+        <label for="new-app-datasource-select">Attach an existing app data source</label>
+      </div>
+      <div class="panel panel-border-narrow js-hidden" id="new-app-datasource-existing-source">
+        <label class="form-label" for="select-existing-datasource">Select app data source</label>
+        <select name="select-existing-datasource" id="select-existing-datasource" class="form-control">
+          <option value="">Select</option>
+          {% for bucket in buckets %}
+            <option value="{{ bucket.id }}">{{ bucket.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="multiple-choice">
+        <input type="radio" id="new-app-datasource-later" name="new-app-datasource" value="later">
+        <label for="new-app-datasource-later">Do this later</label>
+      </div>
+    </fieldset>
+
+  </div>
+
+  <div class="form-group">
+    <input type="submit" class="button button-secondary" value="Create">
+  </div>
+
+</form>
+
+{% endblock %}

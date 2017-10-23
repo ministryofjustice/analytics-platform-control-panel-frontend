@@ -2,6 +2,43 @@ var api = require('../api-client');
 var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 
 
+exports.new_app = [
+
+  ensureLoggedIn('/login'),
+
+  function (req, res) {
+
+    res.render('apps/new.html', {
+      prefix: 'dev-',
+      buckets: [
+        {
+          id: 1,
+          name: 'dev-dummy-bucket1'
+        },
+        {
+          id: 2,
+          name: 'dev-dummy-bucket2'
+        },
+        {
+          id: 3,
+          name: 'dev-dummy-bucket3'
+        },
+        {
+          id: 4,
+          name: 'dev-dummy-bucket4'
+        },
+        {
+          id: 5,
+          name: 'dev-dummy-bucket5'
+        },
+      ]
+    });
+
+  }
+
+];
+
+
 exports.list_apps = [
   ensureLoggedIn('/'),
   function (req, res, next) {

@@ -6,14 +6,12 @@ var url = require('url');
 
 module.exports = (function () {
 
-  var token = null;
+  var token = 'invalid token';
 
   function api_request(options) {
-    var response_promise = request(override_defaults(options));
-    response_promise.catch(function (error) {
-      log.error(error.name, error.message);
+    return request(override_defaults(options)).catch(function (error) {
+      return Promise.reject(new Error('API error: ' + error.message));
     });
-    return response_promise;
   }
 
 
@@ -51,8 +49,12 @@ module.exports = (function () {
 
   var api = {};
 
-  api.authenticate = function (jwt) {
+  api.set_token = function (jwt) {
     token = jwt;
+  };
+
+  api.unset_token = function () {
+    token = 'invalid token';
   };
 
   api.list_users = function () {

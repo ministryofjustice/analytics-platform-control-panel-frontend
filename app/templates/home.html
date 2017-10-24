@@ -1,6 +1,6 @@
 {% extends "layouts/one-column.html" %}
 
-{% set page_title = "Hello " + ( user.name if user.name ) %}
+{% set page_title = "Hello " + ( current_user.name if current_user ) %}
 
 {% block main_column %}
 
@@ -8,7 +8,7 @@
   {% if error %}
     <p>{{ error }}</p>
   {% else %}
-    {{ user | dump | safe }}
+    <p>{{ current_user | dump | safe }}</p>
   {% endif %}
 
 {% endblock %}

@@ -1,25 +1,14 @@
-{% extends "layouts/base.html" %}
+{% extends "layouts/one-column.html" %}
 
-{% set page_title = "Hello " + req.user.name if req.user else "Sign in" %}
+{% set page_title = "Hello " + ( current_user.name if current_user ) %}
 
-{% block content %}
+{% block main_column %}
 
-<main id="content" role="main">
-
-  {% if req.user %}
   <a href="{{ url_for('base.home') }}" class="button button-secondary">Dashboard</a>
   {% if error %}
     <p>{{ error }}</p>
   {% else %}
-    {{ user | dump | safe }}
+    <p>{{ current_user | dump | safe }}</p>
   {% endif %}
-
-  {% else %}
-
-  <div class="login-container" id="js-login-container" data-auth0-clientid="{{env.AUTH0_CLIENT_ID}}" data-auth0-domain="{{env.AUTH0_DOMAIN}}" data-auth0-callbackurl="{{env.AUTH0_CALLBACK_URL}}"></div>
-
-  {% endif %}
-
-</main>
 
 {% endblock %}

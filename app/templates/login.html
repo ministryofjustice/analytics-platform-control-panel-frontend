@@ -1,0 +1,11 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+
+  <main id="content" role="main">
+
+    <div class="login-container" id="js-login-container" data-auth0-clientid="{{env.AUTH0_CLIENT_ID}}" data-auth0-domain="{{env.AUTH0_DOMAIN}}" data-auth0-callbackurl="{{env.AUTH0_CALLBACK_URL}}"></div>
+
+  </main>
+
+{% endblock %}

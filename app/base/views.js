@@ -1,23 +1,22 @@
 var api = require('../../lib/api-client');
 var passport = require('passport');
+var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 
 
-exports.home = function (req, res) {
+exports.home = [
+  ensureLoggedIn('/login'),
+  function (req, res) {
+    function render(context) {
+      res.render('home.html', context);
+    }
 
-  function render(context) {
-    res.render('home.html', context);
-  }
-
-  if (req.user) {
     api.authenticate(req.user.id_token);
     api.users.get(req.user.sub)
       .then(function (user) { render({'user': user}); })
       .catch(function (error) { render({'error': error}); });
-
-  } else {
-    render({'user': {}});
   }
-};
+];
+
 
 exports.auth_callback = [
   passport.authenticate('auth0-oidc'),

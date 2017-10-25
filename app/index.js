@@ -9,10 +9,11 @@ var Strategy = require('passport-auth0-openidconnect').Strategy;
 var assets = require('./assets');
 
 
-bole.output({level: config.log.level, stream: process.stdout});
-
 var app = express();
 app.set('views', __dirname);
+
+bole.output({level: config.log.level, stream: process.stdout});
+app.use(require('morgan')('combined'));
 
 if (process.env.ENV !== 'prod') {
   assets.compile_sass();

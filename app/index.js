@@ -66,6 +66,6 @@ app.use(require('./errors'));
 
 app.locals.asset_path = '/static/';
 
-app.locals.url_for = require('../lib/url_for')(routes.routes);
+app.locals.url_for = routes.url_for;
 
 module.exports = app;

@@ -18,8 +18,8 @@ services:
       NODE_RESTART: "1"
     volumes:
       - ./app:/home/cpanel/app
-      - ./lib:/home/cpanel/lib
       - ./static:/home/cpanel/static
+      - ./test:/home/cpanel/test
   api:
     image: "quay.io/mojanalytics/control-panel:api"
     ports:
@@ -31,12 +31,14 @@ services:
     env_file:
       - .env
     environment:
-      ALLOWED_HOSTS: "*"
-      DB_HOST: "db"
-      DB_NAME: "controlpanel"
-      DB_USER: "controlpanel"
-      DEBUG: "True"
-      DJANGO_SETTINGS_MODULE: "control_panel_api.settings"
+      - ALLOWED_HOSTS=*
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - DB_HOST=db
+      - DB_NAME=controlpanel
+      - DB_USER=controlpanel
+      - DEBUG=True
+      - DJANGO_SETTINGS_MODULE=control_panel_api.settings
   db:
     image: "circleci/postgres:9.6.2"
     environment:

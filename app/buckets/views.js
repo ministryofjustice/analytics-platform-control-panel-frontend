@@ -1,4 +1,4 @@
-var api = require('../../lib/api-client');
+var api = require('../api-client');
 var bole = require('bole');
 
 var log = bole('buckets-views');

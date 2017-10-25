@@ -1,9 +1,8 @@
 "use strict";
-require('./conftest.js');
 var assert = require('chai').assert;
 var nock = require('nock');
 
-var buckets = require('../lib/api-client.js').buckets;
+var buckets = require('../app/api-client.js').buckets;
 
 
 var mock_api = nock('http://localhost:8000');
@@ -20,9 +19,9 @@ describe('buckets API', function () {
         .get('/s3buckets')
         .reply(200, response);
 
-      assert.eventually.deepEqual(buckets.list(), response);
+      return buckets.list()
+        .then(function (buckets) { assert.deepEqual(buckets, response); });
     });
-
   });
 
 
@@ -38,7 +37,9 @@ describe('buckets API', function () {
         .post('/s3buckets', JSON.stringify({}))
         .reply(400, error);
 
-      assert.isRejected(buckets.add({}), error);
+      return buckets.add({})
+        .then(function (_) { throw new Error('expected failure'); })
+        .catch(function (err) { assert.deepEqual(err.error, error); });
     });
 
     it('throws an error if incomplete bucket data is provided', function () {
@@ -51,31 +52,53 @@ describe('buckets API', function () {
         .post('/s3buckets', JSON.stringify(incomplete_bucket_data))
         .reply(400, error);
 
-      assert.isRejected(buckets.add(incomplete_bucket_data), error);
+      return buckets.add(incomplete_bucket_data)
+        .then(function (_) { throw new Error('expected failure'); })
+        .catch(function (err) { assert.deepEqual(err.error, error); });
+    });
+
+    it('throws an error if invalid bucket name is provided', function () {
+      var invalid_bucket_data = {
+        'name': 'bad bucket name',
+        'apps3buckets': []
+      };
+      var error = {
+        'name': ['Name must have correct env prefix e.g. dev-bucketname']
+      };
+
+      mock_api
+        .post('/s3buckets', JSON.stringify(invalid_bucket_data))
+        .reply(400, error);
+
+      return buckets.add(invalid_bucket_data)
+        .then(function (_) { throw new Error('expected failure'); })
+        .catch(function (err) { assert.deepEqual(err.error, error); });
     });
 
     it('returns a bucket id after creating the bucket', function () {
 
       var test_bucket = {
-        'name': 'Test bucket',
+        'name': 'dev-test-bucket',
         'apps3buckets': []
       };
 
-      var current_user_id = null;
+      var expected_id = 1;
 
-      var response ={
-        'id': 1,
-        'name': test_bucket.name,
-        'apps3buckets': [],
-        'created_by': current_user_id
+      var response = {
+        "id": expected_id,
+        "url": "http://" + expected_id + "/s3buckets/1/",
+        "name": "dev-test-bucket",
+        "arn": "arn:aws:s3:::dev-test-bucket",
+        "apps3buckets": [],
+        "created_by": "github|12345"
       };
 
       mock_api
         .post('/s3buckets', JSON.stringify(test_bucket))
         .reply(201, response);
 
-      assert.eventually.propertyVal(buckets.add(test_bucket), 'id', 1);
-
+      return buckets.add(test_bucket)
+        .then(function (bucket) { assert.equal(bucket.id, expected_id); });
     });
 
   });

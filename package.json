@@ -43,23 +43,14 @@
   "devDependencies": {
     "bistre": "1.0.1",
     "chai": "^4.1.2",
-    "chai-as-promised": "^7.1.1",
     "chai-spies": "^0.7.1",
     "mocha": "^3.5.3",
     "nock": "^9.0.20",
     "nodemon": "^1.11.0"
   },
   "nodemonConfig": {
-    "ignore":  [
-        ".git",
-        "test/*",
-        "node_modules/**/*",
-        "static/**/*"
-    ],
-    "watch": [
-        "app/",
-        "lib/"
-    ],
+    "ignore":  ["test/", "static/"],
+    "watch": ["app/"],
     "ext": "js json scss sass css html",
     "delay": "500",
     "verbose": true

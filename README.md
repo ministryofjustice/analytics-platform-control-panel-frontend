@@ -1,44 +1,66 @@
-# analytics-platform-control-panel-frontend
-Control Panel webapp
+# Analytics Platform Control Panel
 
+## Running with Docker
 
-## Getting Started
+### Environment variables
+You need to set a few [environment variables](#env) which will be picked up by Docker. This can be done by creating a `.env` file with a variable set on each line with `VAR_NAME=value`.
 
-Install dependencies
+### Build and run
+Checkout the repo and run
+```sh
+docker-compose build
+docker-compose up
+```
+
+### Create superuser (on first run)
+In a separate terminal window, run
+```sh
+docker-compose exec api python3 manage.py createsuperuser
+```
+
+### View the app
+Then browse to http://localhost:3000/
+You can also access the API backend at http://localhost:8000/
+
+### Developing
+The docker container mounts the `app/` and `test/` directories from the host, and runs with `nodemon`, so file changes will be detected and the node app restarted. The `static/` directory is not monitored, so if you add files directly to this directory, you will need to rebuild the docker image to pick them up.
+
+### Running the tests
+```sh
+docker-compose exec frontend npm test
+```
+
+## Running directly
+
+### Install dependencies
 ```sh
 npm install
 ```
 
-**Environment variables**
+### <a name="env"></a>Environment variables
+You should set these in a file named `.env` with each variable on a separate line, eg: `API_USER=username`
 
-You can set these directly with `export
-API_USER=<username>` or add them to a `.env` file, which will be automatically
-used to setup the environment when the Control Panel starts.
+| name | value |
+| ---- | ----- |
+| `AUTH0_DOMAIN` | Domain of Auth0 tenant, eg: `dev-analytics-moj.eu.auth0.com` |
+| `AUTH0_CLIENT_ID` | Client ID from Auth0 |
+| `AUTH0_CLIENT_SECRET` | Client Secret from Auth0 |
+| `OIDC_CLIENT_ID` | Same value as `AUTH0_CLIENT_ID` |
+| `OIDC_CLIENT_SECRET` | Same value as `AUTH0_CLIENT_SECRET` |
+| `IAM_ARN_BASE` | Used to construct ARNs |
+| `K8S_WORKER_ROLE_NAME` | Used to construct ARN of IAM role |
+| `SAML_PROVIDER` | Used to contruct ARN of SAML provider |
+| `NODE_RESTART` | Set to `1` to enable restarting the app on file changes |
 
-*Required*
-```sh
-API_USER=<username>
-API_PASSWORD=<password>
-```
-
-*Optional*
-```sh
-API_URL="http://localhost:8000"  # Base URL of the control panel API
-ENV=""  # Environment
-EXPRESS_HOST=127.0.0.1  # Express bind host
-EXPRESS_PORT=3000  # Express bind port
-LOG_LEVEL="debug"
-NODE_RESTART=1  # restart the app when file changes are detected
-```
-
-To run the webapp, enter the following:
+### Run the webapp
 ```sh
 npm start
 ```
 
-Then you can browse to http://localhost:3000/ in your browser
+### View the app
+Browse to http://localhost:3000/
 
-To run tests, enter
+### Running the tests
 ```sh
 npm test
 ```

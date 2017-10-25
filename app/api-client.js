@@ -9,9 +9,7 @@ module.exports = (function () {
   var token = 'invalid token';
 
   function api_request(options) {
-    return request(override_defaults(options)).catch(function (error) {
-      return Promise.reject(new Error('API error: ' + error.message));
-    });
+    return request(override_defaults(options));
   }
 
 

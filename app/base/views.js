@@ -10,7 +10,6 @@ exports.home = [
       res.render('home.html', context);
     }
 
-    api.authenticate(req.user.id_token);
     api.users.get(req.user.sub)
       .then(function (user) { render({'user': user}); })
       .catch(function (error) { render({'error': error}); });

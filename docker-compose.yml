@@ -18,8 +18,8 @@ services:
       NODE_RESTART: "1"
     volumes:
       - ./app:/home/cpanel/app
-      - ./lib:/home/cpanel/lib
       - ./static:/home/cpanel/static
+      - ./test:/home/cpanel/test
   api:
     image: "quay.io/mojanalytics/control-panel:api"
     ports:

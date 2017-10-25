@@ -3,7 +3,7 @@ require('./conftest.js');
 var assert = require('chai').assert;
 var nock = require('nock');
 
-var buckets = require('../lib/api-client.js').buckets;
+var buckets = require('../app/api-client.js').buckets;
 
 
 var mock_api = nock('http://localhost:8000');

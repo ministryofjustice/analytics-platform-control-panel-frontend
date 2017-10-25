@@ -7,7 +7,6 @@ WORKDIR /home/cpanel
 ADD app app/
 ADD bin bin/
 ADD package.json package.json
-ADD lib lib/
 
 RUN npm install
 ADD node_modules node_modules/

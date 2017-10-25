@@ -3,7 +3,7 @@ require('./conftest.js');
 var assert = require('chai').assert;
 var nock = require('nock');
 
-var apps = require('../lib/api-client.js').apps;
+var apps = require('../app/api-client.js').apps;
 
 
 var mock_api = nock('http://localhost:8000');

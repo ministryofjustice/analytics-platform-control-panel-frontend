@@ -5,12 +5,16 @@ var express = require('express');
 var join = require('path').join;
 var nunjucks = require('nunjucks');
 var passport = require('passport');
+var raven = require('raven');
 var Strategy = require('passport-auth0-openidconnect').Strategy;
 var assets = require('./assets');
 
 
 var app = express();
 app.set('views', __dirname);
+
+raven.config(config.sentry.dsn, config.sentry.options).install();
+app.use(raven.requestHandler());
 
 bole.output({level: config.log.level, stream: process.stdout});
 app.use(require('morgan')('combined'));
@@ -62,6 +66,8 @@ app.use(function (req, res, next) {
 
 var routes = require('./routes');
 app.use(routes.router);
+
+app.use(raven.errorHandler());
 
 app.use(require('./errors'));
 

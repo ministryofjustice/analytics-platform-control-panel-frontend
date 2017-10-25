@@ -1,7 +1,16 @@
+var log = require('bole')('error-handler');
+var sentry = require('raven');
 var url_for = require('./routes').url_for;
 
 
+process.on('unhandledRejection', function (error) {
+  log.error(error.message);
+  sentry.captureException(error);
+});
+
+
 module.exports = function (err, req, res, next) {
+  sentry.captureException(err);
 
   if (res.headersSent) {
     return next(err);

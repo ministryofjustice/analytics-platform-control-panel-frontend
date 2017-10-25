@@ -1,6 +1,7 @@
 var api = require('../api-client');
 var passport = require('passport');
 var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
+var raven = require('raven');
 
 
 exports.home = [
@@ -17,9 +18,17 @@ exports.home = [
 ];
 
 
+exports.error_test = function (req, res, next) {
+  api.users.get('non-existent')
+    .then(function (user) { res.send(user.id); })
+    .catch(next);
+};
+
+
 exports.auth_callback = [
   passport.authenticate('auth0-oidc'),
   function (req, res) {
+    raven.setContext({user: req.user});
     api.set_token(req.user.id_token);
     res.redirect(req.session.returnTo || '/');
   }

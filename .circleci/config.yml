@@ -65,12 +65,23 @@ jobs:
             docker tag app "quay.io/mojanalytics/control-panel-frontend:${CIRCLE_BRANCH}"
             docker push "quay.io/mojanalytics/control-panel-frontend:${CIRCLE_BRANCH}"
       - deploy:
-          name: Deploy to Kubernetes
+          name: Deploy to dev
           command: |
             curl ${JENKINS_URL}/job/control-panel/job/frontend/buildWithParameters \
               --data token=${JENKINS_JOB_TRIGGER_TOKEN} \
               --data BRANCH_NAME=${CIRCLE_BRANCH} \
               --user ${JENKINS_USER}:${JENKINS_TOKEN}
+
+      - deploy:
+          name: Deploy to alpha
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              curl ${ALPHA_JENKINS_URL}/job/control-panel/job/frontend/buildWithParameters \
+                --data token=${JENKINS_JOB_TRIGGER_TOKEN} \
+                --data BRANCH_NAME=${CIRCLE_BRANCH} \
+                --user ${ALPHA_JENKINS_USER}:${ALPHA_JENKINS_TOKEN}
+            fi
+
 workflows:
   version: 2
   test-build-and-deploy:

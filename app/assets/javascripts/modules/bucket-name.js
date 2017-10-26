@@ -5,31 +5,31 @@ moj.Modules.bucketName = {
 
   init: function() {
     var self = this;
+    self.$input = $('#' + self.inputName);
 
-    if ($('#' + self.inputName).length) {
+    if (self.$input.length) {
+      self.prefix = self.$input.data('prefix');
       self.bindEvents();
     }
   },
 
   bindEvents: function() {
-    var self = this,
-      $input = $('#' + self.inputName),
-      prefix = $input.data('prefix');
+    var self = this;
 
-    $input.on('keypress blur', function() {
-      self.checkValue($input, prefix);
+    self.$input.on('keypress blur', function() {
+      self.formatBucketName();
     });
   },
 
-  checkValue: function($input, prefix) {
-    var val = $input.val();
+  formatBucketName: function() {
+    var self = this,
+      val = self.$input.val();
 
-    if (val.length < prefix.length) {
-      val = prefix;
+    if (val.length < self.prefix.length) {
+      val = self.prefix;
     }
 
     val = val.toLowerCase().replace(/ /gi, '-');
-
-    $input.val(val);
+    self.$input.val(val);
   }
 };

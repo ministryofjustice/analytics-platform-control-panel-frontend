@@ -9,7 +9,7 @@ exports.new_app = [
   function (req, res) {
 
     res.render('apps/new.html', {
-      prefix: 'dev-',
+      prefix: process.env.ENV + '-',
       buckets: [
         {
           id: 1,

@@ -39,11 +39,8 @@
       </div>
       <div class="panel panel-border-narrow js-hidden" id="new-app-datasource-create-new-source">
         <p>This can be populated with data later.</p>
-        <label class="form-label" for="new-datasource-name">
-          App data source (bucket) name
-          <span class="form-hint">60 chars max, only lowercase letters, numbers, periods and hyphens, auto-prefixed with "{{ prefix }}"</span>
-        </label>
-        <input class="form-control" name="new-datasource-name" type="text" id="new-datasource-name" value="{{ prefix }}" data-prefix="{{ prefix }}" pattern="[a-z0-9.-]{1,60}" maxlength="60">
+
+        {% include 'buckets/includes/new-bucket-name.html' %}
       </div>
 
       <div class="multiple-choice" data-target="new-app-datasource-existing-source">

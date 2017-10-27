@@ -2,6 +2,9 @@ FROM node:6.11.5-alpine
 
 MAINTAINER Andy Driver <andy.driver@digital.justice.gov.uk>
 
+# Patch vulnerabilities
+RUN apk --no-cache upgrade musl-dev
+
 WORKDIR /home/cpanel
 
 ADD app app/

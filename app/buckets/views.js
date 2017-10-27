@@ -4,6 +4,15 @@ var bole = require('bole');
 var log = bole('buckets-views');
 
 
+exports.new_bucket = function (req, res) {
+
+  res.render('buckets/new.html', {
+    prefix: process.env.ENV + '-'
+  });
+
+};
+
+
 exports.bucket_details = function (req, res) {
 
   api.get_bucket(req.params.id).then(function (bucket) {

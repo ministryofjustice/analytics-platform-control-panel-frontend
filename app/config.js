@@ -72,6 +72,19 @@ config.api = {
   password: process.env.API_PASSWORD
 };
 
+config.sentry = {
+  dsn: process.env.SENTRY_DSN,
+  options: {
+    autoBreadcrumbs: {
+      console: true,
+      http: true
+    },
+    tags: {
+      environment: process.env.ENV || 'dev'
+    }
+  }
+};
+
 if (PROD) {
   config.express.host = '0.0.0.0';
 }

@@ -32,10 +32,12 @@
     "govuk_frontend_toolkit": "7.0.0",
     "govuk_template_jinja": "0.22.1",
     "jquery": "^3.2.1",
+    "morgan": "^1.9.0",
     "node-sass": "^4.5.3",
     "nunjucks": "3.0.1",
     "passport": "^0.4.0",
     "passport-auth0-openidconnect": "^0.1.0",
+    "raven": "^2.2.1",
     "request": "^2.82.0",
     "request-promise": "^4.2.1",
     "request-promise-core": "^1.1.1"

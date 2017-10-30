@@ -6,9 +6,14 @@
 
 <form action="{{ url_for('apps.create') }}" method="post">
 
-  <div class="form-group">
+  <div class="form-group {% if errors.name %} form-group-error {% endif %}">
     <label for="name" class="form-label">Name</label>
-    <input class="form-control" type="text" id="name" name="name">
+    {% if errors.name %}
+      {% for error in errors.name %}
+        <span class="error-message">{{ error }}</span>
+      {% endfor %}
+    {% endif %}
+    <input class="form-control {% if errors.name %} form-control-error {% endif %}" type="text" id="name" name="name" value="{{ app.name }}">
   </div>
 
   <div class="form-group">
@@ -16,15 +21,20 @@
       Description
       <span class="form-hint">Optional</span>
     </label>
-    <textarea class="form-control" name="description" id="description" cols="30" rows="10"></textarea>
+    <textarea class="form-control" name="description" id="description" cols="30" rows="10">{{ app.description }}</textarea>
   </div>
 
-  <div class="form-group">
-    <label for="repoUrl" class="form-label">
+  <div class="form-group {% if errors.repo_url %} form-group-error {% endif %}">
+    <label for="repo_url" class="form-label">
       Github repo url
       <span class="form-hint">e.g. https://github.com/something-org/lorem-fantastic-app</span>
     </label>
-    <input class="form-control" type="text" id="repoUrl" name="repoUrl">
+    {% if errors.repo_url %}
+      {% for error in errors.repo_url %}
+        <span class="error-message">{{ error }}</span>
+      {% endfor %}
+    {% endif %}
+    <input class="form-control {% if errors.repo_url %} form-control-error {% endif %}" type="text" id="repo_url" name="repo_url" value="{{ app.repo_url }}">
   </div>
 
   <div class="form-group">

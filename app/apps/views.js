@@ -46,7 +46,7 @@ exports.create_app = [
     const app = {
       name: req.body.name,
       description: req.body.description,
-      repo_url: req.body.repoUrl,
+      repo_url: req.body.repo_url,
       userapps: [],
     };
 
@@ -54,7 +54,16 @@ exports.create_app = [
       .then(function (app) {
         res.redirect(routes.url_for('apps.details', {id: app.id}));
       })
-      .catch(next);
+      .catch(function(err) {
+        if (err.statusCode === 400) {
+          res.render('apps/new.html', {
+            app: app,
+            errors: err.error,
+          });
+        } else {
+          next(err)
+        }
+      })
   }
 ];
 

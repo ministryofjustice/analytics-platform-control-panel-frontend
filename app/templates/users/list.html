@@ -1,13 +1,33 @@
-{% extends "layouts/two-column.html" %}
+{% extends "layouts/one-column.html" %}
 
 {% set page_title = "Users" %}
 
 {% block main_column %}
 
-<ul>
-  {% for user in users.results %}
-  <li><a href="{{ url_for('users.details', {id: user.auth0_id}) }}">{{ user.name | default(user.username, true) }}</a></li>
-  {% endfor %}
-</ul>
+<p>{{ users.results.length }} {{ "user" if users.results.length == 1 else "users" }}</p>
+
+<table class="list">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Username</th>
+      <th>Email</th>
+      <td>&nbsp;</td>
+    </tr>
+  </thead>
+  <tbody>
+    {% for user in users.results %}
+      <tr>
+        <td><a href="{{ url_for('users.details', {id: user.auth0_id}) }}">{{ user.name | default(user.username, true) }}</a></td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+        <td class="align-right">
+          <a class="button button-secondary" href="#">Edit</a>
+          <a class="button button-secondary js-confirm" href="#">Delete</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
 
 {% endblock %}

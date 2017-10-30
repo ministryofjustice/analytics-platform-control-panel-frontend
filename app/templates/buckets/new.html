@@ -1,0 +1,19 @@
+{% extends "layouts/one-column.html" %}
+
+{% set page_title = "Create new bucket" %}
+
+{% block main_column %}
+
+<form action="/buckets/create" method="post">
+
+  <div class="form-group">
+    {% include 'buckets/includes/new-bucket-name.html' %}
+  </div>
+
+  <div class="form-group">
+    <input type="submit" class="button button-secondary" value="Create">
+  </div>
+
+</form>
+
+{% endblock %}

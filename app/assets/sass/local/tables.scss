@@ -5,11 +5,6 @@ table {
   th {
     font-weight: bold;
   }
-  &.list {
-    tr {
-      vertical-align: top;
-    }
-  }
 
   tr {
     th:last-child,

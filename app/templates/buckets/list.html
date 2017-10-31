@@ -1,0 +1,31 @@
+{% extends "layouts/one-column.html" %}
+
+{% set page_title = "S3 Buckets" %}
+
+{% block main_column %}
+
+<p>{{ buckets.results.length }} {{ "bucket" if buckets.results.length == 1 else "buckets" }}</p>
+
+{% if buckets.results.length %}
+  <table class="list">
+    <thead>
+      <tr>
+        <th>Bucket name</th>
+        <td>&nbsp;</td>
+      </tr>
+    </thead>
+    <tbody>
+      {% for bucket in buckets.results %}
+        <tr>
+          <td><a href="{{ url_for('buckets.details', {id: bucket.id}) }}">{{ bucket.name }}</a></td>
+          <td class="align-right">
+            <a class="button button-secondary" href="#">Edit</a>
+            <a class="button button-secondary js-confirm" href="#">Delete</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endif %}
+
+{% endblock %}

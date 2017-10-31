@@ -1,7 +1,23 @@
 var api = require('../api-client');
 var bole = require('bole');
+var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 
 var log = bole('buckets-views');
+
+
+exports.list_buckets = [
+
+  ensureLoggedIn('/'),
+  function (req, res, next) {
+
+    api.list_buckets()
+
+      .then(function (buckets) {
+        res.render('buckets/list.html', {buckets: buckets}); })
+
+      .catch(next);
+  }
+];
 
 
 exports.new_bucket = function (req, res) {

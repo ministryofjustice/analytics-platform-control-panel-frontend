@@ -4,9 +4,13 @@
 
 {% block main_column %}
 
-<form action="/buckets/create" method="post">
+{% if error and not error.error %}
+<div class="error">{{ error.message }}</div>
+{% endif %}
 
-  <div class="form-group">
+<form action="{{ url_for('buckets.create') }}" method="post">
+
+  <div class="form-group{% if error.error.name %} form-group-error{% endif %}">
     {% include 'buckets/includes/new-bucket-name.html' %}
   </div>
 

@@ -2,4 +2,9 @@
   App data source (bucket) name
   <span class="form-hint">60 chars max, only lowercase letters, numbers, periods and hyphens, auto-prefixed with "{{ prefix }}"</span>
 </label>
-<input class="form-control" name="new-datasource-name" type="text" id="new-datasource-name" value="{{ prefix }}" data-prefix="{{ prefix }}" pattern="[a-z0-9.-]{1,60}" maxlength="60">
+{% if error.error.name %}
+<span class="error-message">
+  {{ error.error.name }}
+</span>
+{% endif %}
+<input class="form-control" name="new-datasource-name" type="text" id="new-datasource-name" value="{{ prefix }}" data-prefix="{{ prefix }}" pattern="[a-z0-9.-]{1,60}" maxlength="60" value="{{ bucket.name }}">

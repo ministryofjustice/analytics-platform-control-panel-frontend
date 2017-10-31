@@ -9,7 +9,12 @@ module.exports = (function () {
   var token = 'invalid token';
 
   function api_request(options) {
-    return request(override_defaults(options));
+    try {
+      return request(override_defaults(options));
+
+    } catch (error) {
+      throw new Error(`API: ${options.method || 'GET'} ${options.endpoint} failed: ${error}`);
+    }
   }
 
 
@@ -30,7 +35,16 @@ module.exports = (function () {
 
 
   function endpoint_url(endpoint) {
-    return url.resolve(config.api.base_url, '/' + (endpoint + '/' || ''));
+
+    if (!endpoint) {
+      throw new Error('Missing endpoint');
+    }
+
+    if (!endpoint.endsWith('/')) {
+      endpoint += '/';
+    }
+
+    return url.resolve(config.api.base_url, endpoint);
   }
 
 

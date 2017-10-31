@@ -16,7 +16,7 @@ describe('Users API', function () {
       var response = require('./test-users-response');
 
       mock_api
-        .get('/users')
+        .get('/users/')
         .reply(200, response);
 
       return users.list()
@@ -36,7 +36,7 @@ describe('Users API', function () {
       }
 
       mock_api
-        .post('/users', JSON.stringify({}))
+        .post('/users/', JSON.stringify({}))
         .reply(400, error);
 
       return users.add({})
@@ -53,7 +53,7 @@ describe('Users API', function () {
       }
 
       mock_api
-        .post('/users', JSON.stringify(incomplete_user_data))
+        .post('/users/', JSON.stringify(incomplete_user_data))
         .reply(400, error);
 
       return users.add(incomplete_user_data)
@@ -82,7 +82,7 @@ describe('Users API', function () {
       };
 
       mock_api
-        .post('/users', JSON.stringify(test_user))
+        .post('/users/', JSON.stringify(test_user))
         .reply(201, response);
 
       return users.add(test_user)

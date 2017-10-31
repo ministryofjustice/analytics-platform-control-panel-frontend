@@ -17,7 +17,7 @@ describe('API Client', function () {
         'detail': 'Authentication credentials were not provided.'};
 
       test_server
-        .get('/apps')
+        .get('/apps/')
         .matchHeader('Authorization', 'JWT invalid token')
         .reply(403, reason);
 
@@ -36,7 +36,7 @@ describe('API Client', function () {
       };
 
       test_server
-        .get('/apps')
+        .get('/apps/')
         .matchHeader('Authorization', 'JWT ' + valid_token)
         .reply(200, response);
 

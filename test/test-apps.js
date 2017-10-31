@@ -16,7 +16,7 @@ describe('Apps API', function () {
       var response = require('./test-apps-response');
 
       mock_api
-        .get('/apps')
+        .get('/apps/')
         .reply(200, response);
 
       return apps.list()

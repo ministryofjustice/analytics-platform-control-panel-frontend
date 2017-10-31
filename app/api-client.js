@@ -30,7 +30,7 @@ module.exports = (function () {
 
 
   function endpoint_url(endpoint) {
-    return url.resolve(config.api.base_url, '/' + (endpoint || ''));
+    return url.resolve(config.api.base_url, '/' + (endpoint + '/' || ''));
   }
 
 

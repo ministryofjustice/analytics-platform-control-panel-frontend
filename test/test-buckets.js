@@ -16,7 +16,7 @@ describe('buckets API', function () {
       var response = require('./test-buckets-response');
 
       mock_api
-        .get('/s3buckets')
+        .get('/s3buckets/')
         .reply(200, response);
 
       return buckets.list()
@@ -34,7 +34,7 @@ describe('buckets API', function () {
       };
 
       mock_api
-        .post('/s3buckets', JSON.stringify({}))
+        .post('/s3buckets/', JSON.stringify({}))
         .reply(400, error);
 
       return buckets.add({})
@@ -49,7 +49,7 @@ describe('buckets API', function () {
       };
 
       mock_api
-        .post('/s3buckets', JSON.stringify(incomplete_bucket_data))
+        .post('/s3buckets/', JSON.stringify(incomplete_bucket_data))
         .reply(400, error);
 
       return buckets.add(incomplete_bucket_data)
@@ -67,7 +67,7 @@ describe('buckets API', function () {
       };
 
       mock_api
-        .post('/s3buckets', JSON.stringify(invalid_bucket_data))
+        .post('/s3buckets/', JSON.stringify(invalid_bucket_data))
         .reply(400, error);
 
       return buckets.add(invalid_bucket_data)
@@ -94,7 +94,7 @@ describe('buckets API', function () {
       };
 
       mock_api
-        .post('/s3buckets', JSON.stringify(test_bucket))
+        .post('/s3buckets/', JSON.stringify(test_bucket))
         .reply(201, response);
 
       return buckets.add(test_bucket)

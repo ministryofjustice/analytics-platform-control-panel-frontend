@@ -1,4 +1,5 @@
 var api = require('../api-client');
+var routes = require('../routes');
 var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 
 
@@ -38,6 +39,33 @@ exports.new_app = [
 
 ];
 
+
+exports.create_app = [
+  ensureLoggedIn('/login'),
+  function (req, res, next) {
+    const app = {
+      name: req.body.name,
+      description: req.body.description,
+      repo_url: req.body.repo_url,
+      userapps: [],
+    };
+
+    api.add_app(app)
+      .then(function (app) {
+        res.redirect(routes.url_for('apps.details', {id: app.id}));
+      })
+      .catch(function(err) {
+        if (err.statusCode === 400) {
+          res.render('apps/new.html', {
+            app: app,
+            errors: err.error,
+          });
+        } else {
+          next(err)
+        }
+      })
+  }
+];
 
 exports.list_apps = [
   ensureLoggedIn('/login'),

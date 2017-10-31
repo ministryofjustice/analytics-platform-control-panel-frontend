@@ -86,7 +86,7 @@ module.exports = (function () {
   };
 
   api.add_app = function (app) {
-    return api_request({method: 'POST', endpoint: 'apps', resource: app});
+    return api_request({method: 'POST', endpoint: 'apps/', resource: app});
   };
 
   api.apps = {

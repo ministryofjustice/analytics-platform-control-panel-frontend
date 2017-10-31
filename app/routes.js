@@ -86,11 +86,28 @@ function add_route(app_name) {
 
     log.debug(route.name + ': ' + route.pattern);
 
-    exports.router.all(route.pattern, route.view);
+    if (!route.method) {
+      route.method = 'get';
+    }
+
+    route.method = route.method.toLowerCase();
+
+    if (valid_method(route.method)) {
+      exports.router[route.method](route.pattern, route.view);
+
+    } else {
+      throw new Error('Invalid method "' + route.method.toUpperCase() + '" in route ' + route);
+    }
 
     return route;
   };
 }
+
+
+function valid_method(method) {
+  return ['get', 'post', 'put', 'delete'].indexOf(method) >= 0;
+}
+
 
 // static routes
 Object.keys(config.static.paths).forEach(function (pattern) {

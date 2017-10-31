@@ -1,6 +1,7 @@
 var api = require('../api-client');
 var bole = require('bole');
 var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
+var routes = require('../routes');
 
 var log = bole('buckets-views');
 
@@ -21,6 +22,7 @@ exports.list_buckets = [
 
 
 exports.new_bucket = [
+  ensureLoggedIn('/login'),
   function (req, res) {
 
     res.render('buckets/new.html', {
@@ -42,10 +44,9 @@ exports.create_bucket = [
 
     api.buckets.add(bucket)
       .then(function (bucket) {
-        res.redirect(url_for('buckets.details', {id: bucket.id}));
+        res.redirect(routes.url_for('buckets.details', {id: bucket.id}));
       })
       .catch(function (error) {
-        console.dir(error);
         res.render('buckets/new.html', {
           bucket: bucket,
           error: error

@@ -36,7 +36,7 @@ describe('Apps API', function () {
       };
 
       mock_api
-        .post('/apps', JSON.stringify({}))
+        .post('/apps/', JSON.stringify({}))
         .reply(400, response);
 
       return apps.add({})
@@ -53,7 +53,7 @@ describe('Apps API', function () {
       };
 
       mock_api
-        .post('/apps', JSON.stringify(incomplete_app_data))
+        .post('/apps/', JSON.stringify(incomplete_app_data))
         .reply(400, response);
 
       return apps.add(incomplete_app_data)
@@ -85,7 +85,7 @@ describe('Apps API', function () {
       };
 
       mock_api
-        .post('/apps', JSON.stringify(test_app))
+        .post('/apps/', JSON.stringify(test_app))
         .reply(201, response);
 
       return apps.add(test_app)

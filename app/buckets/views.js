@@ -7,7 +7,7 @@ var log = bole('buckets-views');
 
 exports.list_buckets = [
 
-  ensureLoggedIn('/'),
+  ensureLoggedIn('/login'),
   function (req, res, next) {
 
     api.list_buckets()

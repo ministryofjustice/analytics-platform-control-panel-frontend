@@ -3,7 +3,7 @@ var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 
 
 exports.list_users = [
-  ensureLoggedIn('/'),
+  ensureLoggedIn('/login'),
   function (req, res, next) {
 
     api.list_users()
@@ -17,7 +17,7 @@ exports.list_users = [
 
 
 exports.user_details = [
-  ensureLoggedIn('/'),
+  ensureLoggedIn('/login'),
   function (req, res, next) {
 
     api.get_user(req.params.id)

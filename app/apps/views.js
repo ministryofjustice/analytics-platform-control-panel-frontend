@@ -40,7 +40,7 @@ exports.new_app = [
 
 
 exports.list_apps = [
-  ensureLoggedIn('/'),
+  ensureLoggedIn('/login'),
   function (req, res, next) {
 
     api.list_apps()

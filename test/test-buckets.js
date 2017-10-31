@@ -1,11 +1,7 @@
 "use strict";
 var assert = require('chai').assert;
-var nock = require('nock');
-
+var mock = require('./mock');
 var buckets = require('../app/api-client.js').buckets;
-
-
-var mock_api = nock('http://localhost:8000');
 
 
 describe('buckets API', function () {
@@ -15,7 +11,7 @@ describe('buckets API', function () {
     it('returns a list of buckets', function () {
       var response = require('./test-buckets-response');
 
-      mock_api
+      mock.api
         .get('/s3buckets/')
         .reply(200, response);
 
@@ -33,7 +29,7 @@ describe('buckets API', function () {
         'apps3buckets': ['This field is required.']
       };
 
-      mock_api
+      mock.api
         .post('/s3buckets/', JSON.stringify({}))
         .reply(400, error);
 
@@ -48,7 +44,7 @@ describe('buckets API', function () {
         'apps3buckets': ['This field is required.']
       };
 
-      mock_api
+      mock.api
         .post('/s3buckets/', JSON.stringify(incomplete_bucket_data))
         .reply(400, error);
 
@@ -66,7 +62,7 @@ describe('buckets API', function () {
         'name': ['Name must have correct env prefix e.g. dev-bucketname']
       };
 
-      mock_api
+      mock.api
         .post('/s3buckets/', JSON.stringify(invalid_bucket_data))
         .reply(400, error);
 
@@ -93,7 +89,7 @@ describe('buckets API', function () {
         "created_by": "github|12345"
       };
 
-      mock_api
+      mock.api
         .post('/s3buckets/', JSON.stringify(test_bucket))
         .reply(201, response);
 

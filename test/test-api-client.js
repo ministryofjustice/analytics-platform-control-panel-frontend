@@ -1,11 +1,8 @@
 "use strict";
 var assert = require('chai').assert;
-var nock = require('nock');
+var mock = require('./mock');
 
 var api = require('../app/api-client');
-
-
-var test_server = nock('http://localhost:8000');
 
 
 describe('API Client', function () {
@@ -16,7 +13,7 @@ describe('API Client', function () {
       var reason = {
         'detail': 'Authentication credentials were not provided.'};
 
-      test_server
+      mock.api
         .get('/apps/')
         .matchHeader('Authorization', 'JWT invalid token')
         .reply(403, reason);
@@ -35,7 +32,7 @@ describe('API Client', function () {
         'results': []
       };
 
-      test_server
+      mock.api
         .get('/apps/')
         .matchHeader('Authorization', 'JWT ' + valid_token)
         .reply(200, response);

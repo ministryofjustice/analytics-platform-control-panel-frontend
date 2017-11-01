@@ -92,7 +92,7 @@ function add_route(app_name) {
 
     route.method = route.method.toLowerCase();
 
-    if (valid_method(route.method)) {
+    if (is_valid_method(route.method)) {
       exports.router[route.method](route.pattern, route.view);
 
     } else {
@@ -104,7 +104,7 @@ function add_route(app_name) {
 }
 
 
-function valid_method(method) {
+function is_valid_method(method) {
   return ['get', 'post', 'put', 'delete'].indexOf(method) >= 0;
 }
 

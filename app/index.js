@@ -33,18 +33,12 @@ app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(require('express-session')(config.session));
 
-passport.use(new Strategy({
-    domain: process.env.AUTH0_DOMAIN,
-    clientID: process.env.AUTH0_CLIENT_ID,
-    clientSecret: process.env.AUTH0_CLIENT_SECRET,
-    callbackURL: process.env.AUTH0_CALLBACK_URL,
-    passReqToCallback: true
-  },
-  function (req, issuer, audience, profile, accessToken, refreshToken, params, cb) {
+passport.use(new Strategy(
+  config.auth0,
+  (req, issuer, audience, profile, accessToken, refreshToken, params, cb) => {
     profile._json.id_token = params.id_token;
     return cb(null, profile._json);
-  }
-));
+  }));
 
 passport.serializeUser(function(user, done) {
   done(null, user);

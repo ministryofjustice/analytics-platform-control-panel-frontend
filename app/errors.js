@@ -1,6 +1,5 @@
 var log = require('bole')('error-handler');
 var sentry = require('raven');
-var url_for = require('./routes').url_for;
 
 
 process.on('unhandledRejection', function (error) {

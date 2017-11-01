@@ -1,11 +1,7 @@
 "use strict";
 var assert = require('chai').assert;
-var nock = require('nock');
-
+var mock = require('./mock');
 var apps = require('../app/api-client.js').apps;
-
-
-var mock_api = nock('http://localhost:8000');
 
 
 describe('Apps API', function () {
@@ -15,8 +11,8 @@ describe('Apps API', function () {
     it('returns a list of apps', function () {
       var response = require('./test-apps-response');
 
-      mock_api
-        .get('/apps')
+      mock.api
+        .get('/apps/')
         .reply(200, response);
 
       return apps.list()
@@ -35,7 +31,7 @@ describe('Apps API', function () {
         "userapps": ["This field is required."]
       };
 
-      mock_api
+      mock.api
         .post('/apps/', JSON.stringify({}))
         .reply(400, response);
 
@@ -52,7 +48,7 @@ describe('Apps API', function () {
         "userapps": ["This field is required."]
       };
 
-      mock_api
+      mock.api
         .post('/apps/', JSON.stringify(incomplete_app_data))
         .reply(400, response);
 
@@ -84,7 +80,7 @@ describe('Apps API', function () {
         "userapps": []
       };
 
-      mock_api
+      mock.api
         .post('/apps/', JSON.stringify(test_app))
         .reply(201, response);
 

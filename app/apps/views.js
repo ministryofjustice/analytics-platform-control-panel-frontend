@@ -1,6 +1,9 @@
+var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
+var Bluebird = require('bluebird');
+
+
 var api = require('../api-client');
 var routes = require('../routes');
-var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 
 
 exports.new_app = [
@@ -153,24 +156,23 @@ exports.app_details = function (req, res) {
 exports.app_edit = [
   ensureLoggedIn('/login'),
   function(req, res, next) {
-    var buckets = []
-    var users = []
+    // This is making three requests cuncurrently to get the app details,
+    // the list of bucket and the list of users.
+    // If all of them succeed it then renders `apps/edit.html`
+    app_request = api.get_app(req.params.id);
+    buckets_request = api.list_buckets();
+    users_request = api.list_users();
 
-    // This is making a request to get the app, then a request
-    // to get the list of bucket and finally a request to get
-    // the users. If these succeed it then renders `apps/edit.html`
-    api.get_app(req.params.id).then(function (app) {
-      var template_args = {app: app};
-
-      api.list_buckets().then(function (buckets) {
-        template_args.buckets = buckets.results;
-
-        api.list_users().then(function (users) {
-          template_args.users = users.results;
-
-          res.render('apps/edit.html', template_args);
-        }).catch(next)
-      }).catch(next);
-    }).catch(next);
+    Bluebird
+      .all([app_request, buckets_request, users_request])
+      .spread(function(app_response, buckets_response, users_response) {
+        const template_args = {
+          app: app_response,
+          buckets: buckets_response.results,
+          users: users_response.results,
+        };
+        res.render('apps/edit.html', template_args);
+      })
+      .catch(next)
   },
 ];

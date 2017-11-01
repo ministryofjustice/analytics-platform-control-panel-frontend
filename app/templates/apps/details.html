@@ -41,11 +41,11 @@
   <p>None</p>
 {% endif %}
 
-<h2 class="heading-medium">App data sources</h2>
-{% if app.buckets.length %}
+<h2 class="heading-medium">App S3 buckets</h2>
+{% if app.apps3buckets.length %}
   <ul class="list list-bullet">
-    {% for bucket in app.buckets %}
-      <li><a href="/buckets/{{ bucket.id }}">{{ bucket.name }}</a></li>
+    {% for bucket in app.apps3buckets %}
+      <li><a href="{{ url_for('buckets.details', {id: bucket.id}) }}">{{ bucket.s3bucket.name }}</a></li>
     {% endfor %}
   </ul>
 {% else %}

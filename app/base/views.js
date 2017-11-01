@@ -27,10 +27,14 @@ exports.error_test = function (req, res, next) {
 
 exports.auth_callback = [
   passport.authenticate('auth0-oidc'),
-  function (req, res) {
+  function (req, res, next) {
     raven.setContext({user: req.user});
     api.set_token(req.user.id_token);
-    res.redirect(req.session.returnTo || '/');
+    api.users.get(req.user.sub)
+      .then((user) => {
+        res.redirect(req.session.returnTo || '/');
+      })
+      .catch(next);
   }
 ];
 

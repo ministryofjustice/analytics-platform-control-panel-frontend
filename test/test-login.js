@@ -1,8 +1,6 @@
 "use strict";
 const assert = require('chai').assert;
-const config = require('../app/config');
 const mock = require('./mock');
-const nock = require('nock');
 const views = require('../app/base/views');
 
 

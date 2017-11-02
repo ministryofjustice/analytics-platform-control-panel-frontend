@@ -159,9 +159,9 @@ exports.app_edit = [
     // This is making three requests cuncurrently to get the app details,
     // the list of bucket and the list of users.
     // If all of them succeed it then renders `apps/edit.html`
-    app_request = api.get_app(req.params.id);
-    buckets_request = api.list_buckets();
-    users_request = api.list_users();
+    let app_request = api.get_app(req.params.id);
+    let buckets_request = api.list_buckets();
+    let users_request = api.list_users();
 
     Bluebird
       .all([app_request, buckets_request, users_request])

@@ -4,12 +4,12 @@ var mock = require('./mock');
 var users = require('../app/api-client.js').users;
 
 
-describe('Users API', function () {
+describe('Users API', () => {
 
-  describe('list_users', function () {
+  describe('list_users', () => {
 
-    it('returns a list of users', function () {
-      var response = require('./test-users-response');
+    it('returns a list of users', () => {
+      let response = require('./fixtures/users');
 
       mock.api
         .get('/users/')

@@ -1,70 +1,52 @@
 "use strict";
 
-const chai = require('chai');
-const should = chai.should();
-const chaiHttp = require('chai-http');
-chai.use(chaiHttp);
+const assert = require('chai').assert;
 const nock = require('nock');
 
-const api = require('../app/api-client');
 const config = require('../app/config');
-const server = require('../app/index');
-const views = require('../app/base/views');
+const views = require('../app/apps/views');
 
 
-describe('Edit app', () => {
+describe('Edit app form', () => {
 
-  describe('an authenticated user', () => {
-    const AUTH_HEADER = /JWT .*/
+  describe('when rendered', () => {
 
-    it('renders apps/edit.html passing app, buckets and users', () => {
-      const APP = require('./fixtures/app')
-      const BUCKETS = require('./fixtures/buckets')
-      const USERS = require('./fixtures/users')
+    it('loads app, buckets and users from API', () => {
+      const app = require('./fixtures/app')
+      const buckets = require('./fixtures/buckets')
+      const users = require('./fixtures/users')
 
       // Mock API requests
       let app_details_request = nock(config.api.base_url)
-        .get(`/apps/${APP.id}/`)
-        .matchHeader('Authorization', AUTH_HEADER)
-        .reply(200, APP);
+        .get(`/apps/${app.id}/`)
+        .reply(200, app);
       let buckets_list_request = nock(config.api.base_url)
         .get(`/s3buckets/`)
-        .matchHeader('Authorization', AUTH_HEADER)
-        .reply(200, BUCKETS);
+        .reply(200, buckets);
       let users_list_request = nock(config.api.base_url)
         .get(`/users/`)
-        .matchHeader('Authorization', AUTH_HEADER)
-        .reply(200, USERS);
+        .reply(200, users);
 
+      let req = {'params': {'id': 1}};
+      let res = {};
+      let request = new Promise((resolve, reject) => {
 
-      // // CHECKS
-      // api.get_app(APP.id).then(
-      //   (app) => {
-      //     console.log("APP =>", JSON.stringify(app))
-      //   }
-      // )
-      // api.list_buckets().then(
-      //   (buckets) => {
-      //     console.log("BUCKETS =>", JSON.stringify(buckets))
-      //   }
-      // )
-      // api.list_users().then(
-      //   (users) => {
-      //     console.log("USERS =>", JSON.stringify(users))
-      //   }
-      // )
+        res.render = function (template, context) {
+          resolve({'template': template, 'context': context});
+        }
 
-      // Make request to node endpoint
-      // SEE: https://scotch.io/tutorials/test-a-node-restful-api-with-mocha-and-chai
-      chai
-        .request(server)
-        .get(`/apps/${APP.id}`)
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.app.should.be.eql(APP);
-          res.body.buckets.should.be.eql(BUCKETS);
-          res.body.users.should.be.eql(USERS);
-        })
+        views.app_edit[1](req, res, reject);
+      });
+
+      return request
+        .then((render) => {
+          assert(app_details_request.isDone(), `API call to /apps/${app.id}/ expected`);
+          assert(buckets_list_request.isDone(), 'API call to /s3buckets/ expected');
+          assert(users_list_request.isDone(), 'API call to /users/ expected');
+          assert.deepEqual(render.context.app, app);
+          assert.deepEqual(render.context.buckets, buckets.results);
+          assert.deepEqual(render.context.users, users.results);
+        });
     });
 
   });

@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/ministryofjustice/analytics-platform-control-panel-frontend#readme",
   "dependencies": {
+    "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
     "bole": "3.0.2",
     "concat-files": "^0.1.1",
@@ -45,6 +46,7 @@
   "devDependencies": {
     "bistre": "1.0.1",
     "chai": "^4.1.2",
+    "chai-http": "^3.0.0",
     "chai-spies": "^0.7.1",
     "mocha": "^3.5.3",
     "nock": "^9.0.20",

@@ -16,6 +16,17 @@ exports.list_users = [
 ];
 
 
+exports.new_user = [
+  ensureLoggedIn('/login'),
+
+  function (req, res) {
+
+    res.render('users/new.html');
+
+  }
+];
+
+
 exports.user_details = [
   ensureLoggedIn('/login'),
   function (req, res, next) {

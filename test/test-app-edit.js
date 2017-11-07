@@ -27,7 +27,7 @@ describe('Edit app form', () => {
         .get(`/users/`)
         .reply(200, users);
 
-      let req = {'params': {'id': 1}};
+      let req = {'params': {'id': app.id}};
       let res = {};
       let request = new Promise((resolve, reject) => {
 

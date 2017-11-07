@@ -17,22 +17,23 @@ describe('Edit bucket form', () => {
       const users = require('./fixtures/users');
 
       // Mock API requests
-      let bucket_details_request = nock(config.api.base_url)
+      const bucket_details_request = nock(config.api.base_url)
         .get(`/s3buckets/${bucket.id}/`)
         .reply(200, bucket);
-      let apps_list_request = nock(config.api.base_url)
+      const apps_list_request = nock(config.api.base_url)
         .get(`/apps/`)
         .reply(200, apps);
-      let users_list_request = nock(config.api.base_url)
+      const users_list_request = nock(config.api.base_url)
         .get(`/users/`)
         .reply(200, users);
 
-      let req = {params: {id: bucket.id}};
-      let res = {};
-      let request = new Promise((resolve, reject) => {
-        res.render = function (template, context) {
-          resolve({'template': template, 'context': context});
-        }
+      const request = new Promise((resolve, reject) => {
+        const req = {params: {id: bucket.id}};
+        const res = {
+          render: (template, context) => {
+            resolve({template: template, context: context});
+          },
+        };
 
         views.bucket_edit[1](req, res, reject);
       });

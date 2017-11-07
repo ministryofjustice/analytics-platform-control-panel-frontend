@@ -39,13 +39,14 @@ describe('Edit app form', () => {
       });
 
       return request
-        .then((render) => {
+        .then((args) => {
           assert(app_details_request.isDone(), `API call to /apps/${app.id}/ expected`);
           assert(buckets_list_request.isDone(), 'API call to /s3buckets/ expected');
           assert(users_list_request.isDone(), 'API call to /users/ expected');
-          assert.deepEqual(render.context.app, app);
-          assert.deepEqual(render.context.buckets, buckets.results);
-          assert.deepEqual(render.context.users, users.results);
+          assert.equal(args.template, 'apps/edit.html');
+          assert.deepEqual(args.context.app, app);
+          assert.deepEqual(args.context.buckets, buckets.results);
+          assert.deepEqual(args.context.users, users.results);
         });
     });
 

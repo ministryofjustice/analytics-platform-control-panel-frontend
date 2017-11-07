@@ -1,6 +1,7 @@
+var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
+
 var api = require('../api-client');
 var routes = require('../routes');
-var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 
 
 exports.new_app = [
@@ -148,3 +149,26 @@ exports.app_details = function (req, res) {
 
   });
 };
+
+
+exports.app_edit = [
+  ensureLoggedIn('/login'),
+  function(req, res, next) {
+    let app_request = api.get_app(req.params.id);
+    let buckets_request = api.list_buckets();
+    let users_request = api.list_users();
+
+    Promise
+      .all([app_request, buckets_request, users_request])
+      .then(function(responses) {
+        let [app_response, buckets_response, users_response] = responses;
+        let template_args = {
+          app: app_response,
+          buckets: buckets_response.results,
+          users: users_response.results,
+        };
+        res.render('apps/edit.html', template_args);
+      })
+      .catch(next)
+  },
+];

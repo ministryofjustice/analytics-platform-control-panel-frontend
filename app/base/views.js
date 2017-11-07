@@ -1,19 +1,14 @@
-var api = require('../api-client');
-var passport = require('passport');
-var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
-var raven = require('raven');
+const api = require('../api-client');
+const passport = require('passport');
+const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
+const raven = require('raven');
+const routes = require('../routes');
 
 
 exports.home = [
   ensureLoggedIn('/login'),
-  function (req, res) {
-    function render(context) {
-      res.render('home.html', context);
-    }
-
-    api.users.get(req.user.sub)
-      .then(function (user) { render({'user': user}); })
-      .catch(function (error) { render({'error': error}); });
+  function (req, res, next) {
+    res.render('home.html');
   }
 ];
 
@@ -27,14 +22,27 @@ exports.error_test = function (req, res, next) {
 
 exports.auth_callback = [
   passport.authenticate('auth0-oidc'),
+
   function (req, res, next) {
     raven.setContext({user: req.user});
     api.set_token(req.user.id_token);
+
     api.users.get(req.user.sub)
+
       .then((user) => {
+        req.user.is_superuser = true;
         res.redirect(req.session.returnTo || '/');
       })
-      .catch(next);
+
+      .catch((error) => {
+        if (error.statusCode && error.statusCode == 403) {
+          req.user.is_superuser = false;
+          res.redirect('/');
+
+        } else {
+          next(error);
+        }
+      });
   }
 ];
 

@@ -24,7 +24,7 @@ moj.Modules.auth0lock = {
       callbackURL: callbackurl,
       responseType: "code",
       authParams: {
-        scope: "openid offline_access"
+        scope: "openid profile offline_access"
       },
       container: self.containerId
     });

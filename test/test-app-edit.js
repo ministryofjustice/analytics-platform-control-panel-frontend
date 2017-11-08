@@ -35,7 +35,7 @@ describe('Edit app form', () => {
           }
         };
 
-        views.app_edit[1](req, res, reject);
+        views.app_details[1](req, res, reject);
       });
 
       return request
@@ -43,9 +43,9 @@ describe('Edit app form', () => {
           assert(app_details_request.isDone(), `API call to /apps/${app.id}/ expected`);
           assert(buckets_list_request.isDone(), 'API call to /s3buckets/ expected');
           assert(users_list_request.isDone(), 'API call to /users/ expected');
-          assert.equal(args.template, 'apps/edit.html');
+          assert.equal(args.template, 'apps/details.html');
           assert.deepEqual(args.context.app, app);
-          assert.deepEqual(args.context.buckets, buckets.results);
+          assert.deepEqual(args.context.available_buckets, buckets.results);
           assert.deepEqual(args.context.users, users.results);
         });
     });

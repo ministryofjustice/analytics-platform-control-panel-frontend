@@ -57,11 +57,29 @@ exports.user_edit = [
     Promise
       .all([user_request, apps_request, buckets_request])
       .then((responses) => {
-        let [user_response, apps_response, buckets_response] = responses;
+        const [user_response, apps_response, buckets_response] = responses;
+
+        const all_apps = apps_response.results;
+        const all_buckets = buckets_response.results;
+
+        const app_ids_associated = user_response
+          .userapps
+          .map(ua => ua.app.id);
+        const bucket_ids_associated = user_response
+          .users3buckets
+          .map(as => as.s3bucket.id);
+
+        const apps_available = all_apps.filter(app => {
+          return app_ids_associated.indexOf(app.id) < 0;
+        });
+        const buckets_available = all_buckets.filter(bucket => {
+          return bucket_ids_associated.indexOf(bucket.id) < 0;
+        });
+
         let template_args = {
           user: user_response,
-          apps: apps_response.results,
-          buckets: buckets_response.results,
+          apps_available: apps_available,
+          buckets_available: buckets_available,
         };
         res.render('users/edit.html', template_args);
       })

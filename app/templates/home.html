@@ -4,8 +4,10 @@
 
 {% block main_column %}
 
-  {% if error %}
-    <p>{{ error }}</p>
+  {% if not current_user.is_superuser %}
+    <h2 class="heading-medium">No access yet</h2>
+    <p>Only superadmins have access to the control panel at the moment.</p>
+    <p>Ask a superadmin to grant you access.</p>
   {% else %}
     <h2 class="heading-medium">Admin</h2>
     <ul class="list list-bullet">

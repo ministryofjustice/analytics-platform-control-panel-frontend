@@ -135,6 +135,14 @@ module.exports = (function () {
     'add': api.add_bucket
   };
 
+  api.add_apps3bucket = function (apps3bucket) {
+    return api_request({method: 'POST', endpoint: 'apps3buckets', resource: apps3bucket});
+  };
+
+  api.apps3buckets = {
+    'add': api.add_apps3bucket
+  };
+
   return api;
 
 })();

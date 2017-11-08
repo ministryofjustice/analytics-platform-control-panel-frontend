@@ -97,21 +97,7 @@ exports.list_user_apps = function (req, res) {
 };
 
 
-exports.app_details = function (req, res, next) {
-
-  api.get_app(req.params.id).
-    then(function (app) {
-
-      res.render('apps/details.html', {
-        app: app
-      });
-
-    })
-    .catch(next);
-};
-
-
-exports.app_edit = [
+exports.app_details = [
   ensureLoggedIn('/login'),
   function(req, res, next) {
     let app_request = api.get_app(req.params.id);
@@ -132,8 +118,28 @@ exports.app_edit = [
           available_buckets: buckets_other,
           users: users_response.results,
         };
-        res.render('apps/edit.html', template_args);
+        res.render('apps/details.html', template_args);
       })
       .catch(next);
   },
+];
+
+
+exports.connect_bucket = [
+  ensureLoggedIn('/login'),
+  function(req, res, next) {
+
+    const apps3bucket = {
+      app: req.params.app_id,
+      s3bucket: req.body.connect_bucket,
+      access_level: 'readonly'
+    };
+
+    api.add_apps3bucket(apps3bucket)
+      .then(function () {
+        res.redirect(routes.url_for('apps.details', {id: apps3bucket.app}));
+      })
+      .catch(next);
+
+  }
 ];

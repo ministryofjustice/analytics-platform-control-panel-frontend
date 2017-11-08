@@ -19,7 +19,7 @@
         <tr>
           <td><a href="{{ url_for('buckets.details', {id: bucket.id}) }}">{{ bucket.name }}</a></td>
           <td class="align-right">
-            <a class="button button-secondary" href="#">Edit</a>
+            <a class="button button-secondary" href="{{ url_for('buckets.edit', {id: bucket.id}) }}">Edit</a>
             <a class="button button-secondary js-confirm" href="#">Delete</a>
           </td>
         </tr>

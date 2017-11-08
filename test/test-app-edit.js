@@ -12,9 +12,9 @@ describe('Edit app form', () => {
   describe('when rendered', () => {
 
     it('loads app, buckets and users from API', () => {
-      const app = require('./fixtures/app')
-      const buckets = require('./fixtures/buckets')
-      const users = require('./fixtures/users')
+      const app = require('./fixtures/app');
+      const buckets = require('./fixtures/buckets');
+      const users = require('./fixtures/users');
 
       // Mock API requests
       let app_details_request = nock(config.api.base_url)
@@ -27,13 +27,13 @@ describe('Edit app form', () => {
         .get(`/users/`)
         .reply(200, users);
 
-      let req = {'params': {'id': 1}};
-      let res = {};
       let request = new Promise((resolve, reject) => {
-
-        res.render = function (template, context) {
-          resolve({'template': template, 'context': context});
-        }
+        let req = {params: {id: app.id}};
+        let res = {
+          render: (template, context) => {
+            resolve({'template': template, 'context': context});
+          }
+        };
 
         views.app_edit[1](req, res, reject);
       });

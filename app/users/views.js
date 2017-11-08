@@ -46,3 +46,25 @@ exports.user_details = [
       .catch(next);
   }
 ];
+
+exports.user_edit = [
+  ensureLoggedIn('/login'),
+  function(req, res, next) {
+    let user_request = api.get_user(req.params.id);
+    let apps_request = api.list_apps();
+    let buckets_request = api.list_buckets();
+
+    Promise
+      .all([user_request, apps_request, buckets_request])
+      .then((responses) => {
+        let [user_response, apps_response, buckets_response] = responses;
+        let template_args = {
+          user: user_response,
+          apps: apps_response.results,
+          buckets: buckets_response.results,
+        };
+        res.render('users/edit.html', template_args);
+      })
+      .catch(next)
+  },
+];

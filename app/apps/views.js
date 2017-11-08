@@ -122,13 +122,18 @@ exports.app_edit = [
       .all([app_request, buckets_request, users_request])
       .then(function(responses) {
         let [app_response, buckets_response, users_response] = responses;
+        const all_buckets = buckets_response.results;
+        const bucket_ids_associated = app_response.apps3buckets.map(as => as.s3bucket.id);
+        const buckets_other = all_buckets.filter(bucket => {
+          return bucket_ids_associated.indexOf(bucket.id) < 0;
+        });
         let template_args = {
           app: app_response,
-          buckets: buckets_response.results,
+          available_buckets: buckets_other,
           users: users_response.results,
         };
         res.render('apps/edit.html', template_args);
       })
-      .catch(next)
+      .catch(next);
   },
 ];

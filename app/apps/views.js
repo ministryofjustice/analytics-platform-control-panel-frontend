@@ -78,6 +78,7 @@ exports.list_apps = [
         res.render('apps/list.html', {
           apps: apps
         });
+
       })
       .catch(next);
   }
@@ -96,79 +97,53 @@ exports.list_user_apps = function (req, res) {
 };
 
 
-exports.app_details = function (req, res) {
+const get_buckets_options = (app, all_buckets) => {
+  const associated_ids = app.apps3buckets.map(as => as.s3bucket.id);
 
-  api.get_app(req.params.id).then(function (app) {
-
-    res.render('apps/details.html', {
-      app: app
-    });
-
-  }).catch(function (err) {
-
-    var dummyUsers = [
-        {
-          id: 'github|123456',
-          name: 'Harry Pierce',
-          admin: true // probably would be role: <integer> or something?
-        },
-        {
-          id: 'github|234567',
-          name: 'Tom Quinn',
-          admin: false
-        },
-        {
-          id: 'github|345678',
-          name: 'Zoe Reynolds',
-          admin: true
-        }
-      ],
-      dummyBuckets = [
-        {
-          id: 1,
-          name: 'dev-dummy-bucket'
-        }
-      ],
-      app = {
-        name: 'That Dummy App',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec ligula mollis, vestibulum mi eget, finibus lorem. Nulla ornare velit.',
-        repo_url: 'https://github.com/org-dummy-org/repo-dummy-repo',
-        apps3buckets: [
-          // array of numbers?
-        ],
-        userapps: [
-          // no idea - I'd have expected app users maybe?
-        ],
-        users: dummyUsers,
-        buckets: dummyBuckets
-      };
-
-    res.render('apps/details.html', {
-      app: app
-    });
-
-  });
+  return all_buckets.filter(bucket => !associated_ids.includes(bucket.id));
 };
 
 
-exports.app_edit = [
+exports.app_details = [
   ensureLoggedIn('/login'),
   function(req, res, next) {
-    let app_request = api.get_app(req.params.id);
-    let buckets_request = api.list_buckets();
-    let users_request = api.list_users();
+    const app_request = api.get_app(req.params.id);
+    const buckets_request = api.list_buckets();
+    const users_request = api.list_users();
 
     Promise
       .all([app_request, buckets_request, users_request])
       .then(function(responses) {
-        let [app_response, buckets_response, users_response] = responses;
-        let template_args = {
-          app: app_response,
-          buckets: buckets_response.results,
-          users: users_response.results,
+        const [app, buckets_response, users_response] = responses;
+        const all_buckets = buckets_response.results;
+        const all_users = users_response.results;
+        const template_args = {
+          app: app,
+          buckets_options: get_buckets_options(app, all_buckets),
+          users: all_users,
         };
-        res.render('apps/edit.html', template_args);
+        res.render('apps/details.html', template_args);
       })
-      .catch(next)
+      .catch(next);
   },
+];
+
+
+exports.connect_bucket = [
+  ensureLoggedIn('/login'),
+  function(req, res, next) {
+
+    const apps3bucket = {
+      app: req.params.app_id,
+      s3bucket: req.body.connect_bucket,
+      access_level: 'readonly'
+    };
+
+    api.apps.connect_bucket(apps3bucket)
+      .then(function () {
+        res.redirect(routes.url_for('apps.details', {id: apps3bucket.app}));
+      })
+      .catch(next);
+
+  }
 ];

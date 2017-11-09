@@ -103,10 +103,15 @@ module.exports = (function () {
     return api_request({method: 'POST', endpoint: 'apps/', resource: app});
   };
 
+  api.connect_bucket_to_app = function (apps3bucket) {
+    return api_request({method: 'POST', endpoint: 'apps3buckets', resource: apps3bucket});
+  };
+
   api.apps = {
     list: api.list_apps,
     get: api.get_app,
-    add: api.add_app
+    add: api.add_app,
+    connect_bucket: api.connect_bucket_to_app,
   };
 
   api.list_buckets = function () {

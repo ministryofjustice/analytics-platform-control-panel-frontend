@@ -4,12 +4,6 @@
 
 {% block main_column %}
 
-<!-- only show if signed in user has admin rights to this app -->
-<p class="clearfix align-right">
-  <a href="/apps/manage/{{ app.id }}" class="button button-secondary">Manage app</a>
-  <a class="button button-secondary js-confirm" href="/apps/delete/{{ app.id }}/{{ user_id }}">Delete app</a>
-</p>
-<!-- end -->
 
 <h2 class="heading-medium">Description</h2>
 <p>
@@ -25,12 +19,16 @@
   {% endif %}
 </p>
 
+<!--
+TODO: hook up app users properly to this once @jmoz has finished work to
+      provide more info than just an array of IDs
+-->
 <h2 class="heading-medium">App users</h2>
 {% if app.users.length %}
   <ul class="list list-bullet">
     {% for user in app.users %}
       <li>
-        <a href="/users/show/{{ user.id | e }}">{{ user.name }}</a>
+        <a href="{{ url_for('user.details', {id: user.id}) }}">{{ user.name }}</a>
         {% if user.admin %}
           (Admin)
         {% endif %}
@@ -40,16 +38,66 @@
 {% else %}
   <p>None</p>
 {% endif %}
+<!--
+TODO: provide form to add users – also dependent on the above work from @jmoz
+ -->
 
 <h2 class="heading-medium">App data sources</h2>
-{% if app.buckets.length %}
-  <ul class="list list-bullet">
-    {% for bucket in app.buckets %}
-      <li><a href="/buckets/{{ bucket.id }}">{{ bucket.name }}</a></li>
-    {% endfor %}
-  </ul>
+<p>{{ app.apps3buckets.length }} app data source{%- if app.apps3buckets.length != 1 -%}s{%- endif %} connected to this app</p>
+
+{% if app.apps3buckets.length %}
+  <table class="form-group">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>App has read/write access</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for bucket in app.apps3buckets %}
+        <tr>
+          <td><a href="{{ url_for('buckets.details', {id: bucket.s3bucket.id}) }}">{{ bucket.s3bucket.name }}</a></td>
+          <td>{% if bucket.access_level == 'readwrite' %}Yes{% else %}No{% endif %}</td>
+          <td class="align-right">
+            <a href="#" class="button button-secondary">{% if bucket.access_level == 'readwrite' %}Remove{% else %}Grant{% endif %} read/write access</a>
+            <a href="#" class="button button-secondary">Remove app access</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 {% else %}
   <p>None</p>
 {% endif %}
+
+{% if buckets_options.length %}
+  <form action="{{ url_for('apps.connect_bucket', {app_id: app.id}) }}" method="post">
+    <div class="form-group">
+      <label class="form-label" for="connect_bucket">Connect an app data source</label>
+      <select class="form-control no-blank" id="connect_bucket" name="connect_bucket">
+        <option value="">Select app data source</option>
+        {% for bucket in buckets_options %}
+          <option value="{{ bucket.id }}">{{ bucket.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <input type="submit" class="button button-secondary" value="Add">
+    </div>
+  </form>
+{% else %}
+  <p>(All available app data sources are already connected to this app.)</p>
+{% endif %}
+
+
+<hr>
+
+<!-- only show if signed in user has admin rights to this app -->
+<p class="clearfix align-right">
+  <a class="button button-secondary js-confirm" href="/apps/delete/{{ app.id }}/{{ user_id }}">Delete app</a>
+</p>
+<!-- end -->
+
 
 {% endblock %}

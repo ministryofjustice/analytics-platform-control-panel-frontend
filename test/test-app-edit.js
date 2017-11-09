@@ -45,7 +45,7 @@ describe('Edit app form', () => {
           assert(users_list_request.isDone(), 'API call to /users/ expected');
           assert.equal(args.template, 'apps/details.html');
           assert.deepEqual(args.context.app, app);
-          assert.deepEqual(args.context.available_buckets, buckets.results);
+          assert.deepEqual(args.context.buckets_options, buckets.results);
           assert.deepEqual(args.context.users, users.results);
         });
     });

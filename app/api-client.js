@@ -103,10 +103,15 @@ module.exports = (function () {
     return api_request({method: 'POST', endpoint: 'apps/', resource: app});
   };
 
+  api.connect_bucket_to_app = function (apps3bucket) {
+    return api_request({method: 'POST', endpoint: 'apps3buckets', resource: apps3bucket});
+  };
+
   api.apps = {
     list: api.list_apps,
     get: api.get_app,
-    add: api.add_app
+    add: api.add_app,
+    connect_bucket: api.connect_bucket_to_app,
   };
 
   api.list_buckets = function () {
@@ -133,14 +138,6 @@ module.exports = (function () {
     'list': api.list_buckets,
     'get': api.get_bucket,
     'add': api.add_bucket
-  };
-
-  api.add_apps3bucket = function (apps3bucket) {
-    return api_request({method: 'POST', endpoint: 'apps3buckets', resource: apps3bucket});
-  };
-
-  api.apps3buckets = {
-    'add': api.add_apps3bucket
   };
 
   return api;

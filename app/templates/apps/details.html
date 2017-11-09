@@ -43,7 +43,7 @@ TODO: provide form to add users – also dependent on the above work from @jmoz
  -->
 
 <h2 class="heading-medium">App data sources</h2>
-<p>{{ app.apps3buckets.length }} app data {{ "source" if app.apps3buckets.length == 1 else "sources" }} connected to this app</p>
+<p>{{ app.apps3buckets.length }} app data source{%- if app.apps3buckets.length != 1 -%}s{%- endif %} connected to this app</p>
 
 {% if app.apps3buckets.length %}
   <table class="form-group">
@@ -58,9 +58,9 @@ TODO: provide form to add users – also dependent on the above work from @jmoz
       {% for bucket in app.apps3buckets %}
         <tr>
           <td><a href="{{ url_for('buckets.details', {id: bucket.s3bucket.id}) }}">{{ bucket.s3bucket.name }}</a></td>
-          <td>{{ "Yes" if bucket.access_level == 'readwrite' else "No" }}</td>
+          <td>{% if bucket.access_level == 'readwrite' %}Yes{% else %}No{% endif %}</td>
           <td class="align-right">
-            <a href="#" class="button button-secondary">{{ "Remove" if bucket.access_level == 'readwrite' else "Grant" }} read/write access</a>
+            <a href="#" class="button button-secondary">{% if bucket.access_level == 'readwrite' %}Remove{% else %}Grant{% endif %} read/write access</a>
             <a href="#" class="button button-secondary">Remove app access</a>
           </td>
         </tr>
@@ -71,13 +71,13 @@ TODO: provide form to add users – also dependent on the above work from @jmoz
   <p>None</p>
 {% endif %}
 
-{% if available_buckets.length %}
-  <form action="/apps/{{ app.id }}/connect_bucket" method="post">
+{% if buckets_options.length %}
+  <form action="{{ url_for('apps.connect_bucket', {app_id: app.id}) }}" method="post">
     <div class="form-group">
       <label class="form-label" for="connect_bucket">Connect an app data source</label>
       <select class="form-control no-blank" id="connect_bucket" name="connect_bucket">
         <option value="">Select app data source</option>
-        {% for bucket in available_buckets %}
+        {% for bucket in buckets_options %}
           <option value="{{ bucket.id }}">{{ bucket.name }}</option>
         {% endfor %}
       </select>

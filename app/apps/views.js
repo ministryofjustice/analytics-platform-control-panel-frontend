@@ -97,26 +97,30 @@ exports.list_user_apps = function (req, res) {
 };
 
 
+const get_buckets_options = (app, all_buckets) => {
+  const associated_ids = app.apps3buckets.map(as => as.s3bucket.id);
+
+  return all_buckets.filter(bucket => !associated_ids.includes(bucket.id));
+};
+
+
 exports.app_details = [
   ensureLoggedIn('/login'),
   function(req, res, next) {
-    let app_request = api.get_app(req.params.id);
-    let buckets_request = api.list_buckets();
-    let users_request = api.list_users();
+    const app_request = api.get_app(req.params.id);
+    const buckets_request = api.list_buckets();
+    const users_request = api.list_users();
 
     Promise
       .all([app_request, buckets_request, users_request])
       .then(function(responses) {
-        let [app_response, buckets_response, users_response] = responses;
+        const [app, buckets_response, users_response] = responses;
         const all_buckets = buckets_response.results;
-        const bucket_ids_associated = app_response.apps3buckets.map(as => as.s3bucket.id);
-        const buckets_other = all_buckets.filter(bucket => {
-          return bucket_ids_associated.indexOf(bucket.id) < 0;
-        });
-        let template_args = {
-          app: app_response,
-          available_buckets: buckets_other,
-          users: users_response.results,
+        const all_users = users_response.results;
+        const template_args = {
+          app: app,
+          buckets_options: get_buckets_options(app, all_buckets),
+          users: all_users,
         };
         res.render('apps/details.html', template_args);
       })
@@ -135,7 +139,7 @@ exports.connect_bucket = [
       access_level: 'readonly'
     };
 
-    api.add_apps3bucket(apps3bucket)
+    api.apps.connect_bucket(apps3bucket)
       .then(function () {
         res.redirect(routes.url_for('apps.details', {id: apps3bucket.app}));
       })

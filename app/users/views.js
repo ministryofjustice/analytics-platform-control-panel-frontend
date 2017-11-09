@@ -61,9 +61,9 @@ const get_buckets_options = (user, all_buckets) => {
 exports.user_edit = [
   ensureLoggedIn('/login'),
   function(req, res, next) {
-    let user_request = api.get_user(req.params.id);
-    let apps_request = api.list_apps();
-    let buckets_request = api.list_buckets();
+    const user_request = api.get_user(req.params.id);
+    const apps_request = api.list_apps();
+    const buckets_request = api.list_buckets();
 
     Promise
       .all([user_request, apps_request, buckets_request])
@@ -72,7 +72,7 @@ exports.user_edit = [
         const all_apps = apps_response.results;
         const all_buckets = buckets_response.results;
 
-        let template_args = {
+        const template_args = {
           user: user,
           apps_options: get_apps_options(user, all_apps),
           buckets_options: get_buckets_options(user, all_buckets),

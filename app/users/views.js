@@ -26,7 +26,6 @@ exports.new_user = [
   }
 ];
 
-
 exports.user_details = [
   ensureLoggedIn('/login'),
   function (req, res, next) {
@@ -45,4 +44,41 @@ exports.user_details = [
       })
       .catch(next);
   }
+];
+
+const get_apps_options = (user, all_apps) => {
+  const associated_ids = user.userapps.map(ua => ua.app.id);
+
+  return all_apps.filter(app => !associated_ids.includes(app.id));
+};
+
+const get_buckets_options = (user, all_buckets) => {
+  const associated_ids = user.users3buckets.map(us => us.s3bucket.id);
+
+  return all_buckets.filter(bucket => !associated_ids.includes(bucket.id));
+};
+
+exports.user_edit = [
+  ensureLoggedIn('/login'),
+  function(req, res, next) {
+    const user_request = api.get_user(req.params.id);
+    const apps_request = api.list_apps();
+    const buckets_request = api.list_buckets();
+
+    Promise
+      .all([user_request, apps_request, buckets_request])
+      .then((responses) => {
+        const [user, apps_response, buckets_response] = responses;
+        const all_apps = apps_response.results;
+        const all_buckets = buckets_response.results;
+
+        const template_args = {
+          user: user,
+          apps_options: get_apps_options(user, all_apps),
+          buckets_options: get_buckets_options(user, all_buckets),
+        };
+        res.render('users/edit.html', template_args);
+      })
+      .catch(next)
+  },
 ];

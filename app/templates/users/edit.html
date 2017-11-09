@@ -1,0 +1,13 @@
+{% extends "layouts/one-column.html" %}
+
+{% set page_title = "User: " + user.username %}
+
+{% block main_column %}
+
+<pre>user = {{ user | dump(4) | safe }}</pre>
+<br />
+<pre>apps_options = {{ apps_options | dump(4) | safe }}</pre>
+<br />
+<pre>buckets_options = {{ buckets_options | dump(4) | safe }}</pre>
+
+{% endblock %}

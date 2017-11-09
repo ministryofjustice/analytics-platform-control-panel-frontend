@@ -22,7 +22,7 @@
         <td>{{ user.username }}</td>
         <td>{{ user.email }}</td>
         <td class="align-right">
-          <a class="button button-secondary" href="#">Edit</a>
+          <a class="button button-secondary" href="{{ url_for('users.edit', {id: user.auth0_id}) }}">Edit</a>
           <a class="button button-secondary js-confirm" href="#">Delete</a>
         </td>
       </tr>

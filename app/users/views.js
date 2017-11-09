@@ -26,7 +26,6 @@ exports.new_user = [
   }
 ];
 
-
 exports.user_details = [
   ensureLoggedIn('/login'),
   function (req, res, next) {
@@ -47,6 +46,18 @@ exports.user_details = [
   }
 ];
 
+const get_apps_options = (user, all_apps) => {
+  const associated_ids = user.userapps.map(ua => ua.app.id);
+
+  return all_apps.filter(app => !associated_ids.includes(app.id));
+};
+
+const get_buckets_options = (user, all_buckets) => {
+  const associated_ids = user.users3buckets.map(us => us.s3bucket.id);
+
+  return all_buckets.filter(bucket => !associated_ids.includes(bucket.id));
+};
+
 exports.user_edit = [
   ensureLoggedIn('/login'),
   function(req, res, next) {
@@ -57,29 +68,14 @@ exports.user_edit = [
     Promise
       .all([user_request, apps_request, buckets_request])
       .then((responses) => {
-        const [user_response, apps_response, buckets_response] = responses;
-
+        const [user, apps_response, buckets_response] = responses;
         const all_apps = apps_response.results;
         const all_buckets = buckets_response.results;
 
-        const app_ids_associated = user_response
-          .userapps
-          .map(ua => ua.app.id);
-        const bucket_ids_associated = user_response
-          .users3buckets
-          .map(as => as.s3bucket.id);
-
-        const apps_available = all_apps.filter(app => {
-          return app_ids_associated.indexOf(app.id) < 0;
-        });
-        const buckets_available = all_buckets.filter(bucket => {
-          return bucket_ids_associated.indexOf(bucket.id) < 0;
-        });
-
         let template_args = {
-          user: user_response,
-          apps_available: apps_available,
-          buckets_available: buckets_available,
+          user: user,
+          apps_options: get_apps_options(user, all_apps),
+          buckets_options: get_buckets_options(user, all_buckets),
         };
         res.render('users/edit.html', template_args);
       })

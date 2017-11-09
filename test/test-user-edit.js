@@ -45,8 +45,8 @@ describe('Edit user form', () => {
           assert(buckets_list_request.isDone(), 'API call to /s3buckets/ expected');
           assert.equal(args.template, 'users/edit.html');
           assert.deepEqual(args.context.user, user);
-          assert.deepEqual(args.context.apps_available, [apps.results[1]]);
-          assert.deepEqual(args.context.buckets_available, [buckets.results[1]]);
+          assert.deepEqual(args.context.apps_options, [apps.results[1]]);
+          assert.deepEqual(args.context.buckets_options, [buckets.results[1]]);
         });
     });
 

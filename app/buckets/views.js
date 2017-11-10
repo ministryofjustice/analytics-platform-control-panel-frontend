@@ -84,6 +84,19 @@ exports.bucket_details = [
   }
 ];
 
+
+const get_apps_options = (bucket, all_apps) => {
+  const associated_ids = bucket.apps3buckets.map(as => as.app.id);
+
+  return all_apps.filter(app => !associated_ids.includes(app.id));
+};
+
+const get_users_options = (bucket, all_users) => {
+  const associated_ids = bucket.users3buckets.map(us => us.user.auth0_id);
+
+  return all_users.filter(user => !associated_ids.includes(user.auth0_id));
+};
+
 exports.bucket_edit = [
   ensureLoggedIn('/login'),
   function(req, res, next) {
@@ -100,8 +113,8 @@ exports.bucket_edit = [
 
         const template_args = {
           bucket: bucket,
-          apps_options: all_apps,
-          users_options: all_users,
+          apps_options: get_apps_options(bucket, all_apps),
+          users_options: get_users_options(bucket, all_users),
         };
         res.render('buckets/edit.html', template_args);
       })

@@ -87,18 +87,21 @@ exports.bucket_details = [
 exports.bucket_edit = [
   ensureLoggedIn('/login'),
   function(req, res, next) {
-    let bucket_request = api.get_bucket(req.params.id);
-    let apps_request = api.list_apps();
-    let users_request = api.list_users();
+    const bucket_request = api.get_bucket(req.params.id);
+    const apps_request = api.list_apps();
+    const users_request = api.list_users();
 
     Promise
       .all([bucket_request, apps_request, users_request])
       .then((responses) => {
-        let [bucket_response, apps_response, users_response] = responses;
-        let template_args = {
-          bucket: bucket_response,
-          apps: apps_response.results,
-          users: users_response.results,
+        const [bucket, apps_response, users_response] = responses;
+        const all_apps = apps_response.results;
+        const all_users = users_response.results;
+
+        const template_args = {
+          bucket: bucket,
+          apps_options: all_apps,
+          users_options: all_users,
         };
         res.render('buckets/edit.html', template_args);
       })

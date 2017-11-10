@@ -10,6 +10,17 @@ module.exports = {
     };
   },
 
+  'api': (app, conf) => {
+    log.debug('adding api');
+    return (req, res, next) => {
+      if (req.user && req.user.id_token) {
+        const api = require('./api-client');
+        api.set_token(req.user.id_token);
+      }
+      next();
+    };
+  },
+
   'body-parser': (app, conf) => {
     log.debug('adding body-parser');
     return require('body-parser').urlencoded({extended: true});
@@ -28,7 +39,11 @@ module.exports = {
   'express-session': (app, conf) => {
     log.debug('adding express-session');
     const session = require('express-session');
-    return session(conf.session);
+    const RedisStore = require('connect-redis')(session);
+    const session_config = Object.assign(
+      {store: new RedisStore(conf.session_store)},
+      conf.session);
+    return session(session_config);
   },
 
   'locals': (app, conf) => {

@@ -6,8 +6,10 @@ services:
       - "3000:3000"
     depends_on:
       - api
+      - redis
     links:
       - api
+      - redis
     env_file:
       - .env
     environment:
@@ -43,3 +45,7 @@ services:
     environment:
       POSTGRES_USER: "controlpanel"
       POSTGRES_DB: "controlpanel"
+  redis:
+    image: "redis:4.0.2-alpine"
+    ports:
+      - "6379:6379"

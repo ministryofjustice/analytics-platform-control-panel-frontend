@@ -58,6 +58,7 @@ config.middleware = [
   'body-parser',
   'express-session',
   'passport',
+  'api',
   'locals',
   'routes',
   '404',
@@ -95,13 +96,19 @@ config.sentry = {
 };
 
 config.session = {
+  name: 'session',
   secret: process.env.COOKIE_SECRET || 'shh-its-a-secret',
-  resave: true,
-  saveUninitialized: true,
+  resave: false,
+  saveUninitialized: false,
   cookie: {
     secure: process.env.ENV != 'dev'
   },
   logFn: console.log
+};
+
+config.session_store = {
+  host: 'redis',
+  port: 6379
 };
 
 config.static = {

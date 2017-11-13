@@ -1,3 +1,20 @@
 <h1>Internal Error</h1>
 
 <p class="error">{{ error.message }}</p>
+
+{% if env.ENV == 'dev' %}
+<pre>
+session:
+{{ req.session | default({}) | dump(2) | safe }}
+</pre>
+
+<pre>
+current_user:
+{{ current_user | dump(2) | safe }}
+</pre>
+
+<pre>
+env:
+{{ env | dump(2) | safe }}
+</pre>
+{% endif %}

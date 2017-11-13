@@ -1,4 +1,5 @@
 const api = require('../api-client');
+const config = require('../config');
 const passport = require('passport');
 const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 const raven = require('raven');
@@ -56,5 +57,8 @@ exports.login = function (req, res) {
 exports.logout = function (req, res) {
   req.logout();
   api.unset_token();
-  res.redirect('/');
+  req.session.destroy((err) => {
+    res.clearCookie(config.session.name);
+    res.redirect('/');
+  });
 };

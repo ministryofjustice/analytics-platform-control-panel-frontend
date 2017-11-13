@@ -1,125 +1,83 @@
-var config = require('./config');
-var log = require('bole')('routes');
-var express = require('express');
-var join = require('path').join;
+const config = require('./config');
+const express = require('express');
+const join = require('path').join;
 
 
 exports.router = new express.Router();
 
-var routes = [].concat.apply([], config.apps.map(add_app_routes));
+const routes = {};
 
-exports.url_for = function (view_name, args) {
+config.apps.forEach((app_name) => {
 
-  for (var i = 0, l = routes.length; i < l; i++) {
-    var route = routes[i];
+  let app_routes = require(join(__dirname, app_name, 'routes'));
 
-    if (route.name === view_name) {
-      try {
-        return build_url(route.pattern, args);
+  app_routes.forEach((route) => {
 
-      } catch (error) {
-        throw 'url_for("' + view_name + '") failed: ' + error;
-      }
-    }
-  }
+    route.name = `${app_name}.${route.name}`;
+    route.method = (route.method || 'GET').toLowerCase();
 
-  throw 'route not found for ' + view_name;
-};
+    add_route(route, exports.router);
 
-
-function build_url(pattern, args) {
-
-  var query = Object.assign({}, args);
-  var placeholders = /(\/:\w+\??)/g;
-
-  function matching_argument(match, placeholder) {
-    var name = placeholder.replace(/[/:?]/g, '');
-    var value = placeholder;
-
-    if (!(name in args)) {
-      throw 'missing argument "' + name + '"';
-    }
-
-    delete query[name];
-
-    return '/' + args[name];
-  }
-
-  var url = pattern.replace(placeholders, matching_argument);
-
-  if (Object.keys(query).length && url.indexOf('?') === -1) {
-    url += '?';
-  }
-
-  return url + url_params(query);
-}
-
-
-function url_params(query) {
-  var pairs = [];
-
-  for (var property in query) {
-    if (query.hasOwnProperty(property)) {
-
-      var key = encodeURIComponent(property);
-      var val = encodeURIComponent(query[property]);
-
-      pairs.push(key + '=' + val);
-    }
-  }
-
-  return pairs.join('&');
-}
-
-
-function add_app_routes(app_name) {
-
-  var routes = join(__dirname, app_name, 'routes.js');
-
-  return require(routes).map(add_route(app_name));
-}
-
-
-function add_route(app_name) {
-  return function (route) {
-    route.name = app_name + '.' + route.name;
-
-    log.debug(route.name + ': ' + route.pattern);
-
-    if (!route.method) {
-      route.method = 'get';
-    }
-
-    route.method = route.method.toLowerCase();
-
-    if (is_valid_method(route.method)) {
-      exports.router[route.method](route.pattern, route.view);
-
-    } else {
-      throw new Error('Invalid method "' + route.method.toUpperCase() + '" in route ' + route);
-    }
-
-    return route;
-  };
-}
-
-
-function is_valid_method(method) {
-  return ['get', 'post', 'put', 'delete'].indexOf(method) >= 0;
-}
-
-
-// static routes
-Object.keys(config.static.paths).forEach(function (pattern) {
-  var source_paths = config.static.paths[pattern];
-
-  source_paths.forEach(function (path) {
-
-    exports.router.use(pattern, express.static(path));
+    routes[route.name] = route;
   });
 });
 
 
-exports.router.use(function (req, res) {
-  res.status(404).render('errors/not-found.html');
-});
+function add_route(route, router) {
+
+  if (!['get', 'post', 'put', 'delete'].includes(route.method)) {
+    throw new Error(
+      `Invalid method ${route.method.toUpperCase()} in route ${route.name}`);
+  }
+
+  router[route.method](route.pattern, route.view);
+}
+
+
+exports.url_for = function (route_name, args = {}) {
+
+  let route = routes[route_name];
+
+  if (!route) {
+    throw new Error(`route ${route_name} not found`);
+  }
+
+  try {
+    return replace_route_params(route.pattern, args) + query_string(args);
+
+  } catch (error) {
+    throw new Error(`url_for("${route_name}") failed: ${error}`);
+  }
+};
+
+
+function replace_route_params(pattern, param_values) {
+
+  return pattern.replace(/(?::(\w+))/g, (match, param) => {
+
+    if (!(param in param_values)) {
+      throw new Error(`missing value for route parameter "${param}"`);
+    }
+
+    let value = param_values[param];
+
+    // remove used values so that the rest can be appended as query string
+    delete param_values[param];
+
+    return value;
+  });
+}
+
+
+function query_string(args) {
+
+  let pairs = Object.keys(args).map(key => {
+    return `${encodeURIComponent(key)}=${encodeURIComponent(args[key])}`;
+  });
+
+  if (pairs.length === 0) {
+    return '';
+  }
+
+  return `?${pairs.join('&')}`;
+}

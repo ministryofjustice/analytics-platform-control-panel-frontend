@@ -12,7 +12,7 @@ module.exports = {
       "groups": [],
     },
     {
-      "auth0_id": "github|1",
+      "auth0_id": "github|2",
       "url": "http://localhost:8000/users/" + escape("github|2"),
       "username": "Mario Rossi",
       "name": "Mario Rossi",

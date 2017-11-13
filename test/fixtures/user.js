@@ -1,7 +1,7 @@
 module.exports = {
   "auth0_id": "github|1",
   "url": "http://localhost:8000/users/github%7C1/",
-  "username": "xoen",
+  "username": "johndoe",
   "name": "",
   "email": "",
   "groups": [],

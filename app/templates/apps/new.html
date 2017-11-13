@@ -58,8 +58,8 @@
         <label for="new-app-datasource-select">Connect an existing app data source</label>
       </div>
       <div class="panel panel-border-narrow js-hidden" id="new-app-datasource-existing-source">
-        <label class="form-label" for="select-existing-datasource">Select app data source</label>
-        <select name="select-existing-datasource" id="select-existing-datasource" class="form-control">
+        <label class="form-label" for="existing_datasource">Select app data source</label>
+        <select name="existing_datasource" id="existing_datasource" class="form-control">
           <option value="">Select</option>
           {% for bucket in buckets %}
             <option value="{{ bucket.id }}">{{ bucket.name }}</option>

@@ -3,6 +3,8 @@ var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 var api = require('../api-client');
 var routes = require('../routes');
 
+var log = require('bole')('appsviews');
+
 
 exports.new_app = [
   ensureLoggedIn('/login'),
@@ -35,9 +37,29 @@ exports.create_app = [
       userapps: [],
     };
 
+    // const apps3bucket = {
+    //   app: app.id,
+    //   s3bucket: req.body.existing_datasource,
+    //   access_level: 'readonly'
+    // };
+    // api.apps.connect_bucket(apps3bucket);
+
+    let app_id
     api.add_app(app)
       .then(function (app) {
-        res.redirect(routes.url_for('apps.details', {id: app.id}));
+        app_id = app.id
+        if (req.body.existing_datasource) {
+          const apps3bucket = {
+            app: app_id,
+            s3bucket: req.body.existing_datasource,
+            access_level: 'readonly'
+          };
+          return api.apps.connect_bucket(apps3bucket);
+        }
+        return Promise.resolve({app: app_id})
+      })
+      .then(function (apps3bucket) {
+        res.redirect(routes.url_for('apps.details', {id: app_id}));
       })
       .catch(function(err) {
         if (err.statusCode === 400) {
@@ -49,6 +71,8 @@ exports.create_app = [
           next(err)
         }
       })
+
+
   }
 ];
 

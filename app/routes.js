@@ -5,23 +5,22 @@ const join = require('path').join;
 
 exports.router = new express.Router();
 
-const routes = merge(config.apps.map(app_name => {
+const routes = {};
 
-  return merge(require(join(__dirname, app_name, 'routes')).map(route => {
+config.apps.forEach((app_name) => {
+
+  let app_routes = require(join(__dirname, app_name, 'routes'));
+
+  app_routes.forEach((route) => {
 
     route.name = `${app_name}.${route.name}`;
     route.method = (route.method || 'GET').toLowerCase();
 
     add_route(route, exports.router);
 
-    return {[route.name]: route};
-  }));
-}));
-
-
-function merge(list_of_objects) {
-  return Object.assign({}, ...list_of_objects);
-}
+    routes[route.name] = route;
+  });
+});
 
 
 function add_route(route, router) {

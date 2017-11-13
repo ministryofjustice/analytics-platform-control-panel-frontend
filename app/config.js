@@ -51,18 +51,18 @@ config.log = {
 
 // order is important!
 config.middleware = [
-  'raven',
-  'morgan',
+  'raven-request-handler',
+  'request-logging',
   'static',
   'cookie-parser',
   'body-parser',
-  'express-session',
-  'passport',
+  'session',
+  'authentication',
   'api',
-  'locals',
+  'template-locals',
   'routes',
   '404',
-  'raven-errorhandler',
+  'raven-error-handler',
   'errors'
 ];
 

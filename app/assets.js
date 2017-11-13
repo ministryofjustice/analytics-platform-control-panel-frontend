@@ -54,11 +54,11 @@ function mkdirp(dir) {
 
     fs.mkdirAsync(dir)
       .then(resolve)
-      .catch(error => {
+      .catch((error) => {
 
         if (error.code == 'ENOENT') {
           mkdirp(path.dirname(dir))
-            .then(_ => {
+            .then((parent) => {
               mkdirp(dir).then(resolve); })
             .catch(reject);
         }
@@ -69,7 +69,7 @@ function mkdirp(dir) {
 
 function compile_all(files, base_options) {
 
-  files.forEach(filename => {
+  files.forEach((filename) => {
     let options = base_options || {};
     let outFile = path.relative(path.dirname(options.files), filename).replace(/.scss$/, '.css');
 
@@ -86,7 +86,7 @@ function compile_all(files, base_options) {
 
 
 function write_css(filename) {
-  return result => {
+  return (result) => {
     fs.writeFileAsync(filename, result.css);
     return result;
   };
@@ -94,7 +94,7 @@ function write_css(filename) {
 
 
 function write_sourcemap(options) {
-  return result => {
+  return (result) => {
     if (options.sourceMap) {
       log.debug(`writing sourcemap: ${relative(options.outFile + '.map')}`);
       fs.writeFileAsync(options.outFile + '.map', result.map);

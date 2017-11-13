@@ -57,7 +57,7 @@ exports.login = function (req, res) {
 exports.logout = function (req, res) {
   req.logout();
   api.unset_token();
-  req.session.destroy(err => {
+  req.session.destroy((err) => {
     res.clearCookie(config.session.name);
     res.redirect('/');
   });

@@ -4,7 +4,7 @@ const join = require('path').join;
 const config = require('./config');
 
 
-module.exports = function (config_override) {
+exports.create_app = function (config_override) {
 
   const app = express();
 
@@ -29,9 +29,10 @@ function init_app(app, conf) {
 
 
 function init_middleware(app, conf) {
-  const middleware = require('./middleware');
+  let log = require('bole')('middleware');
 
   conf.middleware.forEach((name) => {
-    app.use(middleware[name](app, conf));
+    let middleware = require(`./middleware/${name}`)(app, conf, log);
+    app.use(middleware);
   });
 }

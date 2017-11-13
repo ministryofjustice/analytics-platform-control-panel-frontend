@@ -2,9 +2,9 @@ require('dotenv').config();
 const bole = require('bole');
 
 const config = require('./config');
-const create_app = require('./factory');
+const factory = require('./factory');
 
 
 bole.output(config.log);
 
-module.exports = create_app();
+module.exports = factory.create_app();

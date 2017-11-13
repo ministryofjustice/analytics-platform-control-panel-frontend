@@ -14,6 +14,8 @@ ADD node_modules node_modules/
 RUN npm run-script collect-static
 ADD static static/
 
+RUN mkdir -m 777 sessions
+
 ENV EXPRESS_HOST "0.0.0.0"
 ENV NODE_RESTART "0"
 

@@ -1,17 +1,18 @@
-var join = require('path').join;
-var config = module.exports;
-var PROD = process.env.ENV === 'prod';
-
-var node_modules = join(__dirname, '../node_modules');
+const join = require('path').join;
 
 
-config.express = {
-  port: process.env.EXPRESS_PORT || 3000,
-  host: process.env.EXPRESS_HOST || '127.0.0.1'
+const config = module.exports;
+const node_modules = join(__dirname, '../node_modules');
+
+config.api = {
+  base_url: process.env.API_URL || 'http://localhost:8000',
+  username: process.env.API_USER,
+  password: process.env.API_PASSWORD
 };
 
-config.log = {
-  level: process.env.LOG_LEVEL || 'debug'
+config.app = {
+  env: process.env.NODE_ENV || 'dev',
+  asset_path: '/static/'
 };
 
 config.apps = [
@@ -21,11 +22,49 @@ config.apps = [
   'buckets'
 ];
 
-config.session = {
-  secret: process.env.COOKIE_SECRET || 'shh-its-a-secret',
-  resave: true,
-  saveUninitialized: true
+config.auth0 = {
+  domain: process.env.AUTH0_DOMAIN,
+  clientID: process.env.AUTH0_CLIENT_ID,
+  clientSecret: process.env.AUTH0_CLIENT_SECRET,
+  callbackURL: process.env.AUTH0_CALLBACK_URL || 'http://localhost:3000/callback',
+  passReqToCallback: true
 };
+
+config.express = {
+  port: process.env.EXPRESS_PORT || 3000,
+  host: process.env.EXPRESS_HOST || '127.0.0.1'
+};
+
+config.js = {
+  sourceFiles: join(__dirname, 'assets/javascripts/**/*.js'),
+  ignorePaths: [
+    join(__dirname, 'assets/javascripts/vendor/**/*')
+  ],
+  outDir: join(__dirname, '../static/javascripts/'),
+  filename: 'app.js'
+};
+
+config.log = {
+  stream: process.stdout,
+  level: process.env.LOG_LEVEL || 'debug'
+};
+
+// order is important!
+config.middleware = [
+  'raven',
+  'morgan',
+  'static',
+  'cookie-parser',
+  'body-parser',
+  'express-session',
+  'passport',
+  'api',
+  'locals',
+  'routes',
+  '404',
+  'raven-errorhandler',
+  'errors'
+];
 
 config.sass = {
   sources: [
@@ -43,13 +82,33 @@ config.sass = {
   ]
 };
 
-config.js = {
-  sourceFiles: join(__dirname, 'assets/javascripts/**/*.js'),
-  ignorePaths: [
-    join(__dirname, 'assets/javascripts/vendor/**/*')
-  ],
-  outDir: join(__dirname, '../static/javascripts/'),
-  filename: 'app.js'
+config.sentry = {
+  dsn: process.env.SENTRY_DSN,
+  options: {
+    autoBreadcrumbs: {
+      console: true,
+      http: true
+    },
+    tags: {
+      environment: process.env.ENV || 'dev'
+    }
+  }
+};
+
+config.session = {
+  name: 'session',
+  secret: process.env.COOKIE_SECRET || 'shh-its-a-secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.ENV != 'dev'
+  },
+  logFn: console.log
+};
+
+config.session_store = {
+  host: 'redis',
+  port: 6379
 };
 
 config.static = {
@@ -65,34 +124,3 @@ config.static = {
     ]
   }
 };
-
-config.api = {
-  base_url: process.env.API_URL || 'http://localhost:8000',
-  username: process.env.API_USER,
-  password: process.env.API_PASSWORD
-};
-
-config.sentry = {
-  dsn: process.env.SENTRY_DSN,
-  options: {
-    autoBreadcrumbs: {
-      console: true,
-      http: true
-    },
-    tags: {
-      environment: process.env.ENV || 'dev'
-    }
-  }
-};
-
-config.auth0 = {
-  domain: process.env.AUTH0_DOMAIN,
-  clientID: process.env.AUTH0_CLIENT_ID,
-  clientSecret: process.env.AUTH0_CLIENT_SECRET,
-  callbackURL: process.env.AUTH0_CALLBACK_URL || 'http://localhost:3000/callback',
-  passReqToCallback: true
-};
-
-if (PROD) {
-  config.express.host = '0.0.0.0';
-}

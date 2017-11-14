@@ -99,7 +99,7 @@ exports.grant_user_access = [
     const bucket_id = req.params.id;
 
     const users3bucket = {
-      user_id: req.body.user_id,
+      user: req.body.user_id,
       s3bucket: bucket_id,
       access_level: 'readonly',
       is_admin: false,

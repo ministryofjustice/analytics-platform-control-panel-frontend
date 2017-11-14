@@ -3,8 +3,61 @@
 {% set page_title = "Bucket: " + bucket.name %}
 
 {% block main_column %}
+<!-- TODO: This is only a placeholder template - Update me -->
+
+
+<!-- TODO: Placeholder list - double check wording and everything -->
+<h2 class="heading-medium">Users with access</h2>
+<p>{{ bucket.users3buckets.length }} user{%- if bucket.users3buckets.length != 1 -%}s{%- endif %} have access to this data source</p>
+
+{% if bucket.users3buckets.length %}
+  <table class="form-group">
+    <thead>
+      <tr>
+        <th>User</th>
+        <th>User has read/write access</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for users3bucket in bucket.users3buckets %}
+        <tr>
+          <td><a href="{{ url_for('users.details', {id: users3bucket.user.auth0_id}) }}">{{ users3bucket.user.username }}</a></td>
+          <td>{% if users3bucket.access_level == 'readwrite' %}Yes{% else %}No{% endif %}</td>
+          <td class="align-right">
+            <a href="#" class="button button-secondary">{% if users3bucket.access_level == 'readwrite' %}Remove{% else %}Grant{% endif %} read/write access</a>
+            <a href="#" class="button button-secondary">Revoke user access</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>None</p>
+{% endif %}
+
+<!-- TODO: Check/Update - Placeholder "form" -->
+{% if users_options.length %}
+  <form action="{{ url_for('buckets.grant_user_access', {id: bucket.id}) }}" method="post">
+    <div class="form-group">
+      <label class="form-label" for="connect_bucket">Grant user access to this data source</label>
+      <select class="form-control no-blank" id="user_id" name="user_id">
+        <option value="">Select a user</option>
+        {% for user in users_options %}
+          <option value="{{ user.auth0_id }}">{{ user.username }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <input type="submit" class="button button-secondary" value="Grant access">
+    </div>
+  </form>
+{% else %}
+  <p>(All available users already have access to this data source.)</p>
+{% endif %}
 
 <!-- TODO: Remove me - Dump of available variables -->
+<hr />
 <pre>bucket = {{ bucket | dump(4) | safe }}</pre>
 <br />
 <pre>apps_options = {{ apps_options | dump(4) | safe }}</pre>

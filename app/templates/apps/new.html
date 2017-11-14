@@ -40,9 +40,9 @@
   <div class="form-group">
 
     <fieldset>
-      <h2 class="heading-medium">Attach a datasource (S3 bucket)</h2>
-      <p>Attach an existing bucket to your app, or create a new bucket. This can also be done later.</p>
-      <p>Additional buckets can also be attached after your app is created.</p>
+      <h2 class="heading-medium">Connect a datasource (S3 bucket)</h2>
+      <p>Connect an existing bucket to your app, or create a new bucket. This can also be done later.</p>
+      <p>Additional buckets can also be connected after your app is created.</p>
       <div class="multiple-choice" data-target="new-app-datasource-create-new-source">
         <input type="radio" id="new-app-datasource-create" name="new-app-datasource" value="create">
         <label for="new-app-datasource-create">Create a new datasource</label>
@@ -55,11 +55,11 @@
 
       <div class="multiple-choice" data-target="new-app-datasource-existing-source">
         <input type="radio" id="new-app-datasource-select" name="new-app-datasource" value="select">
-        <label for="new-app-datasource-select">Attach an existing app data source</label>
+        <label for="new-app-datasource-select">Connect an existing app data source</label>
       </div>
       <div class="panel panel-border-narrow js-hidden" id="new-app-datasource-existing-source">
-        <label class="form-label" for="select-existing-datasource">Select app data source</label>
-        <select name="select-existing-datasource" id="select-existing-datasource" class="form-control">
+        <label class="form-label" for="existing_datasource">Select app data source</label>
+        <select name="existing_datasource" id="existing_datasource" class="form-control">
           <option value="">Select</option>
           {% for bucket in buckets %}
             <option value="{{ bucket.id }}">{{ bucket.name }}</option>

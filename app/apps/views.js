@@ -3,39 +3,25 @@ var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 var api = require('../api-client');
 var routes = require('../routes');
 
+var log = require('bole')('appsviews');
+
 
 exports.new_app = [
-
   ensureLoggedIn('/login'),
+  function (req, res, next) {
+    const buckets_request = api.list_buckets();
 
-  function (req, res) {
-
-    res.render('apps/new.html', {
-      prefix: process.env.ENV + '-',
-      buckets: [
-        {
-          id: 1,
-          name: 'dev-dummy-bucket1'
-        },
-        {
-          id: 2,
-          name: 'dev-dummy-bucket2'
-        },
-        {
-          id: 3,
-          name: 'dev-dummy-bucket3'
-        },
-        {
-          id: 4,
-          name: 'dev-dummy-bucket4'
-        },
-        {
-          id: 5,
-          name: 'dev-dummy-bucket5'
-        },
-      ]
-    });
-
+    Promise
+      .all([buckets_request])
+      .then(function(response) {
+        const [buckets_response] = response;
+        const template_args = {
+          prefix: process.env.ENV + '-',
+          buckets: buckets_response.results,
+        };
+        res.render('apps/new.html', template_args);
+      })
+      .catch(next);
   }
 
 ];
@@ -51,9 +37,29 @@ exports.create_app = [
       userapps: [],
     };
 
+    // const apps3bucket = {
+    //   app: app.id,
+    //   s3bucket: req.body.existing_datasource,
+    //   access_level: 'readonly'
+    // };
+    // api.apps.connect_bucket(apps3bucket);
+
+    let app_id
     api.add_app(app)
       .then(function (app) {
-        res.redirect(routes.url_for('apps.details', {id: app.id}));
+        app_id = app.id
+        if (req.body.existing_datasource) {
+          const apps3bucket = {
+            app: app_id,
+            s3bucket: req.body.existing_datasource,
+            access_level: 'readonly'
+          };
+          return api.apps.connect_bucket(apps3bucket);
+        }
+        return Promise.resolve({app: app_id})
+      })
+      .then(function (apps3bucket) {
+        res.redirect(routes.url_for('apps.details', {id: app_id}));
       })
       .catch(function(err) {
         if (err.statusCode === 400) {
@@ -65,6 +71,8 @@ exports.create_app = [
           next(err)
         }
       })
+
+
   }
 ];
 

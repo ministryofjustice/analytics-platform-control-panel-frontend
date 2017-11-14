@@ -35,7 +35,7 @@ describe('Edit bucket form', () => {
           },
         };
 
-        views.bucket_edit[1](req, res, reject);
+        views.bucket_details[1](req, res, reject);
       });
 
       return request
@@ -43,7 +43,7 @@ describe('Edit bucket form', () => {
           assert(bucket_details_request.isDone(), `API call to /s3buckets/${bucket.id}/ expected`);
           assert(apps_list_request.isDone(), 'API call to /apps/ expected');
           assert(users_list_request.isDone(), 'API call to /users/ expected');
-          assert.equal(args.template, 'buckets/edit.html');
+          assert.equal(args.template, 'buckets/details.html');
           assert.deepEqual(args.context.bucket, bucket);
           assert.deepEqual(args.context.apps_options, [apps.results[1]]);
           assert.deepEqual(args.context.users_options, [users.results[1]]);

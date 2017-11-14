@@ -4,6 +4,11 @@
 
 {% block main_column %}
 
-<pre>{{ bucket | dump(2) | safe }}</pre>
+<!-- TODO: Remove me - Dump of available variables -->
+<pre>bucket = {{ bucket | dump(4) | safe }}</pre>
+<br />
+<pre>apps_options = {{ apps_options | dump(4) | safe }}</pre>
+<br />
+<pre>users_options = {{ users_options | dump(4) | safe }}</pre>
 
 {% endblock %}

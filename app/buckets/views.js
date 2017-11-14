@@ -55,36 +55,6 @@ exports.create_bucket = [
   }
 ];
 
-
-exports.bucket_details = [
-  ensureLoggedIn('/login'),
-  function (req, res) {
-
-    api.get_bucket(req.params.id).then(function (bucket) {
-
-      res.render('buckets/details.html', {
-        bucket: bucket
-      });
-
-    }).catch(function (err) {
-
-      bucket = {
-        id: 999,
-        url: 'http://api:8000/s3buckets/999',
-        name: 'dev-dummy-bucket',
-        apps3buckets: [],
-        created_by: 'github|123456'
-      };
-
-      res.render('buckets/details.html', {
-        bucket: bucket
-      });
-
-    });
-  }
-];
-
-
 const get_apps_options = (bucket, all_apps) => {
   const associated_ids = bucket.apps3buckets.map(as => as.app.id);
 
@@ -97,7 +67,7 @@ const get_users_options = (bucket, all_users) => {
   return all_users.filter(user => !associated_ids.includes(user.auth0_id));
 };
 
-exports.bucket_edit = [
+exports.bucket_details = [
   ensureLoggedIn('/login'),
   function(req, res, next) {
     const bucket_request = api.get_bucket(req.params.id);
@@ -116,7 +86,7 @@ exports.bucket_edit = [
           apps_options: get_apps_options(bucket, all_apps),
           users_options: get_users_options(bucket, all_users),
         };
-        res.render('buckets/edit.html', template_args);
+        res.render('buckets/details.html', template_args);
       })
       .catch(next)
   },

@@ -7,12 +7,8 @@ var routes = require('../routes');
 exports.new_app = [
   ensureLoggedIn('/login'),
   function (req, res, next) {
-    const buckets_request = api.list_buckets();
-
-    Promise
-      .all([buckets_request])
-      .then(function(response) {
-        const [buckets_response] = response;
+    api.list_buckets()
+      .then((buckets_response) => {
         const template_args = {
           prefix: process.env.ENV + '-',
           buckets: buckets_response.results,
@@ -21,7 +17,6 @@ exports.new_app = [
       })
       .catch(next);
   }
-
 ];
 
 

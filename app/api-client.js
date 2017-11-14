@@ -104,6 +104,7 @@ module.exports = (function () {
     return api_request({method: 'POST', endpoint: 'apps/', resource: app});
   };
 
+  // TODO: Rename `connect_bucket_to_app` => `grant_app_access_to_bucket`
   api.connect_bucket_to_app = function (apps3bucket) {
     return api_request({method: 'POST', endpoint: 'apps3buckets', resource: apps3bucket});
   };
@@ -112,6 +113,7 @@ module.exports = (function () {
     list: api.list_apps,
     get: api.get_app,
     add: api.add_app,
+    // Rename `connect_bucket` => `grant_bucket_access`
     connect_bucket: api.connect_bucket_to_app,
   };
 

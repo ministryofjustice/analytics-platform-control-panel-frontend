@@ -55,12 +55,12 @@ TODO: provide form to add users – also dependent on the above work from @jmoz
       </tr>
     </thead>
     <tbody>
-      {% for bucket in app.apps3buckets %}
+      {% for apps3bucket in app.apps3buckets %}
         <tr>
-          <td><a href="{{ url_for('buckets.details', {id: bucket.s3bucket.id}) }}">{{ bucket.s3bucket.name }}</a></td>
-          <td>{% if bucket.access_level == 'readwrite' %}Yes{% else %}No{% endif %}</td>
+          <td><a href="{{ url_for('buckets.details', {id: apps3bucket.s3bucket.id}) }}">{{ apps3bucket.s3bucket.name }}</a></td>
+          <td>{% if apps3bucket.access_level == 'readwrite' %}Yes{% else %}No{% endif %}</td>
           <td class="align-right">
-            <a href="#" class="button button-secondary">{% if bucket.access_level == 'readwrite' %}Remove{% else %}Grant{% endif %} read/write access</a>
+            <a href="#" class="button button-secondary">{% if apps3bucket.access_level == 'readwrite' %}Remove{% else %}Grant{% endif %} read/write access</a>
             <a href="#" class="button button-secondary">Remove app access</a>
           </td>
         </tr>

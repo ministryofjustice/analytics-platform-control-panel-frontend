@@ -107,7 +107,7 @@ config.session = {
 };
 
 config.session_store = {
-  host: 'redis',
+  host: process.env.REDIS_HOST || 'redis',
   port: 6379,
   logErrors: true,
   pass: process.env.REDIS_PASSWORD

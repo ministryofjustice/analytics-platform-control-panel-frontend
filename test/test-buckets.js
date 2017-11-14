@@ -9,14 +9,16 @@ describe('buckets API', function () {
   describe('list()', function () {
 
     it('returns a list of buckets', function () {
-      var response = require('./test-buckets-response');
+      const buckets_response = require('./fixtures/buckets');
 
       mock.api
         .get('/s3buckets/')
-        .reply(200, response);
+        .reply(200, buckets_response);
 
       return buckets.list()
-        .then(function (buckets) { assert.deepEqual(buckets, response); });
+        .then((buckets) => {
+          assert.deepEqual(buckets, buckets_response);
+        });
     });
   });
 

@@ -5,39 +5,18 @@ var routes = require('../routes');
 
 
 exports.new_app = [
-
   ensureLoggedIn('/login'),
-
-  function (req, res) {
-
-    res.render('apps/new.html', {
-      prefix: process.env.ENV + '-',
-      buckets: [
-        {
-          id: 1,
-          name: 'dev-dummy-bucket1'
-        },
-        {
-          id: 2,
-          name: 'dev-dummy-bucket2'
-        },
-        {
-          id: 3,
-          name: 'dev-dummy-bucket3'
-        },
-        {
-          id: 4,
-          name: 'dev-dummy-bucket4'
-        },
-        {
-          id: 5,
-          name: 'dev-dummy-bucket5'
-        },
-      ]
-    });
-
+  function (req, res, next) {
+    api.list_buckets()
+      .then((buckets_response) => {
+        const template_args = {
+          prefix: process.env.ENV + '-',
+          buckets: buckets_response.results,
+        };
+        res.render('apps/new.html', template_args);
+      })
+      .catch(next);
   }
-
 ];
 
 

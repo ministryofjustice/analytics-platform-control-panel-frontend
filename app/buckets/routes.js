@@ -8,5 +8,5 @@ module.exports = [
   {name: 'create', pattern: '/buckets/new', view: views.create_bucket, method: 'POST'},
   {name: 'details', pattern: '/buckets/:id', view: views.bucket_details},
   {name: 'edit', pattern: '/buckets/:id/edit', view: views.bucket_edit},
-
+  {name: 'grant_user_access', method: 'POST', pattern: '/buckets/:id/grant_user_access', view: views.grant_user_access},
 ];

@@ -121,3 +121,24 @@ exports.bucket_edit = [
       .catch(next)
   },
 ];
+
+
+exports.grant_user_access = [
+  ensureLoggedIn('/login'),
+  (req, res, next) => {
+    const bucket_id = req.params.id;
+
+    const users3bucket = {
+      user_id: req.body.user_id,
+      s3bucket: bucket_id,
+      access_level: 'readonly',
+      is_admin: false,
+    };
+
+    api.buckets.grant_user_access(users3bucket)
+      .then(() => {
+        res.redirect(routes.url_for('buckets.details', {id: bucket_id}));
+      })
+      .catch(next);
+  }
+];

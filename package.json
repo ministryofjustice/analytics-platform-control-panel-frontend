@@ -6,7 +6,8 @@
   "scripts": {
     "start": "$([ \"x$NODE_RESTART\" == \"x0\" ] && echo node || echo nodemon ) ./app/server.js | bistre",
     "test": "mocha -C -R list --recursive --use_strict",
-    "collect-static": "node ./bin/collect-static.js | bistre"
+    "collect-static": "node ./bin/collect-static.js | bistre",
+    "lint": "node node_modules/eslint/bin/eslint.js app || exit 0"
   },
   "repository": {
     "type": "git",
@@ -47,13 +48,21 @@
     "bistre": "1.0.1",
     "chai": "^4.1.2",
     "chai-spies": "^0.7.1",
+    "eslint": "^4.11.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
     "mocha": "^3.5.3",
     "nock": "^9.0.20",
     "nodemon": "^1.11.0"
   },
   "nodemonConfig": {
-    "ignore":  ["test/", "static/"],
-    "watch": ["app/"],
+    "ignore": [
+      "test/",
+      "static/"
+    ],
+    "watch": [
+      "app/"
+    ],
     "ext": "js json scss sass css html",
     "delay": "500",
     "verbose": true

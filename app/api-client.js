@@ -85,7 +85,6 @@ module.exports = (function () {
     list: api.list_users,
     get: api.get_user,
     add: api.add_user,
-    grant_bucket_access: api.grant_user_access_to_bucket,
   };
 
   api.list_apps = function () {
@@ -135,16 +134,21 @@ module.exports = (function () {
     return api_request({method: 'POST', endpoint: 's3buckets', resource: bucket});
   };
 
-  api.grant_user_access_to_bucket = function (users3bucket) {
-    return api_request({method: 'POST', endpoint: 'users3buckets', resource: users3bucket});
-  };
 
   api.buckets = {
     'list': api.list_buckets,
     'get': api.get_bucket,
     'add': api.add_bucket,
-    'grant_user_access': api.grant_user_access_to_bucket,
   };
+
+
+  api.add_users3bucket = (users3bucket) => {
+    return api_request({method: 'POST', endpoint: 'users3buckets', resource: users3bucket});
+  };
+
+  api.users3buckets = {
+    add: api.add_users3bucket,
+  }
 
   return api;
 

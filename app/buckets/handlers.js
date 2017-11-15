@@ -1,9 +1,9 @@
-var api = require('../api-client');
-var bole = require('bole');
-var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
-var routes = require('../routes');
+const bole = require('bole');
+const log = bole('buckets-views');
+const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 
-var log = bole('buckets-views');
+const api = require('../api-client');
+const routes = require('../routes');
 
 
 exports.list_buckets = [
@@ -90,25 +90,4 @@ exports.bucket_details = [
       })
       .catch(next)
   },
-];
-
-
-exports.grant_user_access = [
-  ensureLoggedIn('/login'),
-  (req, res, next) => {
-    const bucket_id = req.params.id;
-
-    const users3bucket = {
-      user: req.body.user_id,
-      s3bucket: bucket_id,
-      access_level: 'readonly',
-      is_admin: false,
-    };
-
-    api.buckets.grant_user_access(users3bucket)
-      .then(() => {
-        res.redirect(routes.url_for('buckets.details', {id: bucket_id}));
-      })
-      .catch(next);
-  }
 ];

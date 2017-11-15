@@ -1,7 +1,7 @@
 "use strict";
 const assert = require('chai').assert;
 const mock = require('./mock');
-const views = require('../app/base/views');
+const handlers = require('../app/base/handlers');
 
 
 describe('Logging in', () => {
@@ -30,7 +30,7 @@ describe('Logging in', () => {
           session: {returnTo: next_url}
         };
         var res = {redirect: resolve};
-        views.auth_callback[1](req, res, reject);
+        handlers.auth_callback[1](req, res, reject);
       });
 
       var user_details_request = mock.api

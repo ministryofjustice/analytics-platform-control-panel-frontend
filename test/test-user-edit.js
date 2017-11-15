@@ -4,7 +4,7 @@ const assert = require('chai').assert;
 const nock = require('nock');
 
 const config = require('../app/config');
-const views = require('../app/users/views');
+const handlers = require('../app/users/handlers');
 
 
 describe('Edit user form', () => {
@@ -35,7 +35,7 @@ describe('Edit user form', () => {
           },
         };
 
-        views.user_edit[1](req, res, reject);
+        handlers.user_edit[1](req, res, reject);
       });
 
       return request

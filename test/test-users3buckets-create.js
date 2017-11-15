@@ -4,7 +4,7 @@ const assert = require('chai').assert;
 const nock = require('nock');
 
 const config = require('../app/config');
-const views = require('../app/buckets/views');
+const handlers = require('../app/users3buckets/handlers');
 const url_for = require('../app/routes').url_for;
 
 
@@ -28,8 +28,10 @@ describe('Edit bucket form', () => {
 
       let request = new Promise((resolve, reject) => {
         let req = {
-          params: {id: bucket_id},
-          body: {user_id: user_id},
+          body: {
+            user_id: user_id,
+            bucket_id: bucket_id,
+          },
         };
         let res = {
           redirect: (redirect_url) => {
@@ -37,12 +39,12 @@ describe('Edit bucket form', () => {
           }
         };
 
-        views.grant_user_access[1](req, res, reject);
+        handlers.create[1](req, res, reject);
       });
 
       return request
         .then((redirect_url) => {
-          assert(post_users3buckets.isDone(), `Make POST request to /users3buckets`);
+          assert(post_users3buckets.isDone(), `Make POST request to /users3buckets (API)`);
 
           const expected_redirect_url = url_for('buckets.details', {id: bucket_id});
           assert.equal(redirect_url, expected_redirect_url);

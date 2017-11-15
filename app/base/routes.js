@@ -1,12 +1,10 @@
-var views = require('./views');
+var handlers = require('./handlers');
 
 
 module.exports = [
-
-  {name: 'home', pattern: '/', view: views.home},
-  {name: 'callback', pattern: '/callback', view: views.auth_callback},
-  {name: 'login', pattern: '/login', view: views.login},
-  {name: 'logout', pattern: '/logout', view: views.logout},
-  {name: 'error', pattern: '/error', view: views.error_test}
-
+  {name: 'home', pattern: '/', handler: handlers.home},
+  {name: 'callback', pattern: '/callback', handler: handlers.auth_callback},
+  {name: 'login', pattern: '/login', handler: handlers.login},
+  {name: 'logout', pattern: '/logout', handler: handlers.logout},
+  {name: 'error', pattern: '/error', handler: handlers.error_test},
 ];

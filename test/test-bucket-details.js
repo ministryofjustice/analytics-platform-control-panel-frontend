@@ -4,7 +4,7 @@ const assert = require('chai').assert;
 const nock = require('nock');
 
 const config = require('../app/config');
-const views = require('../app/buckets/views');
+const handlers = require('../app/buckets/handlers');
 
 
 describe('Edit bucket form', () => {
@@ -35,7 +35,7 @@ describe('Edit bucket form', () => {
           },
         };
 
-        views.bucket_details[1](req, res, reject);
+        handlers.bucket_details[1](req, res, reject);
       });
 
       return request

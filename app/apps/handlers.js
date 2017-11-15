@@ -1,7 +1,7 @@
-var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
+const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 
-var api = require('../api-client');
-var routes = require('../routes');
+const api = require('../api-client');
+const routes = require('../routes');
 
 
 exports.new_app = [

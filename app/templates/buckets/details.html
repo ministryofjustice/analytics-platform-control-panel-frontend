@@ -38,9 +38,10 @@
 
 <!-- TODO: Check/Update - Placeholder "form" -->
 {% if users_options.length %}
-  <form action="{{ url_for('buckets.grant_user_access', {id: bucket.id}) }}" method="post">
+  <form action="{{ url_for('users3buckets.create') }}" method="post">
+    <input type="hidden" name="bucket_id" value="{{ bucket.id }}" />
     <div class="form-group">
-      <label class="form-label" for="connect_bucket">Grant user access to this data source</label>
+      <label class="form-label" for="user_id">Grant user access to this data source</label>
       <select class="form-control no-blank" id="user_id" name="user_id">
         <option value="">Select a user</option>
         {% for user in users_options %}

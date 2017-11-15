@@ -107,8 +107,10 @@ config.session = {
 };
 
 config.session_store = {
-  host: 'redis',
-  port: 6379
+  host: process.env.REDIS_HOST || 'redis',
+  port: 6379,
+  logErrors: true,
+  pass: process.env.REDIS_PASSWORD
 };
 
 config.static = {

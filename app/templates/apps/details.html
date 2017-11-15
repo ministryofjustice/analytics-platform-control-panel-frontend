@@ -72,10 +72,11 @@ TODO: provide form to add users – also dependent on the above work from @jmoz
 {% endif %}
 
 {% if buckets_options.length %}
-  <form action="{{ url_for('apps.connect_bucket', {app_id: app.id}) }}" method="post">
+  <form action="{{ url_for('apps3buckets.create') }}" method="post">
+    <input type="hidden" name="app_id" value="{{ app.id }}" />
     <div class="form-group">
-      <label class="form-label" for="connect_bucket">Connect an app data source</label>
-      <select class="form-control no-blank" id="connect_bucket" name="connect_bucket">
+      <label class="form-label" for="bucket_id">Connect an app data source</label>
+      <select class="form-control no-blank" id="bucket_id" name="bucket_id">
         <option value="">Select app data source</option>
         {% for bucket in buckets_options %}
           <option value="{{ bucket.id }}">{{ bucket.name }}</option>

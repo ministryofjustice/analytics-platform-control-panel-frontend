@@ -1,41 +1,34 @@
-var log = require('bole')('api-client');
-var config = require('../app/config');
-var request = require('request-promise');
-var url = require('url');
+const config = require('../app/config');
+const request = require('request-promise');
+const url = require('url');
 
 
 module.exports = (function () {
-
   var token = 'invalid token';
 
   function api_request(options) {
     try {
       return request(override_defaults(options));
-
     } catch (error) {
       throw new Error(`API: ${options.method || 'GET'} ${options.endpoint} failed: ${error}`);
     }
   }
 
-
   function override_defaults(options) {
-
-    var defaults = {
+    let defaults = {
       method: 'GET',
       uri: endpoint_url(options.endpoint),
       headers: {
-        'Authorization': jwt_auth(),
+        Authorization: jwt_auth(),
       },
       body: options.resource,
-      json: true
+      json: true,
     };
 
     return Object.assign(defaults, options);
   }
 
-
   function endpoint_url(endpoint) {
-
     if (!endpoint) {
       throw new Error('Missing endpoint');
     }
@@ -47,19 +40,16 @@ module.exports = (function () {
     return url.resolve(config.api.base_url, endpoint);
   }
 
-
   function basic_auth() {
     return 'Basic ' + new Buffer(
       config.api.username + ':' + config.api.password).toString('base64');
   }
 
-
   function jwt_auth() {
-    return 'JWT ' + token;
+    return `JWT ${token}`;
   }
 
-
-  var api = {};
+  let api = {};
 
   api.set_token = function (jwt) {
     token = jwt;
@@ -70,15 +60,15 @@ module.exports = (function () {
   };
 
   api.list_users = function () {
-    return api_request({endpoint: 'users'});
+    return api_request({ endpoint: 'users' });
   };
 
   api.get_user = function (id) {
-    return api_request({endpoint: 'users/' + id});
+    return api_request({ endpoint: `users/${id}` });
   };
 
   api.add_user = function (user) {
-    return api_request({method: 'POST', endpoint: 'users', resource: user});
+    return api_request({ method: 'POST', endpoint: 'users', resource: user });
   };
 
   api.users = {
@@ -88,19 +78,19 @@ module.exports = (function () {
   };
 
   api.list_apps = function () {
-      return api_request({endpoint: 'apps'});
+    return api_request({ endpoint: 'apps' });
   };
 
   api.list_user_apps = function (user_id) {
-    return api_request({endpoint: 'users/' + user_id + '/apps'});
+    return api_request({ endpoint: `users/${user_id}/apps` });
   };
 
   api.get_app = function (id) {
-    return api_request({endpoint: 'apps/' + id});
+    return api_request({ endpoint: `apps/${id}` });
   };
 
   api.add_app = function (app) {
-    return api_request({method: 'POST', endpoint: 'apps/', resource: app});
+    return api_request({ method: 'POST', endpoint: 'apps/', resource: app });
   };
 
   api.apps = {
@@ -110,48 +100,46 @@ module.exports = (function () {
   };
 
   api.list_buckets = function () {
-    return api_request({endpoint: 's3buckets'});
+    return api_request({ endpoint: 's3buckets' });
   };
 
   api.list_app_buckets = function (app_id) {
-    return api_request({endpoint: 'apps/' + app_id + '/s3buckets'});
+    return api_request({ endpoint: `apps/${app_id}/s3buckets` });
   };
 
   api.list_user_buckets = function (user_id) {
-    return api_request({endpoint: 'users/' + user_id + '/s3buckets'});
+    return api_request({ endpoint: `users/${user_id}/s3buckets` });
   };
 
   api.get_bucket = function (id) {
-    return api_request({endpoint: 's3buckets/' + id});
+    return api_request({ endpoint: `s3buckets/${id}` });
   };
 
   api.add_bucket = function (bucket) {
-    return api_request({method: 'POST', endpoint: 's3buckets', resource: bucket});
+    return api_request({ method: 'POST', endpoint: 's3buckets', resource: bucket });
   };
 
-
   api.buckets = {
-    'list': api.list_buckets,
-    'get': api.get_bucket,
-    'add': api.add_bucket,
+    list: api.list_buckets,
+    get: api.get_bucket,
+    add: api.add_bucket,
   };
 
   api.add_apps3bucket = (apps3bucket) => {
-    return api_request({method: 'POST', endpoint: 'apps3buckets', resource: apps3bucket});
+    return api_request({ method: 'POST', endpoint: 'apps3buckets', resource: apps3bucket });
   };
 
   api.apps3buckets = {
     add: api.add_apps3bucket,
-  }
+  };
 
   api.add_users3bucket = (users3bucket) => {
-    return api_request({method: 'POST', endpoint: 'users3buckets', resource: users3bucket});
+    return api_request({ method: 'POST', endpoint: 'users3buckets', resource: users3bucket });
   };
 
   api.users3buckets = {
     add: api.add_users3bucket,
-  }
+  };
 
   return api;
-
 })();

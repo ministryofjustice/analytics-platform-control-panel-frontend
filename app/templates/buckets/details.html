@@ -25,8 +25,21 @@
           <td><a href="{{ url_for('users.details', {id: users3bucket.user.auth0_id}) }}">{{ users3bucket.user.username }}</a></td>
           <td>{% if users3bucket.access_level == 'readwrite' %}Yes{% else %}No{% endif %}</td>
           <td class="align-right">
-            <a href="#" class="button button-secondary">{% if users3bucket.access_level == 'readwrite' %}Remove{% else %}Grant{% endif %} read/write access</a>
-            <a href="#" class="button button-secondary">Revoke user access</a>
+            <!-- Button to change access level -->
+            <form action="{{ url_for('users3buckets.update', {id: users3bucket.id}) }}" method="post">
+              <input type="hidden" name="access_level" value="{% if users3bucket.access_level == 'readwrite' %}readonly{% else %}readwrite{% endif %}" />
+
+              <input type="hidden" name="redirect_to" value="{{ url_for('buckets.details', {id: bucket.id}) }}" />
+
+              <input type="submit" class="button button-secondary js-confirm" value="{% if users3bucket.access_level == 'readwrite' %}Revoke{% else %}Grant{% endif %} read/write access" />
+            </form>
+
+            <!-- Button to revoke access -->
+            <form action="{{ url_for('users3buckets.delete', {id: users3bucket.id}) }}" method="post">
+              <input type="hidden" name="redirect_to" value="{{ url_for('buckets.details', {id: bucket.id}) }}">
+
+              <input type="submit" class="button button-warning js-confirm" value="Revoke user access" />
+            </form>
           </td>
         </tr>
       {% endfor %}

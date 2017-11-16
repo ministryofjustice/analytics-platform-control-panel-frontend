@@ -147,8 +147,18 @@ module.exports = (function () {
     return api_request({ method: 'POST', endpoint: 'users3buckets', resource: users3bucket });
   };
 
+  api.update_users3bucket = (users3bucket) => {
+    return api_request({ method: 'PATCH', endpoint: `users3buckets/${users3bucket.id}`, resource: users3bucket });
+  };
+
+  api.delete_users3bucket = (users3bucket_id) => {
+    return api_request({ method: 'DELETE', endpoint: `users3buckets/${users3bucket_id}` });
+  };
+
   api.users3buckets = {
     add: api.add_users3bucket,
+    update: api.update_users3bucket,
+    delete: api.delete_users3bucket,
   };
 
   return api;

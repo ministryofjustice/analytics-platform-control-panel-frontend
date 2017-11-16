@@ -2,7 +2,7 @@
 var assert = require('chai').assert;
 var config = require('../app/config');
 var mock = require('./mock');
-var views = require('../app/buckets/views');
+var handlers = require('../app/buckets/handlers');
 
 
 describe('buckets view', function () {
@@ -39,7 +39,7 @@ describe('buckets view', function () {
         req.body = bucket_data;
         res.redirect = resolve;
         res.render = unexpected;
-        views.create_bucket[1](req, res, reject);
+        handlers.create_bucket[1](req, res, reject);
       });
 
       return request

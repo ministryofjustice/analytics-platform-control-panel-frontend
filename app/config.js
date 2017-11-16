@@ -19,7 +19,8 @@ config.apps = [
   'base',
   'apps',
   'users',
-  'buckets'
+  'buckets',
+  'users3buckets',
 ];
 
 config.auth0 = {

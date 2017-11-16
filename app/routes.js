@@ -30,7 +30,7 @@ function add_route(route, router) {
       `Invalid method ${route.method.toUpperCase()} in route ${route.name}`);
   }
 
-  router[route.method](route.pattern, route.view);
+  router[route.method](route.pattern, route.handler);
 }
 
 

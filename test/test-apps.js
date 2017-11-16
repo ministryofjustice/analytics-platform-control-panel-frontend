@@ -9,14 +9,16 @@ describe('Apps API', function () {
   describe('list_apps', function () {
 
     it('returns a list of apps', function () {
-      var response = require('./test-apps-response');
+      const apps_response = require('./fixtures/apps');
 
       mock.api
         .get('/apps/')
-        .reply(200, response);
+        .reply(200, apps_response);
 
       return apps.list()
-        .then(function (apps) { assert.deepEqual(apps, response); });
+        .then((apps) => {
+          assert.deepEqual(apps, apps_response);
+        });
     });
   });
 

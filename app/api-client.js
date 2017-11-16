@@ -84,7 +84,7 @@ module.exports = (function () {
   api.users = {
     list: api.list_users,
     get: api.get_user,
-    add: api.add_user
+    add: api.add_user,
   };
 
   api.list_apps = function () {
@@ -134,11 +134,21 @@ module.exports = (function () {
     return api_request({method: 'POST', endpoint: 's3buckets', resource: bucket});
   };
 
+
   api.buckets = {
     'list': api.list_buckets,
     'get': api.get_bucket,
-    'add': api.add_bucket
+    'add': api.add_bucket,
   };
+
+
+  api.add_users3bucket = (users3bucket) => {
+    return api_request({method: 'POST', endpoint: 'users3buckets', resource: users3bucket});
+  };
+
+  api.users3buckets = {
+    add: api.add_users3bucket,
+  }
 
   return api;
 

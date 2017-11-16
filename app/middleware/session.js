@@ -5,6 +5,9 @@ module.exports = (app, conf, log) => {
   const session_config = Object.assign(
     {store: new RedisStore(conf.session_store)},
     conf.session);
+  const redislog = require('bole')('redis');
+  redislog.debug(`connecting to ${conf.session_store.host}:${conf.session_store.port}`);
+  session_config.store.logErrors = redislog.error;
   const session_middleware = session(session_config);
 
   return (req, res, next) => {

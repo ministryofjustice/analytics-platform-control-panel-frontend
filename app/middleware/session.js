@@ -1,5 +1,5 @@
 module.exports = (app, conf, log) => {
-  log.debug('adding session');
+  log.info('adding session');
   const session = require('express-session');
   const RedisStore = require('connect-redis')(session);
   const session_config = Object.assign(

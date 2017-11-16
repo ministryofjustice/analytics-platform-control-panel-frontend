@@ -1,5 +1,5 @@
 module.exports = (app, conf, log) => {
-  log.debug('adding api');
+  log.info('adding api');
   return (req, res, next) => {
     if (req.user && req.user.id_token) {
       const api = require('../api-client');

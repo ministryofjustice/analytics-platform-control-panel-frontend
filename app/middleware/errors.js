@@ -1,5 +1,5 @@
 module.exports = (app, conf, log) => {
-  log.debug('adding errors');
+  log.info('adding errors');
 
   const sentry = require('raven');
   const errlog = require('bole')('error-handler');

@@ -1,5 +1,5 @@
 module.exports = (app, conf, log) => {
-  log.debug('adding static');
+  log.info('adding static');
 
   const express = require('express');
   const router = new express.Router();

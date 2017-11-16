@@ -1,5 +1,5 @@
 module.exports = (app, conf, log) => {
-  log.debug('adding authentication');
+  log.info('adding authentication');
   const passport = require('passport');
   const Auth0Strategy = require('passport-auth0-openidconnect').Strategy;
   passport.use(new Auth0Strategy(

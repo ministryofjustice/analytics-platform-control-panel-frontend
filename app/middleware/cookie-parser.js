@@ -1,4 +1,4 @@
 module.exports = (app, conf, log) => {
-  log.debug('adding cookie-parser');
+  log.info('adding cookie-parser');
   return require('cookie-parser')();
 };

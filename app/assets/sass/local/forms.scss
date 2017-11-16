@@ -11,3 +11,12 @@
     width: 100%;
   }
 }
+
+.inline-form {
+  display: inline-block;
+
+  &.right {
+    float: right;
+    margin-left: 5px;
+  }
+}

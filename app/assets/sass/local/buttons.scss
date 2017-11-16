@@ -2,7 +2,12 @@
   @include button($grey-3);
 }
 
+.button-warning {
+  @include button($red);
+}
+
 .button,
-.button-secondary {
+.button-secondary,
+.button-warning {
   @include core-16;
 }

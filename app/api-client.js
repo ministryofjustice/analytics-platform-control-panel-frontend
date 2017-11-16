@@ -93,10 +93,15 @@ module.exports = (function () {
     return api_request({ method: 'POST', endpoint: 'apps/', resource: app });
   };
 
+  api.delete_app = function (app_id) {
+    return api_request({ method: 'DELETE', endpoint: `apps/${app_id}` });
+  };
+
   api.apps = {
     list: api.list_apps,
     get: api.get_app,
     add: api.add_app,
+    delete: api.delete_app,
   };
 
   api.list_buckets = function () {

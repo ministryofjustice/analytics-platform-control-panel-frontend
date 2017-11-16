@@ -10,13 +10,15 @@
   <table class="list">
     <thead>
       <tr>
+        <td>ID</td>
         <th>Bucket name</th>
-        <td>&nbsp;</td>
+        <th><span class="visuallyhidden">Actions</span></th>
       </tr>
     </thead>
     <tbody>
       {% for bucket in buckets.results %}
         <tr>
+          <td>{{ bucket.id }}</td>
           <td><a href="{{ url_for('buckets.details', {id: bucket.id}) }}">{{ bucket.name }}</a></td>
           <td class="align-right">
             <a class="button button-secondary js-confirm" href="#">Delete</a>

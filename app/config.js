@@ -103,9 +103,6 @@ config.session = {
   secret: process.env.COOKIE_SECRET || 'shh-its-a-secret',
   resave: false,
   saveUninitialized: false,
-  cookie: {
-    secure: process.env.ENV != 'dev'
-  },
   logFn: console.log
 };
 

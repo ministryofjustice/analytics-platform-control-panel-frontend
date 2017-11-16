@@ -1,17 +1,12 @@
-"use strict";
-
-const assert = require('chai').assert;
+const { assert } = require('chai');
 const nock = require('nock');
 
 const config = require('../app/config');
 const handlers = require('../app/apps3buckets/handlers');
-const url_for = require('../app/routes').url_for;
 
 
 describe('Edit bucket form', () => {
-
   describe('when revoking access to user', () => {
-
     it('make request to API', () => {
       const apps3bucket_id = 42;
       const redirect_to = 'apps/123';
@@ -21,15 +16,15 @@ describe('Edit bucket form', () => {
         .delete(`/apps3buckets/${apps3bucket_id}/`)
         .reply(204);
 
-      let request = new Promise((resolve, reject) => {
-        let req = {
+      const request = new Promise((resolve, reject) => {
+        const req = {
           params: { id: apps3bucket_id },
-          body: { redirect_to: redirect_to},
+          body: { redirect_to },
         };
-        let res = {
+        const res = {
           redirect: (redirect_url) => {
             resolve(redirect_url);
-          }
+          },
         };
 
         handlers.delete[1](req, res, reject);
@@ -41,7 +36,5 @@ describe('Edit bucket form', () => {
           assert.equal(redirect_url, redirect_to);
         });
     });
-
   });
-
 });

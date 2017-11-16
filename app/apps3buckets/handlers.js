@@ -17,7 +17,7 @@ exports.create = [
 
     api.apps3buckets.add(apps3bucket)
       .then(() => {
-        res.redirect(routes.url_for('app.details', { id: app_id }));
+        res.redirect(routes.url_for('apps.details', { id: app_id }));
       })
       .catch(next);
   },

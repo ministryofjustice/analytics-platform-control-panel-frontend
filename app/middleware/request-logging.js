@@ -1,5 +1,5 @@
 module.exports = (app, conf, log) => {
-  if (conf.log.ENABLE_ACCESS_LOGS) {
+  if (conf.log.requests) {
     log.debug('adding request-logging');
     return require('morgan')('combined');
   }

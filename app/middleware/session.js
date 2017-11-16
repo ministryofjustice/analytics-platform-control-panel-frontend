@@ -7,8 +7,6 @@ module.exports = (app, conf, log) => {
     conf.session);
   const session_middleware = session(session_config);
 
-  let sesslog = require('bole')('session');
-
   return (req, res, next) => {
     let tries = 3;
 
@@ -18,12 +16,9 @@ module.exports = (app, conf, log) => {
         return next(error);
       }
 
-      log.debug('trying session lookup');
-
       tries -= 1;
 
       if (req.session !== undefined) {
-        sesslog.debug('session loaded');
         return next();
       }
 

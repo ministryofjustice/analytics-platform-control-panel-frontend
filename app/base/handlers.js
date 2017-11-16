@@ -25,19 +25,30 @@ exports.auth_callback = [
   passport.authenticate('auth0-oidc'),
 
   function (req, res, next) {
+    let log = require('bole')('oidc-callback');
+
+    log.debug('authenticated');
+
     raven.setContext({user: req.user});
     api.set_token(req.user.id_token);
 
+    log.debug(`fetching user ${req.user.sub} from api`);
     api.users.get(req.user.sub)
 
       .then((user) => {
+        log.debug(`got user from api`);
         req.user.is_superuser = true;
+        log.debug(`redirecting to ${req.session.returnTo || '/'}`);
         res.redirect(req.session.returnTo || '/');
       })
 
       .catch((error) => {
+        log.debug('error fetching user');
+        log.debug(error);
         if (error.statusCode && error.statusCode == 403) {
+          log.debug('api permission denied - user not superuser');
           req.user.is_superuser = false;
+          log.debug('redirecting to friendly error message');
           res.redirect('/');
 
         } else {

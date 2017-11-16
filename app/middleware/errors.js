@@ -10,6 +10,7 @@ module.exports = (app, conf, log) => {
   });
 
   return (err, req, res, next) => {
+    errlog.error(err);
     sentry.captureException(err);
 
     if (res.headersSent) {

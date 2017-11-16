@@ -20,6 +20,7 @@ config.apps = [
   'apps',
   'users',
   'buckets',
+  'apps3buckets',
   'users3buckets',
 ];
 

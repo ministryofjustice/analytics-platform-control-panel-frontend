@@ -11,7 +11,7 @@ config.api = {
 };
 
 config.app = {
-  env: process.env.NODE_ENV || 'dev',
+  env: process.env.ENV || 'dev',
   asset_path: '/static/'
 };
 
@@ -47,6 +47,7 @@ config.js = {
 };
 
 config.log = {
+  requests: process.env.ENABLE_ACCESS_LOGS !== 'false',
   stream: process.stdout,
   level: process.env.LOG_LEVEL || 'debug'
 };

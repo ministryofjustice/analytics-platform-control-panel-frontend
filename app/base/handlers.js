@@ -7,12 +7,6 @@ const routes = require('../routes');
 
 
 exports.home = [
-  function (req, res, next) {
-    let log = require('bole')('home');
-    log.debug(req.session);
-    log.debug(req.session.user);
-    next();
-  },
   ensureLoggedIn('/login'),
   function (req, res, next) {
     res.render('home.html');

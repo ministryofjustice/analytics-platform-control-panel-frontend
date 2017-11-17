@@ -6,30 +6,34 @@
 
 <p>{{ apps.results.length }} {{ "app" if apps.results.length == 1 else "apps" }}</p>
 
-<table class="list">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Repo</th>
-      <td>&nbsp;</td>
-    </tr>
-  </thead>
-  <tbody>
-    {% for app in apps.results %}
-    <tr>
-      <td>{{ app.id }}</td>
-      <td><a href="{{ url_for('apps.details', {id: app.id}) }}">{{ app.name }}</a></td>
-      <td>{{ app.description }}</td>
-      <td><a href="{{ app.repo_url }}">Github</a></td>
-      <td class="align-right no-wrap">
-        <a class="button button-secondary" href="/apps/edit/{{ app.id }}">Edit</a>
-        <a class="button button-secondary js-confirm" href="/apps/delete/{{ app.id }}">Delete</a>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+{% if apps.results.length %}
+  <table class="list">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Repo</th>
+        <th><span class="visuallyhidden">Actions</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for app in apps.results %}
+      <tr>
+        <td>{{ app.id }}</td>
+        <td><a href="{{ url_for('apps.details', {id: app.id}) }}">{{ app.name }}</a></td>
+        <td>{{ app.description }}</td>
+        <td><a href="{{ app.repo_url }}">Github</a></td>
+        <td class="align-right no-wrap">
+          <a class="button button-secondary" href="/apps/edit/{{ app.id }}">Edit</a>
+          <form action="{{ url_for('apps.delete', {id: app.id}) }}" method="post" class="inline-form right clearfix">
+            <input type="submit" class="button button-warning right js-confirm" value="Delete app" data-confirm-message="Are you sure you want to delete this app?">
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endif %}
 
 {% endblock %}

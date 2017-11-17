@@ -106,3 +106,17 @@ exports.app_details = [
       .catch(next);
   },
 ];
+
+
+exports.app_delete = [
+  ensureLoggedIn('/login'),
+  (req, res, next) => {
+    const app_id = req.params.id;
+
+    api.apps.delete(app_id)
+      .then(() => {
+        res.redirect(routes.url_for('apps.list'));
+      })
+      .catch(next);
+  }
+];

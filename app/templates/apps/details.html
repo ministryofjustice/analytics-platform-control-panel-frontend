@@ -96,7 +96,7 @@ TODO: provide form to add users – also dependent on the above work from @jmoz
 
 <!-- only show if signed in user has admin rights to this app -->
 <form action="{{ url_for('apps.delete', {app_id: app.id}) }}" method="post" class="clearfix">
-  <input type="submit" class="button button-warning right js-confirm" value="Delete app">
+  <input type="submit" class="button button-warning right js-confirm" value="Delete app" data-confirm-message="Are you sure you want to delete this app?">
 </form>
 <!-- end -->
 

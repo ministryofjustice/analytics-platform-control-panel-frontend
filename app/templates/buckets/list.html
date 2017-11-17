@@ -21,7 +21,7 @@
           <td>{{ bucket.id }}</td>
           <td><a href="{{ url_for('buckets.details', {id: bucket.id}) }}">{{ bucket.name }}</a></td>
           <td class="align-right">
-            <a class="button button-secondary js-confirm" href="#">Delete</a>
+            <a class="button button-secondary js-confirm" href="#" data-confirm-message="Are you sure you want to delete this bucket?">Delete</a>
           </td>
         </tr>
       {% endfor %}

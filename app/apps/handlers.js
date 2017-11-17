@@ -111,7 +111,7 @@ exports.app_details = [
 exports.app_delete = [
   ensureLoggedIn('/login'),
   (req, res, next) => {
-    const app_id = req.params.app_id;
+    const app_id = req.params.id;
 
     api.apps.delete(app_id)
       .then(() => {

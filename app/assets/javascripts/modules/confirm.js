@@ -2,11 +2,7 @@
 
 moj.Modules.jsConfirm = {
   confirmClass: 'js-confirm',
-<<<<<<< HEAD
   defaultConfirmMessage: 'Are you sure?',
-=======
-  confirmMessage: 'Are you sure?',
->>>>>>> f0a8f70... delete app endpoint and wired up buttons
 
   init: function() {
     this.bindEvents();

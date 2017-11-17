@@ -12,7 +12,6 @@ describe('Edit bucket form', () => {
       const access_level = 'readonly';
       const redirect_to = 'apps/123';
 
-      // Mock `POST /apps3buckets` request
       const patch_apps3buckets = nock(config.api.base_url)
         .patch(`/apps3buckets/${apps3bucket_id}/`, {
           id: apps3bucket_id,
@@ -36,7 +35,7 @@ describe('Edit bucket form', () => {
 
       return request
         .then((redirect_url) => {
-          assert(patch_apps3buckets.isDone(), `Make PATCH request to /apps3buckets/${apps3bucket_id} (API)`);
+          assert(patch_apps3buckets.isDone(), `Didn't make PATCH request to API endpoint /apps3buckets/${apps3bucket_id}/ as expected`);
 
           assert.equal(redirect_url, redirect_to);
         });

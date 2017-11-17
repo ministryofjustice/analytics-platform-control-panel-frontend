@@ -12,7 +12,6 @@ describe('Edit bucket form', () => {
       const bucket_id = 42;
       const app_id = 123;
 
-      // Mock `POST /apps3buckets` request
       const post_apps3buckets = nock(config.api.base_url)
         .post('/apps3buckets/', {
           app: app_id,
@@ -36,7 +35,7 @@ describe('Edit bucket form', () => {
 
       return request
         .then((redirect_url) => {
-          assert(post_apps3buckets.isDone(), 'Make POST request to /apps3buckets (API)');
+          assert(post_apps3buckets.isDone(), 'Did not make POST request to API endpoint /apps3buckets/ as expected');
 
           const expected_redirect_url = url_for('apps.details', { id: app_id });
           assert.equal(redirect_url, expected_redirect_url);

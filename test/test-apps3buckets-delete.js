@@ -11,7 +11,6 @@ describe('Edit bucket form', () => {
       const apps3bucket_id = 42;
       const redirect_to = 'apps/123';
 
-      // Mock `DELETE /apps3buckets/:id` request
       const delete_apps3buckets = nock(config.api.base_url)
         .delete(`/apps3buckets/${apps3bucket_id}/`)
         .reply(204);
@@ -32,7 +31,7 @@ describe('Edit bucket form', () => {
 
       return request
         .then((redirect_url) => {
-          assert(delete_apps3buckets.isDone(), `Make DELETE request to /apps3buckets/${apps3bucket_id} (API)`);
+          assert(delete_apps3buckets.isDone(), `Did't make DELETE request to API endpoint to /apps3buckets/${apps3bucket_id}/`);
           assert.equal(redirect_url, redirect_to);
         });
     });

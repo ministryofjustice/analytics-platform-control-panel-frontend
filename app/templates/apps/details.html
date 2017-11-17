@@ -55,13 +55,26 @@ TODO: provide form to add users – also dependent on the above work from @jmoz
       </tr>
     </thead>
     <tbody>
-      {% for bucket in app.apps3buckets %}
+      {% for apps3bucket in app.apps3buckets %}
         <tr>
-          <td><a href="{{ url_for('buckets.details', {id: bucket.s3bucket.id}) }}">{{ bucket.s3bucket.name }}</a></td>
-          <td>{% if bucket.access_level == 'readwrite' %}Yes{% else %}No{% endif %}</td>
+          <td><a href="{{ url_for('buckets.details', {id: apps3bucket.s3bucket.id}) }}">{{ apps3bucket.s3bucket.name }}</a></td>
+          <td>{% if apps3bucket.access_level == 'readwrite' %}Yes{% else %}No{% endif %}</td>
           <td class="align-right">
-            <a href="#" class="button button-secondary">{% if bucket.access_level == 'readwrite' %}Remove{% else %}Grant{% endif %} read/write access</a>
-            <a href="#" class="button button-secondary">Remove app access</a>
+            <!-- Button to change access level -->
+            <form action="{{ url_for('apps3buckets.update', {id: apps3bucket.id}) }}" method="post">
+              <input type="hidden" name="access_level" value="{% if apps3bucket.access_level == 'readwrite' %}readonly{% else %}readwrite{% endif %}">
+
+              <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', {id: app.id}) }}">
+
+              <input type="submit" class="button button-secondary js-confirm" value="{% if apps3bucket.access_level == 'readwrite' %}Revoke{% else %}Grant{% endif %} read/write access" />
+            </form>
+
+            <!-- Button to revoke access -->
+            <form action="{{ url_for('apps3buckets.delete', {id: apps3bucket.id}) }}" method="post">
+              <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', {id: app.id}) }}">
+
+              <input type="submit" class="button button-secondary js-confirm" value="Remove app access" />
+            </form>
           </td>
         </tr>
       {% endfor %}

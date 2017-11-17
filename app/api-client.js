@@ -129,8 +129,18 @@ module.exports = (function () {
     return api_request({ method: 'POST', endpoint: 'apps3buckets', resource: apps3bucket });
   };
 
+  api.update_apps3bucket = (apps3bucket) => {
+    return api_request({ method: 'PATCH', endpoint: `apps3buckets/${apps3bucket.id}`, resource: apps3bucket });
+  };
+
+  api.delete_apps3bucket = (apps3bucket_id) => {
+    return api_request({ method: 'DELETE', endpoint: `apps3buckets/${apps3bucket_id}` });
+  };
+
   api.apps3buckets = {
     add: api.add_apps3bucket,
+    update: api.update_apps3bucket,
+    delete: api.delete_apps3bucket,
   };
 
   api.add_users3bucket = (users3bucket) => {

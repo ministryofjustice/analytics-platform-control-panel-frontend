@@ -8,16 +8,16 @@ module.exports = [
     pattern: '/apps3buckets',
     handler: handlers.create,
   },
-  // {
-  //   name: 'update',
-  //   method: 'POST',
-  //   pattern: '/apps3buckets/:id',
-  //   handler: handlers.update,
-  // },
-  // {
-  //   name: 'destroy',
-  //   method: 'POST',
-  //   pattern: '/apps3buckets/:id/destroy',
-  //   handler: handlers.destroy,
-  // },
+  {
+    name: 'update',
+    method: 'POST',
+    pattern: '/apps3buckets/:id',
+    handler: handlers.update,
+  },
+  {
+    name: 'delete',
+    method: 'POST',
+    pattern: '/apps3buckets/:id/delete',
+    handler: handlers.delete,
+  },
 ];

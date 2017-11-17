@@ -11,7 +11,7 @@ moj.Modules.jsConfirm = {
   bindEvents: function() {
     var self = this;
 
-    $('a.' + self.confirmClass).on('click', function(e) {
+    $(document).on('click', 'a.' + self.confirmClass, function(e) {
       var $el = $(e.target);
       e.preventDefault();
 
@@ -20,7 +20,7 @@ moj.Modules.jsConfirm = {
       }
     });
 
-    $('input[type="submit"].' + self.confirmClass).on('click', function(e) {
+    $(document).on('click', 'input[type="submit"].' + self.confirmClass, function(e) {
       var $el = $(e.target);
       e.preventDefault();
 

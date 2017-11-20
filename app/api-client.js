@@ -1,34 +1,99 @@
-const config = require('../app/config');
+const config = require('./config');
 const request = require('request-promise');
 const url = require('url');
 
 
-module.exports = (function () {
-  var token = 'invalid token';
+const log = require('bole')('api-client');
 
-  function api_request(options) {
+
+class BasicAuth {
+
+  constructor(username, password) {
+    this.username = username
+    this.password = password
+  }
+
+  get header() {
+    return 'Basic ' + new Buffer(
+      `${options.username}:${options.password}`).toString('base64');
+  }
+
+}
+
+
+class JWTAuth {
+
+  constructor(token) {
+    this.token = token || 'invalid token';
+  }
+
+  set_token(token) {
+    this.token = token;
+  }
+
+  unset_token() {
+    this.token = 'invalid token';
+  }
+
+  get header() {
+    return `JWT ${this.token}`;
+  }
+
+}
+
+
+class APIClient {
+
+  constructor(config) {
+    this.base_url = config.base_url;
+    this.auth = null;
+  }
+
+  request(endpoint, method = 'GET', body = null) {
+    let headers = {};
+
+    if (this.auth) {
+      headers['Authorization'] = this.auth.header;
+    }
+
     try {
-      return request(override_defaults(options));
+      let options = {
+        method: method,
+        uri: this.endpoint_url(endpoint),
+        headers: headers,
+        body: body,
+        json: true
+      };
+      return request(options)
+        .then((result) => {
+          console.log(`${method} ${options.uri}`);
+          //console.dir(result);
+          return result;
+        });
+
     } catch (error) {
-      throw new Error(`API: ${options.method || 'GET'} ${options.endpoint} failed: ${error}`);
+      throw new Error(`API: ${method} ${endpoint} failed: ${error}`);
     }
   }
 
-  function override_defaults(options) {
-    let defaults = {
-      method: 'GET',
-      uri: endpoint_url(options.endpoint),
-      headers: {
-        Authorization: jwt_auth(),
-      },
-      body: options.resource,
-      json: true,
-    };
-
-    return Object.assign(defaults, options);
+  get(endpoint) {
+    return this.request(endpoint);
   }
 
-  function endpoint_url(endpoint) {
+  post(endpoint, body = '') {
+    return this.request(endpoint, 'POST', body);
+  }
+
+  delete(endpoint) {
+    return this.request(endpoint, 'DELETE');
+  }
+
+  put(endpoint, body = '') {
+    return this.request(endpoint, 'PUT', body);
+  }
+
+  endpoint_url(endpoint) {
+
     if (!endpoint) {
       throw new Error('Missing endpoint');
     }
@@ -37,134 +102,150 @@ module.exports = (function () {
       endpoint += '/';
     }
 
-    return url.resolve(config.api.base_url, endpoint);
+    return url.resolve(this.base_url, endpoint);
   }
 
-  function basic_auth() {
-    return 'Basic ' + new Buffer(
-      config.api.username + ':' + config.api.password).toString('base64');
+}
+
+
+const api = new APIClient(config.api);
+api.auth = new JWTAuth();
+
+exports.api = api;
+
+
+const model_proxy = {
+  get: (model, property) => {
+    if (Reflect.has(model, property)) {
+      return Reflect.get(model, property);
+    }
+    if (property in model.data) {
+      return model.data[property];
+    }
+  }
+}
+
+
+class ModelSet extends Array {
+
+  constructor(model, data = []) {
+    super(...data.map((obj) => {
+      const model_obj = new model(obj);
+      return new Proxy(model_obj, model_proxy);
+    }));
   }
 
-  function jwt_auth() {
-    return `JWT ${token}`;
+}
+
+
+class Model {
+
+  constructor(data) {
+    this.data = data;
   }
 
-  let api = {};
+  static list(filter = {}) {
+    return api.get(this.endpoint)
+      .then((result) => {
+        return new ModelSet(this.prototype.constructor, result.results);
+      });
+  }
 
-  api.set_token = function (jwt) {
-    token = jwt;
-  };
+  static get(id) {
+    return api.get(`${this.endpoint}/${id}`)
+      .then((result) => {
+        const model_obj = new this.prototype.constructor(result);
+        return new Proxy(model_obj, model_proxy);
+      });
+  }
 
-  api.unset_token = function () {
-    token = 'invalid token';
-  };
+  save() {
+    return api.post(this.endpoint, this.data);
+  }
 
-  api.list_users = function () {
-    return api_request({ endpoint: 'users' });
-  };
+}
 
-  api.get_user = function (id) {
-    return api_request({ endpoint: `users/${id}` });
-  };
 
-  api.add_user = function (user) {
-    return api_request({ method: 'POST', endpoint: 'users', resource: user });
-  };
+class AppS3Bucket extends Model {
+  static get endpoint() {
+    return 'apps3buckets';
+  }
+}
 
-  api.users = {
-    list: api.list_users,
-    get: api.get_user,
-    add: api.add_user,
-  };
 
-  api.list_apps = function () {
-    return api_request({ endpoint: 'apps' });
-  };
+class User extends Model {
+  static get endpoint() {
+    return 'users';
+  }
+}
 
-  api.list_user_apps = function (user_id) {
-    return api_request({ endpoint: `users/${user_id}/apps` });
-  };
+exports.User = User;
 
-  api.get_app = function (id) {
-    return api_request({ endpoint: `apps/${id}` });
-  };
 
-  api.add_app = function (app) {
-    return api_request({ method: 'POST', endpoint: 'apps/', resource: app });
-  };
+class App extends Model {
+  static get endpoint() {
+    return 'apps';
+  }
 
-  api.delete_app = function (app_id) {
-    return api_request({ method: 'DELETE', endpoint: `apps/${app_id}` });
-  };
+  get apps3buckets() {
+    return new ModelSet(AppS3Bucket, this.data.apps3buckets);
+  }
+}
 
-  api.apps = {
-    list: api.list_apps,
-    get: api.get_app,
-    add: api.add_app,
-    delete: api.delete_app,
-  };
+exports.App = App;
 
-  api.list_buckets = function () {
-    return api_request({ endpoint: 's3buckets' });
-  };
+class Bucket extends Model {
+  static get endpoint() {
+    return 's3buckets';
+  }
+}
 
-  api.list_app_buckets = function (app_id) {
-    return api_request({ endpoint: `apps/${app_id}/s3buckets` });
-  };
+exports.Bucket = Bucket;
 
-  api.list_user_buckets = function (user_id) {
-    return api_request({ endpoint: `users/${user_id}/s3buckets` });
-  };
 
-  api.get_bucket = function (id) {
-    return api_request({ endpoint: `s3buckets/${id}` });
-  };
+api.list_users = () => User.list();
 
-  api.add_bucket = function (bucket) {
-    return api_request({ method: 'POST', endpoint: 's3buckets', resource: bucket });
-  };
+api.get_user = id => User.get(id);
 
-  api.buckets = {
-    list: api.list_buckets,
-    get: api.get_bucket,
-    add: api.add_bucket,
-  };
+api.add_user = user => user.save();
 
-  api.add_apps3bucket = (apps3bucket) => {
-    return api_request({ method: 'POST', endpoint: 'apps3buckets', resource: apps3bucket });
-  };
+api.list_apps = () => App.list();
 
-  api.update_apps3bucket = (apps3bucket) => {
-    return api_request({ method: 'PATCH', endpoint: `apps3buckets/${apps3bucket.id}`, resource: apps3bucket });
-  };
+api.list_user_apps = (user_id) => {
+  return api.get(`users/${user_id}/apps`);
+};
 
-  api.delete_apps3bucket = (apps3bucket_id) => {
-    return api_request({ method: 'DELETE', endpoint: `apps3buckets/${apps3bucket_id}` });
-  };
+api.get_app = id => App.get(id);
 
-  api.apps3buckets = {
-    add: api.add_apps3bucket,
-    update: api.update_apps3bucket,
-    delete: api.delete_apps3bucket,
-  };
+api.add_app = app => app.save();
 
-  api.add_users3bucket = (users3bucket) => {
-    return api_request({ method: 'POST', endpoint: 'users3buckets', resource: users3bucket });
-  };
+api.connect_bucket_to_app = (apps3bucket) => {
+  return api.post('apps3buckets', body = apps3bucket);
+};
 
-  api.update_users3bucket = (users3bucket) => {
-    return api_request({ method: 'PATCH', endpoint: `users3buckets/${users3bucket.id}`, resource: users3bucket });
-  };
+api.apps = {
+  list: api.list_apps,
+  get: api.get_app,
+  add: api.add_app,
+  connect_bucket: api.connect_bucket_to_app,
+};
 
-  api.delete_users3bucket = (users3bucket_id) => {
-    return api_request({ method: 'DELETE', endpoint: `users3buckets/${users3bucket_id}` });
-  };
+api.list_buckets = () => Bucket.list();
 
-  api.users3buckets = {
-    add: api.add_users3bucket,
-    update: api.update_users3bucket,
-    delete: api.delete_users3bucket,
-  };
+api.list_app_buckets = (app_id) => {
+  return api.get(`apps/${app_id}/s3buckets`);
+};
 
-  return api;
-})();
+api.list_user_buckets = (user_id) => {
+  return api.get(`users/${user_id}/s3buckets`);
+};
+
+api.get_bucket = id => Bucket.get(id);
+
+api.add_bucket = bucket => bucket.save();
+
+api.buckets = {
+  'list': api.list_buckets,
+  'get': api.get_bucket,
+  'add': api.add_bucket
+};

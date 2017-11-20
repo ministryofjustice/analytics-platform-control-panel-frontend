@@ -1,4 +1,4 @@
-const api = require('../api-client');
+const { User, api } = require('../api-client');
 const config = require('../config');
 const passport = require('passport');
 const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
@@ -30,10 +30,10 @@ exports.auth_callback = [
     log.debug('authenticated');
 
     raven.setContext({user: req.user});
-    api.set_token(req.user.id_token);
+    api.auth.set_token(req.user.id_token);
 
     log.debug(`fetching user ${req.user.sub} from api`);
-    api.users.get(req.user.sub)
+    User.get(req.user.sub)
 
       .then((user) => {
         log.debug(`got user from api`);
@@ -67,7 +67,7 @@ exports.login = function (req, res) {
 
 exports.logout = function (req, res) {
   req.logout();
-  api.unset_token();
+  api.auth.unset_token();
   req.session.destroy((err) => {
     res.clearCookie(config.session.name);
     res.redirect('/');

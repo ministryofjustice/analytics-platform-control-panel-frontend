@@ -1,6 +1,6 @@
 const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 
-const api = require('../api-client');
+const { App, Bucket, User, api } = require('../api-client');
 const routes = require('../routes');
 
 
@@ -76,30 +76,25 @@ exports.list_user_apps = function (req, res) {
 };
 
 
-const get_buckets_options = (app, all_buckets) => {
+const get_buckets_options = (app, buckets) => {
   const associated_ids = app.apps3buckets.map(as => as.s3bucket.id);
 
-  return all_buckets.filter(bucket => !associated_ids.includes(bucket.id));
+  return buckets.filter(bucket => !associated_ids.includes(bucket.id));
 };
 
 
 exports.app_details = [
   ensureLoggedIn('/login'),
   function(req, res, next) {
-    const app_request = api.get_app(req.params.id);
-    const buckets_request = api.list_buckets();
-    const users_request = api.list_users();
 
     Promise
-      .all([app_request, buckets_request, users_request])
+      .all([App.get(req.params.id), Bucket.list(), User.list()])
       .then(function(responses) {
-        const [app, buckets_response, users_response] = responses;
-        const all_buckets = buckets_response.results;
-        const all_users = users_response.results;
+        const [app, buckets, users] = responses;
         const template_args = {
           app: app,
-          buckets_options: get_buckets_options(app, all_buckets),
-          users: all_users,
+          buckets_options: get_buckets_options(app, buckets),
+          users: users
         };
         res.render('apps/details.html', template_args);
       })

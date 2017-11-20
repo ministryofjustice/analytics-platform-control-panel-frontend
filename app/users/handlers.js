@@ -1,4 +1,4 @@
-var api = require('../api-client');
+var { User, api } = require('../api-client');
 var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 
 
@@ -6,7 +6,7 @@ exports.list_users = [
   ensureLoggedIn('/login'),
   function (req, res, next) {
 
-    api.list_users()
+    User.list()
 
       .then(function (users) {
         res.render('users/list.html', {users: users}); })

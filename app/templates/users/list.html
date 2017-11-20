@@ -4,7 +4,7 @@
 
 {% block main_column %}
 
-<p>{{ users.results.length }} user{%- if users.results.length != 1 -%}s{%- endif -%}</p>
+<p>{{ users.length }} user{%- if users.length != 1 -%}s{%- endif -%}</p>
 
 <table class="list">
   <thead>
@@ -16,7 +16,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for user in users.results %}
+    {% for user in users %}
       <tr>
         <td><a href="{{ url_for('users.details', {id: user.auth0_id}) }}">{{ user.name | default(user.username, true) }}</a></td>
         <td>{{ user.username }}</td>

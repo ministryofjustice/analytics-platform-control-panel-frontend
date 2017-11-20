@@ -61,19 +61,19 @@ TODO: provide form to add users – also dependent on the above work from @jmoz
           <td>{% if apps3bucket.access_level == 'readwrite' %}Yes{% else %}No{% endif %}</td>
           <td class="align-right">
             <!-- Button to change access level -->
-            <form action="{{ url_for('apps3buckets.update', {id: apps3bucket.id}) }}" method="post">
+            <form action="{{ url_for('apps3buckets.update', {id: apps3bucket.id}) }}" method="post" class="inline-form clearfix">
               <input type="hidden" name="access_level" value="{% if apps3bucket.access_level == 'readwrite' %}readonly{% else %}readwrite{% endif %}">
 
               <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', {id: app.id}) }}">
 
-              <input type="submit" class="button button-secondary js-confirm" value="{% if apps3bucket.access_level == 'readwrite' %}Revoke{% else %}Grant{% endif %} read/write access" />
+              <input type="submit" class="js-confirm button button-secondary right" value="{% if apps3bucket.access_level == 'readwrite' %}Revoke{% else %}Grant{% endif %} read/write access" />
             </form>
 
             <!-- Button to revoke access -->
-            <form action="{{ url_for('apps3buckets.delete', {id: apps3bucket.id}) }}" method="post">
+            <form action="{{ url_for('apps3buckets.delete', {id: apps3bucket.id}) }}" method="post" class="inline-form clearfix">
               <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', {id: app.id}) }}">
 
-              <input type="submit" class="button button-secondary js-confirm" value="Remove app access" />
+              <input type="submit" class="js-confirm button button-warning right" value="Revoke access" />
             </form>
           </td>
         </tr>
@@ -97,7 +97,7 @@ TODO: provide form to add users – also dependent on the above work from @jmoz
       </select>
     </div>
     <div class="form-group">
-      <input type="submit" class="button button-secondary" value="Add">
+      <input type="submit" class="button button-secondary" value="Grant access">
     </div>
   </form>
 {% else %}

@@ -8,7 +8,7 @@
 
 <!-- TODO: Placeholder list - double check wording and everything -->
 <h2 class="heading-medium">Users with access</h2>
-<p>{{ bucket.users3buckets.length }} user{%- if bucket.users3buckets.length != 1 -%}s{%- endif %} have access to this data source</p>
+<p>{{ bucket.users3buckets.length }} user{%- if bucket.users3buckets.length != 1 -%}s have{% else %} has{% endif %} access to this data source</p>
 
 {% if bucket.users3buckets.length %}
   <table class="form-group">
@@ -71,11 +71,16 @@
 {% endif %}
 
 <!-- TODO: Remove me - Dump of available variables -->
-<hr />
-<pre>bucket = {{ bucket | dump(4) | safe }}</pre>
-<br />
-<pre>apps_options = {{ apps_options | dump(4) | safe }}</pre>
-<br />
-<pre>users_options = {{ users_options | dump(4) | safe }}</pre>
+<details class="debug">
+  <summary>Debug</summary>
+  <div>
+    <pre>bucket = {{ bucket | dump(4) | safe }}</pre>
+    <br />
+    <pre>apps_options = {{ apps_options | dump(4) | safe }}</pre>
+    <br />
+    <pre>users_options = {{ users_options | dump(4) | safe }}</pre>
+  </div>
+</details>
+
 
 {% endblock %}

@@ -22,8 +22,13 @@
       <li><a href="{{ url_for('buckets.new') }}">Create new bucket</a></li>
     </ul>
 
-    <h2 class="heading-medium">Logged-in user dump</h2>
-    <p>{{ current_user | dump(2) | safe }}</p>
+    <details class="debug">
+      <summary>Debug</summary>
+      <div class="panel">
+        <h2 class="heading-medium">Logged-in user dump</h2>
+        <pre>{{ current_user | dump(2) | safe }}</pre>
+      </div>
+    </details>
   {% endif %}
 
 {% endblock %}

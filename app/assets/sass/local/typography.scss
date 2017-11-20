@@ -11,3 +11,8 @@ ul {
   @include core-19;
   color: $grey-1;
 }
+
+pre {
+  @include core-14;
+  font-family: monospace;
+}

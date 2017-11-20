@@ -133,8 +133,21 @@ class ModelSet extends Array {
       const model_obj = new model(obj);
       return new Proxy(model_obj, model_proxy);
     }));
+    this.model = model;
   }
 
+  exclude(other) {
+
+    if (other instanceof this.model) {
+      other = [other];
+    }
+
+    let pks = other.map(instance => instance[this.model.pk]);
+
+    return this.filter((instance) => {
+      return !pks.includes(instance[this.model.pk]);
+    });
+  }
 }
 
 
@@ -142,6 +155,10 @@ class Model {
 
   constructor(data) {
     this.data = data;
+  }
+
+  static get pk() {
+    return 'id';
   }
 
   static list(filter = {}) {
@@ -176,6 +193,10 @@ class AppS3Bucket extends Model {
 class User extends Model {
   static get endpoint() {
     return 'users';
+  }
+
+  static get pk() {
+    return 'auth0_id';
   }
 }
 

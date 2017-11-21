@@ -1,7 +1,70 @@
 .login-container {
   padding-top: 4em;
 
-  .a0-panel {
-    margin: auto;
+  #a0-lock.a0-theme-default {
+
+    .a0-bg-gradient {
+      display: none;
+    }
+
+    .a0-panel {
+      margin: auto;
+      width: 500px;
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      border: 1px solid $grey-2;
+      border-radius: 0;
+
+      * {
+        font-family: "nta", Arial, sans-serif;
+        font-stretch: normal;
+        color: $black;
+      }
+
+      .a0-icon-container {
+        .a0-image {
+          background-image: url(/static/images/gov.uk_logotype_crown_invert_trans.png);
+          background-size: 72px 64px;
+          background-repeat: no-repeat;
+          background-position: center center;
+          height: 80px;
+
+          img {
+            display: none;
+          }
+        }
+      }
+
+      .a0-top-header {
+        h1 {
+          @include heading-36;
+        }
+      }
+
+      .a0-mode-container {
+        .a0-loggedin {
+          text-align: left;
+        }
+
+        .a0-zocial {
+          span {
+            display: inline-block;
+            width: 400px;
+            @include core-16(40px, 40px);
+            text-transform: none;
+          }
+
+          &:before {
+            width: 40px;
+          }
+        }
+      }
+
+      .a0-last-time,
+      .a0-all {
+        @include core-16;
+        color: $black;
+      }
+    }
   }
 }

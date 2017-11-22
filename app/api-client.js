@@ -66,7 +66,7 @@ class APIClient {
       };
       return request(options)
         .then((result) => {
-          console.log(`${method} ${options.uri}`);
+          log.debug(`${method} ${options.uri}`);
           //console.dir(result);
           return result;
         });
@@ -86,6 +86,10 @@ class APIClient {
 
   delete(endpoint) {
     return this.request(endpoint, 'DELETE');
+  }
+
+  patch(endpoint, body = '') {
+    return this.request(endpoint, 'PATCH', body);
   }
 
   put(endpoint, body = '') {
@@ -119,7 +123,7 @@ const model_proxy = {
     if (Reflect.has(model, property)) {
       return Reflect.get(model, property);
     }
-    if (property in model.data) {
+    if (model.data && property in model.data) {
       return model.data[property];
     }
   }
@@ -129,10 +133,7 @@ const model_proxy = {
 class ModelSet extends Array {
 
   constructor(model, data = []) {
-    super(...data.map((obj) => {
-      const model_obj = new model(obj);
-      return new Proxy(model_obj, model_proxy);
-    }));
+    super(...data.map(obj => new model(obj)));
     this.model = model;
   }
 
@@ -150,11 +151,13 @@ class ModelSet extends Array {
   }
 }
 
+exports.ModelSet = ModelSet;
 
 class Model {
 
   constructor(data) {
     this.data = data;
+    return new Proxy(this, model_proxy);
   }
 
   static get pk() {
@@ -170,14 +173,42 @@ class Model {
 
   static get(id) {
     return api.get(`${this.endpoint}/${id}`)
-      .then((result) => {
-        const model_obj = new this.prototype.constructor(result);
-        return new Proxy(model_obj, model_proxy);
-      });
+      .then(data => new this.prototype.constructor(data));
   }
 
-  save() {
-    return api.post(this.endpoint, this.data);
+  static delete(id) {
+    return api.delete(`${this.endpoint}/${id}`);
+  }
+
+  create() {
+    return api.post(this.constructor.endpoint, this.data)
+      .then(data => new this.constructor(data));
+  }
+
+  replace() {
+    const endpoint = this.constructor.endpoint;
+    const pk_name = this.constructor.pk;
+    const pk = this.data[pk_name];
+
+    if (pk !== undefined) {
+      return api.put(`${endpoint}/${pk}`, this.data)
+        .then(data => new this.constructor(data));
+    }
+
+    return Promise.reject({error: `Missing ${pk_name} for PUT ${endpoint}`});
+  }
+
+  update() {
+    const endpoint = this.constructor.endpoint;
+    const pk_name = this.constructor.pk;
+    const pk = this.data[pk_name];
+
+    if (pk !== undefined) {
+      return api.patch(`${endpoint}/${pk}`, this.data)
+        .then(data => new this.constructor(data));
+    }
+
+    return Promise.reject({error: `Missing ${pk_name} for PATCH ${endpoint}`});
   }
 
 }
@@ -189,6 +220,17 @@ class AppS3Bucket extends Model {
   }
 }
 
+exports.AppS3Bucket = AppS3Bucket;
+
+
+class UserS3Bucket extends Model {
+  static get endpoint() {
+    return 'users3buckets';
+  }
+}
+
+exports.UserS3Bucket = UserS3Bucket;
+
 
 class User extends Model {
   static get endpoint() {
@@ -197,6 +239,18 @@ class User extends Model {
 
   static get pk() {
     return 'auth0_id';
+  }
+
+  get apps() {
+    return new ModelSet(App, this.data.userapps.map(ua => ua.app));
+  }
+
+  get buckets() {
+    return new ModelSet(Bucket, this.data.users3buckets.map(us => us.s3bucket));
+  }
+
+  get users3buckets() {
+    return new ModelSet(UserS3Bucket, this.data.users3buckets);
   }
 }
 
@@ -211,6 +265,29 @@ class App extends Model {
   get apps3buckets() {
     return new ModelSet(AppS3Bucket, this.data.apps3buckets);
   }
+
+  get buckets() {
+    return new ModelSet(Bucket, this.data.apps3buckets.map(as => as.s3bucket));
+  }
+
+  connect_bucket(bucket, access_level = 'readonly') {
+
+    if (!['readonly', 'readwrite'].includes(access_level)) {
+      throw new Error(`Invalid access_level "${access_level}"`);
+    }
+
+    let bucket_id = bucket;
+
+    if (typeof bucket === 'function' && bucket.prototype.constructor == Bucket) {
+      bucket_id = bucket.id;
+    }
+
+    return new AppS3Bucket({
+      app: this.id,
+      s3bucket: bucket_id,
+      access_level: access_level
+    }).create()
+  }
 }
 
 exports.App = App;
@@ -219,54 +296,27 @@ class Bucket extends Model {
   static get endpoint() {
     return 's3buckets';
   }
+
+  get apps() {
+    return new ModelSet(App, this.data.apps3buckets.map(as => as.app));
+  }
+
+  get apps3buckets() {
+    return new ModelSet(AppS3Bucket, this.data.apps3buckets);
+  }
+
+  get users() {
+    return new ModelSet(User, this.data.users3buckets.map(us => us.user));
+  }
+
+  get users3buckets() {
+    return new ModelSet(UserS3Bucket, this.data.users3buckets);
+  }
 }
 
 exports.Bucket = Bucket;
 
 
-api.list_users = () => User.list();
-
-api.get_user = id => User.get(id);
-
-api.add_user = user => user.save();
-
-api.list_apps = () => App.list();
-
-api.list_user_apps = (user_id) => {
-  return api.get(`users/${user_id}/apps`);
-};
-
-api.get_app = id => App.get(id);
-
-api.add_app = app => app.save();
-
 api.connect_bucket_to_app = (apps3bucket) => {
   return api.post('apps3buckets', body = apps3bucket);
-};
-
-api.apps = {
-  list: api.list_apps,
-  get: api.get_app,
-  add: api.add_app,
-  connect_bucket: api.connect_bucket_to_app,
-};
-
-api.list_buckets = () => Bucket.list();
-
-api.list_app_buckets = (app_id) => {
-  return api.get(`apps/${app_id}/s3buckets`);
-};
-
-api.list_user_buckets = (user_id) => {
-  return api.get(`users/${user_id}/s3buckets`);
-};
-
-api.get_bucket = id => Bucket.get(id);
-
-api.add_bucket = bucket => bucket.save();
-
-api.buckets = {
-  'list': api.list_buckets,
-  'get': api.get_bucket,
-  'add': api.add_bucket
 };

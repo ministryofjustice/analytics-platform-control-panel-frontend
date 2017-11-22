@@ -4,9 +4,9 @@
 
 {% block main_column %}
 
-<p>{{ buckets.results.length }} bucket{%- if buckets.results.length != 1 -%}s{%- endif -%}</p>
+<p>{{ buckets.length }} bucket{%- if buckets.length != 1 -%}s{%- endif -%}</p>
 
-{% if buckets.results.length %}
+{% if buckets.length %}
   <table class="list">
     <thead>
       <tr>
@@ -16,7 +16,7 @@
       </tr>
     </thead>
     <tbody>
-      {% for bucket in buckets.results %}
+      {% for bucket in buckets %}
         <tr>
           <td>{{ bucket.id }}</td>
           <td><a href="{{ url_for('buckets.details', {id: bucket.id}) }}">{{ bucket.name }}</a></td>

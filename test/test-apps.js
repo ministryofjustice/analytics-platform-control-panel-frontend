@@ -1,76 +1,77 @@
 "use strict";
-var assert = require('chai').assert;
-var mock = require('./mock');
-var apps = require('../app/api-client.js').apps;
+const { assert } = require('chai');
+const { mock_api } = require('./conftest');
+const { App, ModelSet } = require('../app/api-client.js');
 
 
-describe('Apps API', function () {
+describe('Apps API', () => {
 
-  describe('list_apps', function () {
+  describe('list_apps', () => {
 
-    it('returns a list of apps', function () {
+    it('returns a list of apps', () => {
       const apps_response = require('./fixtures/apps');
+      const expected = new ModelSet(App, apps_response.results);
 
-      mock.api
+      mock_api()
         .get('/apps/')
         .reply(200, apps_response);
 
-      return apps.list()
+      return App.list()
         .then((apps) => {
-          assert.deepEqual(apps, apps_response);
+          assert.deepEqual(apps, expected);
         });
     });
   });
 
 
-  describe('add_app', function () {
+  describe('add_app', () => {
 
-    it('throws an error if no app data is provided', function () {
-      var response = {
+    it('throws an error if no app data is provided', () => {
+      const response = {
         "name": ["This field is required."],
         "repo_url": ["This field is required."],
         "apps3buckets": ["This field is required."],
         "userapps": ["This field is required."]
       };
 
-      mock.api
+      mock_api()
         .post('/apps/', JSON.stringify({}))
         .reply(400, response);
 
-      return apps.add({})
-        .then(function (data) { throw new Error('expected failure'); })
-        .catch(function (err) { assert.deepEqual(err.error, response); });
+      return new App({}).create()
+        .then((data) => { throw new Error('expected failure'); })
+        .catch((err) => { assert.deepEqual(err.error, response); });
     });
 
-    it('throws an error if incomplete app data is provided', function () {
-      var incomplete_app_data = {'name': 'Test app'};
-      var response = {
+    it('throws an error if incomplete app data is provided', () => {
+      const incomplete_app_data = {'name': 'Test app'};
+      const response = {
         "repo_url": ["This field is required."],
         "apps3buckets": ["This field is required."],
         "userapps": ["This field is required."]
       };
 
-      mock.api
+      mock_api()
         .post('/apps/', JSON.stringify(incomplete_app_data))
         .reply(400, response);
 
-      return apps.add(incomplete_app_data)
-        .then(function (data) { throw new Error('expected failure'); })
-        .catch(function (err) { assert.deepEqual(err.error, response); });
+      return new App(incomplete_app_data).create()
+        .then((data) => { throw new Error('expected failure'); })
+        .catch((err) => { assert.deepEqual(err.error, response); });
     });
 
-    it('returns an app id after creating the app', function () {
+    it('returns an app id after creating the app', () => {
 
-      var test_app = {
+      const test_app = {
         'name': 'Test app',
         'repo_url': 'https://github.com/moj-analytical-services/test-app',
         'app_s3_buckets': [],
         'userapps': []
       };
 
-      var expected_id = 4;
+      const expected_id = 4;
 
-      var response = {
+      const response = {
         "id": expected_id,
         "url": "http://localhost:8000/apps/" + expected_id + "/",
         "name": test_app.name,
@@ -82,12 +83,12 @@ describe('Apps API', function () {
         "userapps": []
       };
 
-      mock.api
+      mock_api()
         .post('/apps/', JSON.stringify(test_app))
         .reply(201, response);
 
-      return apps.add(test_app)
-        .then(function (app) { assert.equal(app.id, expected_id); });
+      return new App(test_app).create()
+        .then((app) => { assert.equal(app.id, expected_id); });
     });
 
   });

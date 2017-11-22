@@ -1,7 +1,5 @@
 const { ensureLoggedIn } = require('connect-ensure-login');
-
-const api = require('../api-client');
-const routes = require('../routes');
+const { App, AppS3Bucket } = require('../api-client');
 
 
 exports.create = [
@@ -9,16 +7,17 @@ exports.create = [
   (req, res, next) => {
     const { app_id, bucket_id } = req.body;
 
-    const apps3bucket = {
-      app: app_id,
-      s3bucket: bucket_id,
-      access_level: 'readonly',
-    };
+    App.get(app_id)
 
-    api.apps3buckets.add(apps3bucket)
-      .then(() => {
-        res.redirect(routes.url_for('apps.details', { id: app_id }));
+      .then((app) => {
+        return app.connect_bucket(bucket_id);
       })
+
+      .then((_) => {
+        const { url_for } = require('../routes');
+        res.redirect(url_for('apps.details', { id: app_id }));
+      })
+
       .catch(next);
   },
 ];
@@ -26,18 +25,19 @@ exports.create = [
 exports.update = [
   ensureLoggedIn('/login'),
   (req, res, next) => {
-    const apps3bucket_id = req.params.id;
     const { access_level, redirect_to } = req.body;
 
-    const apps3bucket = {
-      id: apps3bucket_id,
-      access_level: access_level,
-    };
+    new AppS3Bucket({
+      id: req.params.id,
+      access_level: access_level
+    })
 
-    api.apps3buckets.update(apps3bucket)
-      .then(() => {
+      .update()
+
+      .then((_) => {
         res.redirect(redirect_to);
       })
+
       .catch(next);
   },
 ];
@@ -45,10 +45,11 @@ exports.update = [
 exports.delete = [
   ensureLoggedIn('/login'),
   (req, res, next) => {
-    api.apps3buckets.delete(req.params.id)
-      .then(() => {
-        res.redirect(req.body.redirect_to);
-      })
+
+    AppS3Bucket.delete(req.params.id)
+
+      .then(() => { res.redirect(req.body.redirect_to); })
+
       .catch(next);
   },
 ];

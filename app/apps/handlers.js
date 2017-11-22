@@ -1,117 +1,100 @@
-const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
-
-const { App, Bucket, User, api } = require('../api-client');
-const routes = require('../routes');
+const { ensureLoggedIn } = require('connect-ensure-login');
+const { App, Bucket, User } = require('../api-client');
 
 
-exports.new_app = [
+exports.new = [
   ensureLoggedIn('/login'),
-  function (req, res, next) {
-    api.list_buckets()
-      .then((buckets_response) => {
-        const template_args = {
+  (req, res, next) => {
+
+    Bucket.list()
+
+      .then((buckets) => {
+        res.render('apps/new.html', {
           prefix: process.env.ENV + '-',
-          buckets: buckets_response.results,
-        };
-        res.render('apps/new.html', template_args);
+          buckets: buckets,
+        });
       })
+
       .catch(next);
   }
 ];
 
 
-exports.create_app = [
+exports.create = [
   ensureLoggedIn('/login'),
-  function (req, res, next) {
-    const app = {
+  (req, res, next) => {
+
+    const { url_for } = require('../routes');
+
+    new App({
       name: req.body.name,
       description: req.body.description,
       repo_url: req.body.repo_url,
       userapps: [],
-    };
+    })
 
-    api.add_app(app)
-      .then(function (app) {
-        res.redirect(routes.url_for('apps.details', {id: app.id}));
-      })
-      .catch(function(err) {
+      .create()
+
+      .then((app) => {
+        res.redirect(url_for('apps.details', {id: app.id})); })
+
+      .catch((err) => {
         if (err.statusCode === 400) {
           res.render('apps/new.html', {
             app: app,
             errors: err.error,
           });
+
         } else {
-          next(err)
+          next(err);
         }
-      })
+      });
   }
 ];
 
-exports.list_apps = [
+exports.list = [
   ensureLoggedIn('/login'),
-  function (req, res, next) {
+  (req, res, next) => {
 
-    api.list_apps()
-      .then(function (apps) {
+    App.list()
 
-        res.render('apps/list.html', {
-          apps: apps
-        });
+      .then((apps) => {
+        res.render('apps/list.html', { apps: apps }); })
 
-      })
       .catch(next);
   }
 ];
 
 
-exports.list_user_apps = function (req, res) {
-
-  api.list_user_apps(req.params.id).then(function (apps) {
-
-    res.render('apps/list.html', {
-      apps: apps
-    });
-
-  });
-};
-
-
-const get_buckets_options = (app, buckets) => {
-  const associated_ids = app.apps3buckets.map(as => as.s3bucket.id);
-
-  return buckets.filter(bucket => !associated_ids.includes(bucket.id));
-};
-
-
-exports.app_details = [
+exports.details = [
   ensureLoggedIn('/login'),
-  function(req, res, next) {
+  (req, res, next) => {
 
-    Promise
-      .all([App.get(req.params.id), Bucket.list(), User.list()])
-      .then(function(responses) {
-        const [app, buckets, users] = responses;
-        const template_args = {
+    Promise.all([App.get(req.params.id), Bucket.list(), User.list()])
+
+      .then(([app, buckets, users]) => {
+        res.render('apps/details.html', {
           app: app,
-          buckets_options: get_buckets_options(app, buckets),
+          buckets_options: buckets.exclude(app.buckets),
           users: users
-        };
-        res.render('apps/details.html', template_args);
+        });
       })
+
       .catch(next);
   },
 ];
 
 
-exports.app_delete = [
+exports.delete = [
   ensureLoggedIn('/login'),
   (req, res, next) => {
-    const app_id = req.params.id;
 
-    api.apps.delete(app_id)
-      .then(() => {
-        res.redirect(routes.url_for('apps.list'));
-      })
+    const { url_for } = require('../routes');
+
+    App.delete(req.params.id)
+
+      .then(() => { res.redirect(url_for('apps.list')); })
+
       .catch(next);
   }
 ];

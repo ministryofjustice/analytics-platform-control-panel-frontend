@@ -1,88 +1,92 @@
 "use strict";
-var assert = require('chai').assert;
-var mock = require('./mock');
-var buckets = require('../app/api-client.js').buckets;
+const { assert } = require('chai');
+const { mock_api } = require('./conftest');
+const { Bucket, ModelSet } = require('../app/api-client');
 
 
-describe('buckets API', function () {
+describe('buckets API', () => {
 
-  describe('list()', function () {
+  describe('list()', () => {
 
-    it('returns a list of buckets', function () {
+    it('returns a list of buckets', () => {
       const buckets_response = require('./fixtures/buckets');
 
-      mock.api
+      mock_api()
         .get('/s3buckets/')
         .reply(200, buckets_response);
 
-      return buckets.list()
+      const expected = {
+        'buckets': new ModelSet(Bucket, buckets_response.results),
+      };
+
+      return Bucket.list()
         .then((buckets) => {
-          assert.deepEqual(buckets, buckets_response);
+          assert.deepEqual(buckets, expected.buckets);
         });
     });
   });
 
 
-  describe('add()', function () {
+  describe('add()', () => {
 
-    it('throws an error if no bucket data is provided', function () {
-      var error = {
+    it('throws an error if no bucket data is provided', () => {
+      const error = {
         'name': ['This field is required.'],
         'apps3buckets': ['This field is required.']
       };
 
-      mock.api
+      mock_api()
         .post('/s3buckets/', JSON.stringify({}))
         .reply(400, error);
 
-      return buckets.add({})
-        .then(function (_) { throw new Error('expected failure'); })
-        .catch(function (err) { assert.deepEqual(err.error, error); });
+      return new Bucket({}).create()
+        .then((_) => { throw new Error('expected failure'); })
+        .catch((err) => { assert.deepEqual(err.error, error); });
     });
 
-    it('throws an error if incomplete bucket data is provided', function () {
-      var incomplete_bucket_data = {'name': 'Test bucket'};
-      var error = {
+    it('throws an error if incomplete bucket data is provided', () => {
+      const incomplete_bucket_data = {'name': 'Test bucket'};
+      const error = {
         'apps3buckets': ['This field is required.']
       };
 
-      mock.api
+      mock_api()
         .post('/s3buckets/', JSON.stringify(incomplete_bucket_data))
         .reply(400, error);
 
-      return buckets.add(incomplete_bucket_data)
-        .then(function (_) { throw new Error('expected failure'); })
-        .catch(function (err) { assert.deepEqual(err.error, error); });
+      return new Bucket(incomplete_bucket_data).create()
+        .then((_) => { throw new Error('expected failure'); })
+        .catch((err) => { assert.deepEqual(err.error, error); });
     });
 
-    it('throws an error if invalid bucket name is provided', function () {
-      var invalid_bucket_data = {
+    it('throws an error if invalid bucket name is provided', () => {
+      const invalid_bucket_data = {
         'name': 'bad bucket name',
         'apps3buckets': []
       };
-      var error = {
+      const error = {
         'name': ['Name must have correct env prefix e.g. dev-bucketname']
       };
 
-      mock.api
+      mock_api()
         .post('/s3buckets/', JSON.stringify(invalid_bucket_data))
         .reply(400, error);
 
-      return buckets.add(invalid_bucket_data)
-        .then(function (_) { throw new Error('expected failure'); })
-        .catch(function (err) { assert.deepEqual(err.error, error); });
+      return new Bucket(invalid_bucket_data).create()
+        .then((_) => { throw new Error('expected failure'); })
+        .catch((err) => { assert.deepEqual(err.error, error); });
     });
 
-    it('returns a bucket id after creating the bucket', function () {
+    it('returns a bucket id after creating the bucket', () => {
 
-      var test_bucket = {
+      const test_bucket = {
         'name': 'dev-test-bucket',
         'apps3buckets': []
       };
 
-      var expected_id = 1;
+      const expected_id = 1;
 
-      var response = {
+      const response = {
         "id": expected_id,
         "url": "http://" + expected_id + "/s3buckets/1/",
         "name": "dev-test-bucket",
@@ -91,12 +95,12 @@ describe('buckets API', function () {
         "created_by": "github|12345"
       };
 
-      mock.api
+      mock_api()
         .post('/s3buckets/', JSON.stringify(test_bucket))
         .reply(201, response);
 
-      return buckets.add(test_bucket)
-        .then(function (bucket) { assert.equal(bucket.id, expected_id); });
+      return new Bucket(test_bucket).create()
+        .then((bucket) => { assert.equal(bucket.id, expected_id); });
     });
 
   });

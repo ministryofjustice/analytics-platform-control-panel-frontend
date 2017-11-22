@@ -1,19 +1,19 @@
 "use strict";
-var assert = require('chai').assert;
-var config = require('../app/config');
-var mock = require('./mock');
-var handlers = require('../app/buckets/handlers');
+const { assert } = require('chai');
+
+const { config, mock_api, url_for } = require('./conftest');
+const handlers = require('../app/buckets/handlers');
 
 
-describe('buckets view', function () {
+describe('buckets view', () => {
 
-  describe('add bucket', function () {
+  describe('add bucket', () => {
 
-    it('creates a new bucket and redirects', function () {
-      var bucket_data = {
+    it('creates a new bucket and redirects', () => {
+      const bucket_data = {
         'new-datasource-name': 'dev-test-bucket'
       };
-      var created_bucket = {
+      const created_bucket = {
         id: 1,
         url: config.api.base_url + '/s3buckets/1/',
         name: 'dev-test-bucket',
@@ -22,13 +22,13 @@ describe('buckets view', function () {
         created_by: 'github|12345'
       };
 
-      mock.api
+      mock_api()
         .post('/s3buckets/')
         .reply(201, created_bucket);
 
-      var req = {};
-      var res = {};
-      var request = new Promise(function (resolve, reject) {
+      const req = {};
+      const res = {};
+      const request = new Promise((resolve, reject) => {
 
         function unexpected(template, options) {
           options = JSON.stringify(options);
@@ -43,8 +43,8 @@ describe('buckets view', function () {
       });
 
       return request
-        .then(function (redirect_url) {
-          assert.equal(redirect_url, mock.url_for('buckets.details', {id: created_bucket.id}));
+        .then((redirect_url) => {
+          assert.equal(redirect_url, url_for('buckets.details', {id: created_bucket.id}));
         });
     });
 

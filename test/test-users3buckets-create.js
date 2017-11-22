@@ -1,11 +1,8 @@
 "use strict";
 
-const assert = require('chai').assert;
-const nock = require('nock');
-
-const config = require('../app/config');
+const { assert } = require('chai');
+const { config, mock_api, url_for } = require('./conftest');
 const handlers = require('../app/users3buckets/handlers');
-const url_for = require('../app/routes').url_for;
 
 
 describe('Edit bucket form', () => {
@@ -16,7 +13,7 @@ describe('Edit bucket form', () => {
       const bucket_id = 42;
       const user_id = 'github|123';
 
-      const post_users3buckets = nock(config.api.base_url)
+      const post_users3buckets = mock_api()
         .post(`/users3buckets/`, {
           user: user_id,
           s3bucket: bucket_id,

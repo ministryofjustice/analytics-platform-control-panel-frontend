@@ -1,46 +1,48 @@
 "use strict";
-var assert = require('chai').assert;
-var mock = require('./mock');
+const { assert } = require('chai');
+const { mock_api } = require('./conftest');
 
-var api = require('../app/api-client');
+const { App, ModelSet, api } = require('../app/api-client');
 
 
-describe('API Client', function () {
+describe('API Client', () => {
 
-  describe('request', function () {
+  describe('request', () => {
 
-    it('rejects an invalid auth token', function () {
-      var reason = {
+    it('rejects an invalid auth token', () => {
+      const reason = {
         'detail': 'Authentication credentials were not provided.'};
 
-      mock.api
+      mock_api()
         .get('/apps/')
         .matchHeader('Authorization', 'JWT invalid token')
         .reply(403, reason);
 
-      return api.apps.list()
-        .then(function (apps) { throw new Error('expected failure'); })
-        .catch(function (err) { assert.deepEqual(err.error, reason); });
+      return App.list()
+        .then((apps) => { throw new Error('expected failure'); })
+        .catch((err) => { assert.deepEqual(err.error, reason); });
     });
 
-    it('accepts a valid auth token', function () {
-      var valid_token = 'invalid JWT'
-      var response = {
+    it('accepts a valid auth token', () => {
+      const valid_token = 'invalid JWT';
+      const response = {
         'count': 0,
         'next': null,
         'previous': null,
         'results': []
       };
 
-      mock.api
+      mock_api()
         .get('/apps/')
         .matchHeader('Authorization', 'JWT ' + valid_token)
         .reply(200, response);
 
-      api.set_token(valid_token);
+      api.auth.set_token(valid_token);
 
-      return api.apps.list()
-        .then(function (apps) { assert.deepEqual(apps, response); });
+      const expected = new ModelSet(App, response.results);
+
+      return App.list()
+        .then((apps) => { assert.deepEqual(apps, expected); });
     });
 
   });

@@ -28,7 +28,10 @@ exports.user_details = [
     User.get(req.params.id)
 
       .then((user) => {
-        res.render('users/details.html', { user: user }); })
+        res.render('users/details.html', {
+          signedInuser: user.auth0_id === req.user.sub,
+          user: user,
+        }); })
 
       .catch(next);
   }

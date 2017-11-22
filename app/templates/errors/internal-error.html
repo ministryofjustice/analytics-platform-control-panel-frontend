@@ -4,6 +4,10 @@
 
 {% if env.ENV == 'dev' %}
 <pre>
+{{ error.stack | safe }}
+</pre>
+
+<pre>
 session:
 {{ req.session | default({}) | dump(2) | safe }}
 </pre>

@@ -6,11 +6,9 @@ const raven = require('raven');
 const routes = require('../routes');
 
 
-exports.home = [
-  function (req, res, next) {
-    res.render('home.html');
-  }
-];
+exports.home = function (req, res, next) {
+  res.render('home.html');
+};
 
 
 exports.error_test = function (req, res, next) {

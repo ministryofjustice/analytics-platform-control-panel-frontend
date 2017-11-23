@@ -28,7 +28,7 @@ describe('Edit user form', () => {
           },
         };
 
-        handlers.user_edit[1](req, res, reject);
+        handlers.user_edit(req, res, reject);
       });
 
       const expected = {

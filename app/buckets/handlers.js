@@ -5,12 +5,9 @@ const { App, Bucket, User } = require('../api-client');
 exports.list_buckets = [
   ensureLoggedIn('/login'),
   (req, res, next) => {
-
     Bucket.list()
-
       .then((buckets) => {
         res.render('buckets/list.html', {buckets: buckets}); })
-
       .catch(next);
   }
 ];
@@ -27,18 +24,14 @@ exports.new_bucket = [
 exports.create_bucket = [
   ensureLoggedIn('/login'),
   (req, res, next) => {
-
     new Bucket({
       name: req.body['new-datasource-name'],
       apps3buckets: []
     })
-
       .create()
-
       .then((bucket) => {
         const { url_for } = require('../routes');
         res.redirect(url_for('buckets.details', {id: bucket.id})); })
-
       .catch((error) => {
         res.render('buckets/new.html', {
           bucket: {name: req.body['new-datasource-name']},
@@ -52,9 +45,7 @@ exports.create_bucket = [
 exports.bucket_details = [
   ensureLoggedIn('/login'),
   (req, res, next) => {
-
     Promise.all([Bucket.get(req.params.id), App.list(), User.list()])
-
       .then(([bucket, apps, users]) => {
         res.render('buckets/details.html', {
           bucket: bucket,
@@ -62,7 +53,6 @@ exports.bucket_details = [
           users_options: users.exclude(bucket.users),
         });
       })
-
       .catch(next)
   },
 ];

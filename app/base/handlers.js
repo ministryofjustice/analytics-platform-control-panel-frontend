@@ -23,7 +23,6 @@ exports.error_test = function (req, res, next) {
 
 exports.auth_callback = [
   passport.authenticate('auth0-oidc'),
-
   function (req, res, next) {
     let log = require('bole')('oidc-callback');
 
@@ -33,15 +32,14 @@ exports.auth_callback = [
     api.auth.set_token(req.user.id_token);
 
     log.debug(`fetching user ${req.user.sub} from api`);
-    User.get(req.user.sub)
 
+    User.get(req.user.sub)
       .then((user) => {
         log.debug(`got user from api`);
         req.user.is_superuser = true;
         log.debug(`redirecting to ${req.session.returnTo || '/'}`);
         res.redirect(req.session.returnTo || '/');
       })
-
       .catch((error) => {
         log.debug('error fetching user');
         log.debug(error);
@@ -50,7 +48,6 @@ exports.auth_callback = [
           req.user.is_superuser = false;
           log.debug('redirecting to friendly error message');
           res.redirect('/');
-
         } else {
           next(error);
         }

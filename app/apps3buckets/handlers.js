@@ -28,13 +28,10 @@ exports.update = [
       id: req.params.id,
       access_level: access_level
     })
-
       .update()
-
       .then((_) => {
         res.redirect(redirect_to);
       })
-
       .catch(next);
   },
 ];
@@ -42,11 +39,8 @@ exports.update = [
 exports.delete = [
   ensureLoggedIn('/login'),
   (req, res, next) => {
-
     AppS3Bucket.delete(req.params.id)
-
       .then(() => { res.redirect(req.body.redirect_to); })
-
       .catch(next);
   },
 ];

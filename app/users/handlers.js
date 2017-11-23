@@ -5,12 +5,9 @@ const { ensureLoggedIn } = require('connect-ensure-login');
 exports.list_users = [
   ensureLoggedIn('/login'),
   (req, res, next) => {
-
     User.list()
-
       .then((users) => {
         res.render('users/list.html', {users: users}); })
-
       .catch(next);
   }
 ];
@@ -24,15 +21,12 @@ exports.new_user = [
 exports.user_details = [
   ensureLoggedIn('/login'),
   (req, res, next) => {
-
     User.get(req.params.id)
-
       .then((user) => {
         res.render('users/details.html', {
           signedInuser: user.auth0_id === req.user.sub,
           user: user,
         }); })
-
       .catch(next);
   }
 ];
@@ -41,9 +35,7 @@ exports.user_details = [
 exports.user_edit = [
   ensureLoggedIn('/login'),
   (req, res, next) => {
-
     Promise.all([User.get(req.params.id), App.list(), Bucket.list()])
-
       .then(([user, apps, buckets]) => {
         res.render('users/edit.html', {
           user: user,
@@ -51,7 +43,6 @@ exports.user_edit = [
           buckets_options: buckets.exclude(user.buckets),
         });
       })
-
       .catch(next);
   },
 ];

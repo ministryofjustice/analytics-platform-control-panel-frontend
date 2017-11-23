@@ -13,13 +13,10 @@ exports.create = [
       access_level: 'readonly',
       is_admin: false,
     })
-
       .create()
-
       .then(() => {
         const { url_for } = require('../routes');
         res.redirect(url_for('buckets.details', { id: bucket_id })); })
-
       .catch(next);
   },
 ];
@@ -34,11 +31,8 @@ exports.update = [
       id: users3bucket_id,
       access_level: access_level,
     })
-
       .update()
-
       .then(() => { res.redirect(redirect_to); })
-
       .catch(next);
   },
 ];
@@ -46,11 +40,8 @@ exports.update = [
 exports.delete = [
   ensureLoggedIn('/login'),
   (req, res, next) => {
-
     UserS3Bucket.delete(req.params.id)
-
       .then(() => { res.redirect(req.body.redirect_to); })
-
       .catch(next);
   },
 ];

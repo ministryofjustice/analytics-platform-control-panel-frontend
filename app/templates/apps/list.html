@@ -4,9 +4,9 @@
 
 {% block main_column %}
 
-<p>{{ apps.results.length }} app{%- if apps.results.length != 1 -%}s{%- endif -%}</p>
+<p>{{ apps.length }} app{%- if apps.length != 1 -%}s{%- endif -%}</p>
 
-{% if apps.results.length %}
+{% if apps.length %}
   <table class="form-group list">
     <thead>
       <tr>
@@ -18,7 +18,7 @@
       </tr>
     </thead>
     <tbody>
-      {% for app in apps.results %}
+      {% for app in apps %}
       <tr>
         <td>{{ app.id }}</td>
         <td><a href="{{ url_for('apps.details', {id: app.id}) }}">{{ app.name }}</a></td>

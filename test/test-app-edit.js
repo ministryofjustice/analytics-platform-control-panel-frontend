@@ -1,9 +1,8 @@
-"use strict";
+const { ModelSet } = require('../app/base-model');
+const { App, Bucket, User } = require('../app/models');
+const { assert } = require('chai');
 
-const assert = require('chai').assert;
-const nock = require('nock');
-
-const config = require('../app/config');
+const { config, mock_api, url_for } = require('./conftest');
 const handlers = require('../app/apps/handlers');
 
 
@@ -16,14 +15,13 @@ describe('Edit app form', () => {
       const buckets = require('./fixtures/buckets');
       const users = require('./fixtures/users');
 
-      // Mock API requests
-      let app_details_request = nock(config.api.base_url)
+      let app_details_request = mock_api()
         .get(`/apps/${app.id}/`)
         .reply(200, app);
-      let buckets_list_request = nock(config.api.base_url)
+      let buckets_list_request = mock_api()
         .get(`/s3buckets/`)
         .reply(200, buckets);
-      let users_list_request = nock(config.api.base_url)
+      let users_list_request = mock_api()
         .get(`/users/`)
         .reply(200, users);
 
@@ -35,8 +33,14 @@ describe('Edit app form', () => {
           }
         };
 
-        handlers.app_details[1](req, res, reject);
+        handlers.details[1](req, res, reject);
       });
+
+      const expected = {
+        'app': new App(app),
+        'buckets': new ModelSet(Bucket, buckets.results),
+        'users': new ModelSet(User, users.results),
+      }
 
       return request
         .then((args) => {
@@ -44,9 +48,9 @@ describe('Edit app form', () => {
           assert(buckets_list_request.isDone(), 'API call to /s3buckets/ expected');
           assert(users_list_request.isDone(), 'API call to /users/ expected');
           assert.equal(args.template, 'apps/details.html');
-          assert.deepEqual(args.context.app, app);
-          assert.deepEqual(args.context.buckets_options, buckets.results);
-          assert.deepEqual(args.context.users, users.results);
+          assert.deepEqual(args.context.app, expected.app);
+          assert.deepEqual(args.context.buckets_options, expected.buckets);
+          assert.deepEqual(args.context.users, expected.users);
         });
     });
 

@@ -1,17 +1,19 @@
 const { assert } = require('chai');
-const nock = require('nock');
 
-const config = require('../app/config');
+const { config, mock_api } = require('./conftest');
 const handlers = require('../app/apps3buckets/handlers');
 
 
 describe('Edit bucket form', () => {
+
   describe('when revoking access to user', () => {
+
     it('make request to API', () => {
+
       const apps3bucket_id = 42;
       const redirect_to = 'apps/123';
 
-      const delete_apps3buckets = nock(config.api.base_url)
+      const delete_apps3buckets = mock_api()
         .delete(`/apps3buckets/${apps3bucket_id}/`)
         .reply(204);
 

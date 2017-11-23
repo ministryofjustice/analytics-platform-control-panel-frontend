@@ -1,18 +1,20 @@
 const { assert } = require('chai');
-const nock = require('nock');
 
-const config = require('../app/config');
+const { config, mock_api } = require('./conftest');
 const handlers = require('../app/apps3buckets/handlers');
 
 
 describe('Edit bucket form', () => {
+
   describe('when updating user access', () => {
+
     it('make request to API', () => {
+
       const apps3bucket_id = 42;
       const access_level = 'readonly';
       const redirect_to = 'apps/123';
 
-      const patch_apps3buckets = nock(config.api.base_url)
+      const patch_apps3buckets = mock_api()
         .patch(`/apps3buckets/${apps3bucket_id}/`, {
           id: apps3bucket_id,
           access_level: access_level,
@@ -35,7 +37,7 @@ describe('Edit bucket form', () => {
 
       return request
         .then((redirect_url) => {
-          assert(patch_apps3buckets.isDone(), `Didn't make PATCH request to API endpoint /apps3buckets/${apps3bucket_id}/ as expected`);
+          assert(patch_apps3buckets.isDone(), `Didn't PATCH /apps3buckets/${apps3bucket_id}/`);
 
           assert.equal(redirect_url, redirect_to);
         });

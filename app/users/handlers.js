@@ -1,16 +1,13 @@
-var api = require('../api-client');
-var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
+const { App, Bucket, User } = require('../models');
+const { ensureLoggedIn } = require('connect-ensure-login');
 
 
 exports.list_users = [
   ensureLoggedIn('/login'),
-  function (req, res, next) {
-
-    api.list_users()
-
-      .then(function (users) {
+  (req, res, next) => {
+    User.list()
+      .then((users) => {
         res.render('users/list.html', {users: users}); })
-
       .catch(next);
   }
 ];
@@ -18,67 +15,34 @@ exports.list_users = [
 
 exports.new_user = [
   ensureLoggedIn('/login'),
-
-  function (req, res) {
-
-    res.render('users/new.html');
-
-  }
+  (req, res) => { res.render('users/new.html'); }
 ];
 
 exports.user_details = [
   ensureLoggedIn('/login'),
-  function (req, res, next) {
-
-    api.get_user(req.params.id)
-      .then(function (user) {
-
-        user.apps = [
-          {'name': 'Test App', 'role': 0, 'id': 1}
-        ];
-
+  (req, res, next) => {
+    User.get(req.params.id)
+      .then((user) => {
         res.render('users/details.html', {
-          signedInUser: (user.id == req.user.id),
-          user: user
-        });
-      })
+          signedInuser: user.auth0_id === req.user.sub,
+          user: user,
+        }); })
       .catch(next);
   }
 ];
 
-const get_apps_options = (user, all_apps) => {
-  const associated_ids = user.userapps.map(ua => ua.app.id);
-
-  return all_apps.filter(app => !associated_ids.includes(app.id));
-};
-
-const get_buckets_options = (user, all_buckets) => {
-  const associated_ids = user.users3buckets.map(us => us.s3bucket.id);
-
-  return all_buckets.filter(bucket => !associated_ids.includes(bucket.id));
-};
 
 exports.user_edit = [
   ensureLoggedIn('/login'),
-  function(req, res, next) {
-    const user_request = api.get_user(req.params.id);
-    const apps_request = api.list_apps();
-    const buckets_request = api.list_buckets();
-
-    Promise
-      .all([user_request, apps_request, buckets_request])
-      .then((responses) => {
-        const [user, apps_response, buckets_response] = responses;
-        const all_apps = apps_response.results;
-        const all_buckets = buckets_response.results;
-
-        const template_args = {
+  (req, res, next) => {
+    Promise.all([User.get(req.params.id), App.list(), Bucket.list()])
+      .then(([user, apps, buckets]) => {
+        res.render('users/edit.html', {
           user: user,
-          apps_options: get_apps_options(user, all_apps),
-          buckets_options: get_buckets_options(user, all_buckets),
-        };
-        res.render('users/edit.html', template_args);
+          apps_options: apps.exclude(user.apps),
+          buckets_options: buckets.exclude(user.buckets),
+        });
       })
-      .catch(next)
+      .catch(next);
   },
 ];

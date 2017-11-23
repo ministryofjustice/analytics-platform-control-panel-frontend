@@ -1,7 +1,8 @@
 "use strict";
-var assert = require('chai').assert;
-var mock = require('./mock');
-var users = require('../app/api-client.js').users;
+const { assert } = require('chai');
+const { ModelSet } = require('../app/base-model');
+const { User } = require('../app/models');
+const { config, mock_api } = require('./conftest');
 
 
 describe('Users API', () => {
@@ -9,14 +10,18 @@ describe('Users API', () => {
   describe('list_users', () => {
 
     it('returns a list of users', () => {
-      let response = require('./fixtures/users');
+      const response = require('./fixtures/users');
 
-      mock.api
+      mock_api()
         .get('/users/')
         .reply(200, response);
 
-      return users.list()
-        .then(function (users) { assert.deepEqual(users, response); });
+      const expected = {
+        'users': new ModelSet(User, response.results),
+      };
+
+      return User.list()
+        .then((users) => { assert.deepEqual(users, expected.users); });
     });
 
   });
@@ -25,50 +30,50 @@ describe('Users API', () => {
   describe('add_user', function () {
 
     it('throws an error if no user data is provided', function () {
-      var error = {
+      const error = {
         "username": ["This field is required."],
         "userapps": ["This field is required."],
         "users3buckets": ["This field is required."]
       }
 
-      mock.api
+      mock_api()
         .post('/users/', JSON.stringify({}))
         .reply(400, error);
 
-      return users.add({})
+      return new User({}).create()
         .then(function (data) { throw new Error('expected failure'); })
         .catch(function (err) { assert.deepEqual(err.error, error); });
     });
 
     it('throws an error if incomplete user data is provided', function () {
-      var incomplete_user_data = {'username': 'test-user'};
+      const incomplete_user_data = {'username': 'test-user'};
 
-      var error = {
+      const error = {
         "userapps": ["This field is required."],
         "users3buckets": ["This field is required."]
       }
 
-      mock.api
+      mock_api()
         .post('/users/', JSON.stringify(incomplete_user_data))
         .reply(400, error);
 
-      return users.add(incomplete_user_data)
+      return new User(incomplete_user_data).create()
         .then(function (data) { throw new Error('expected failure'); })
         .catch(function (err) { assert.deepEqual(err.error, error); });
     });
 
     it('returns a user object after creating the user', function () {
 
-      var test_user = {
+      const test_user = {
         'auth0_id': 'github|12345',
         'username': 'test-user',
         'name': 'Test User',
         'email': 'test@example.com'
       };
 
-      var response = {
+      const response = {
         "auth0_id": test_user.auth0_id,
-        "url": "http://localhost:8000/users/" + escape(test_user.auth0_id) + "/",
+        "url": `${config.api.base_url}/users/${escape(test_user.auth0_id)}/`,
         "username": test_user.username,
         "name": test_user.name,
         "email": test_user.email,
@@ -77,12 +82,16 @@ describe('Users API', () => {
         "users3buckets": []
       };
 
-      mock.api
+      mock_api()
         .post('/users/', JSON.stringify(test_user))
         .reply(201, response);
 
-      return users.add(test_user)
-        .then(function (user) { assert.deepEqual(user, response); });
+      const expected = {
+        'user': new User(response),
+      };
+
+      return new User(test_user).create()
+        .then((user) => { assert.deepEqual(user, expected.user); });
     });
 
   });

@@ -1,17 +1,19 @@
 const { assert } = require('chai');
-const nock = require('nock');
 
-const config = require('../app/config');
+const { config, mock_api, url_for } = require('./conftest');
 const handlers = require('../app/apps/handlers');
 
 
 describe('Delete app', () => {
+
   describe('when deleting an app', () => {
+
     it('makes a DELETE request to the API', () => {
+
       const app_id = 2;
       const redirect_to = '/apps';
 
-      const delete_app = nock(config.api.base_url)
+      const delete_app = mock_api()
         .delete(`/apps/${app_id}/`)
         .reply(204);
 
@@ -26,12 +28,12 @@ describe('Delete app', () => {
           },
         };
 
-        handlers.app_delete[1](req, res, reject);
+        handlers.delete[1](req, res, reject);
       });
 
       return request
         .then((redirect_url) => {
-          assert(delete_app.isDone(), `Did't make DELETE request to API endpoint to /apps/${app_id}/`);
+          assert(delete_app.isDone(), `Didn't make DELETE request to API endpoint to /apps/${app_id}/`);
           assert.equal(redirect_url, redirect_to);
         });
     });

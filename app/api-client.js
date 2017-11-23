@@ -242,7 +242,7 @@ class App extends Model {
     return new ModelSet(Bucket, this.data.apps3buckets.map(as => as.s3bucket));
   }
 
-  connect_bucket(bucket, access_level = 'readonly') {
+  grant_bucket_access(bucket, access_level = 'readonly') {
     if (!['readonly', 'readwrite'].includes(access_level)) {
       throw new Error(`Invalid access_level "${access_level}"`);
     }

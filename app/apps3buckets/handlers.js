@@ -8,16 +8,13 @@ exports.create = [
     const { app_id, bucket_id } = req.body;
 
     App.get(app_id)
-
       .then((app) => {
-        return app.connect_bucket(bucket_id);
+        return app.grant_bucket_access(bucket_id, 'readonly');
       })
-
       .then((_) => {
         const { url_for } = require('../routes');
         res.redirect(url_for('apps.details', { id: app_id }));
       })
-
       .catch(next);
   },
 ];

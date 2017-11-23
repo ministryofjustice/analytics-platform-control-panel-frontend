@@ -6,23 +6,7 @@ const url = require('url');
 const log = require('bole')('api-client');
 
 
-class BasicAuth {
-
-  constructor(username, password) {
-    this.username = username
-    this.password = password
-  }
-
-  get header() {
-    return 'Basic ' + new Buffer(
-      `${options.username}:${options.password}`).toString('base64');
-  }
-
-}
-
-
 class JWTAuth {
-
   constructor(token) {
     this.token = token || 'invalid token';
   }
@@ -38,39 +22,36 @@ class JWTAuth {
   get header() {
     return `JWT ${this.token}`;
   }
-
 }
 
 
 class APIClient {
-
-  constructor(config) {
-    this.base_url = config.base_url;
+  constructor(conf) {
+    this.base_url = conf.base_url;
     this.auth = null;
   }
 
   request(endpoint, method = 'GET', body = null) {
-    let headers = {};
+    const headers = {};
 
     if (this.auth) {
-      headers['Authorization'] = this.auth.header;
+      headers.Authorization = this.auth.header;
     }
 
     try {
-      let options = {
-        method: method,
+      const options = {
+        method,
         uri: this.endpoint_url(endpoint),
-        headers: headers,
-        body: body,
-        json: true
+        headers,
+        body,
+        json: true,
       };
       return request(options)
         .then((result) => {
           log.debug(`${method} ${options.uri}`);
-          //console.dir(result);
+          // console.dir(result);
           return result;
         });
-
     } catch (error) {
       throw new Error(`API: ${method} ${endpoint} failed: ${error}`);
     }
@@ -97,18 +78,17 @@ class APIClient {
   }
 
   endpoint_url(endpoint) {
-
     if (!endpoint) {
       throw new Error('Missing endpoint');
     }
 
+    let suffix = '';
     if (!endpoint.endsWith('/')) {
-      endpoint += '/';
+      suffix = '/';
     }
 
-    return url.resolve(this.base_url, endpoint);
+    return url.resolve(this.base_url, endpoint + suffix);
   }
-
 }
 
 
@@ -126,35 +106,32 @@ const model_proxy = {
     if (model.data && property in model.data) {
       return model.data[property];
     }
-  }
-}
+    return undefined;
+  },
+};
 
 
 class ModelSet extends Array {
-
-  constructor(model, data = []) {
-    super(...data.map(obj => new model(obj)));
-    this.model = model;
+  constructor(Model, data = []) {
+    super(...data.map(obj => new Model(obj)));
+    this.model = Model;
   }
 
   exclude(other) {
-
+    let others = other;
     if (other instanceof this.model) {
-      other = [other];
+      others = [other];
     }
 
-    let pks = other.map(instance => instance[this.model.pk]);
+    const pks = others.map(instance => instance[this.model.pk]);
 
-    return this.filter((instance) => {
-      return !pks.includes(instance[this.model.pk]);
-    });
+    return this.filter(instance => !pks.includes(instance[this.model.pk]));
   }
 }
 
 exports.ModelSet = ModelSet;
 
 class Model {
-
   constructor(data) {
     this.data = data;
     return new Proxy(this, model_proxy);
@@ -164,11 +141,9 @@ class Model {
     return 'id';
   }
 
-  static list(filter = {}) {
+  static list() {
     return api.get(this.endpoint)
-      .then((result) => {
-        return new ModelSet(this.prototype.constructor, result.results);
-      });
+      .then(result => new ModelSet(this.prototype.constructor, result.results));
   }
 
   static get(id) {
@@ -186,31 +161,28 @@ class Model {
   }
 
   replace() {
-    const endpoint = this.constructor.endpoint;
     const pk_name = this.constructor.pk;
     const pk = this.data[pk_name];
 
     if (pk !== undefined) {
-      return api.put(`${endpoint}/${pk}`, this.data)
+      return api.put(`${this.constructor.endpoint}/${pk}`, this.data)
         .then(data => new this.constructor(data));
     }
 
-    return Promise.reject({error: `Missing ${pk_name} for PUT ${endpoint}`});
+    return Promise.reject(new Error(`Missing ${pk_name} for PUT ${this.constructor.endpoint}`));
   }
 
   update() {
-    const endpoint = this.constructor.endpoint;
     const pk_name = this.constructor.pk;
     const pk = this.data[pk_name];
 
     if (pk !== undefined) {
-      return api.patch(`${endpoint}/${pk}`, this.data)
+      return api.patch(`${this.constructor.endpoint}/${pk}`, this.data)
         .then(data => new this.constructor(data));
     }
 
-    return Promise.reject({error: `Missing ${pk_name} for PATCH ${endpoint}`});
+    return Promise.reject(new Error(`Missing ${pk_name} for PATCH ${this.constructor.endpoint}`));
   }
-
 }
 
 
@@ -271,22 +243,21 @@ class App extends Model {
   }
 
   connect_bucket(bucket, access_level = 'readonly') {
-
     if (!['readonly', 'readwrite'].includes(access_level)) {
       throw new Error(`Invalid access_level "${access_level}"`);
     }
 
     let bucket_id = bucket;
 
-    if (typeof bucket === 'function' && bucket.prototype.constructor == Bucket) {
+    if (typeof bucket === 'function' && bucket.prototype.constructor === Bucket) {
       bucket_id = bucket.id;
     }
 
     return new AppS3Bucket({
       app: this.id,
       s3bucket: bucket_id,
-      access_level: access_level
-    }).create()
+      access_level,
+    }).create();
   }
 }
 
@@ -317,6 +288,4 @@ class Bucket extends Model {
 exports.Bucket = Bucket;
 
 
-api.connect_bucket_to_app = (apps3bucket) => {
-  return api.post('apps3buckets', body = apps3bucket);
-};
+api.connect_bucket_to_app = apps3bucket => api.post('apps3buckets', body = apps3bucket);

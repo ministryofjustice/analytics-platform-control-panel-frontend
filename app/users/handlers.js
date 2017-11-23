@@ -1,4 +1,4 @@
-const { App, Bucket, User, api } = require('../api-client');
+const { App, Bucket, User } = require('../models');
 const { ensureLoggedIn } = require('connect-ensure-login');
 
 

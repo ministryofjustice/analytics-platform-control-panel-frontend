@@ -1,5 +1,5 @@
 const { ensureLoggedIn } = require('connect-ensure-login');
-const { UserS3Bucket } = require('../api-client');
+const { UserS3Bucket } = require('../models');
 
 
 exports.create = [

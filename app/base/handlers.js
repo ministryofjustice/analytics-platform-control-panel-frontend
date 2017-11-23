@@ -1,4 +1,5 @@
-const { User, api } = require('../api-client');
+const { api } = require('../api-client');
+const { User } = require('../models');
 const config = require('../config');
 const passport = require('passport');
 const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;

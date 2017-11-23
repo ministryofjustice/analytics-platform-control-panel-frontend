@@ -2,7 +2,9 @@
 const { assert } = require('chai');
 const { mock_api } = require('./conftest');
 
-const { App, ModelSet, api } = require('../app/api-client');
+const { api } = require('../app/api-client');
+const { ModelSet } = require('../app/base-model');
+const { App } = require('../app/models');
 
 
 describe('API Client', () => {

@@ -32,6 +32,16 @@ config.auth0 = {
   passReqToCallback: true
 };
 
+config.ensure_login = {
+  exclude: [
+    /^\/callback/,
+    /^\/error/,
+    /^\/login/,
+    /^\/logout/,
+    /^\/static/
+  ]
+};
+
 config.express = {
   port: process.env.EXPRESS_PORT || 3000,
   host: process.env.EXPRESS_HOST || '127.0.0.1'
@@ -63,6 +73,7 @@ config.middleware = [
   'authentication',
   'api',
   'template-locals',
+  'ensure-login',
   'routes',
   '404',
   'raven-error-handler',

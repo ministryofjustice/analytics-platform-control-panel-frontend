@@ -1,9 +1,7 @@
-const { ensureLoggedIn } = require('connect-ensure-login');
 const { App, Bucket, User } = require('../models');
 
 
 exports.new = [
-  ensureLoggedIn('/login'),
   (req, res, next) => {
     Bucket.list()
       .then((buckets) => {
@@ -18,7 +16,6 @@ exports.new = [
 
 
 exports.create = [
-  ensureLoggedIn('/login'),
   (req, res, next) => {
     const app = new App({
       name: req.body.name,
@@ -46,7 +43,6 @@ exports.create = [
 ];
 
 exports.list = [
-  ensureLoggedIn('/login'),
   (req, res, next) => {
     App.list()
       .then((apps) => {
@@ -58,7 +54,6 @@ exports.list = [
 
 
 exports.details = [
-  ensureLoggedIn('/login'),
   (req, res, next) => {
     Promise.all([App.get(req.params.id), Bucket.list(), User.list()])
       .then(([app, buckets, users]) => {
@@ -74,7 +69,6 @@ exports.details = [
 
 
 exports.delete = [
-  ensureLoggedIn('/login'),
   (req, res, next) => {
     App.delete(req.params.id)
       .then(() => {

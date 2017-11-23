@@ -1,9 +1,7 @@
 const { App, Bucket, User } = require('../models');
-const { ensureLoggedIn } = require('connect-ensure-login');
 
 
 exports.list_users = [
-  ensureLoggedIn('/login'),
   (req, res, next) => {
     User.list()
       .then((users) => {
@@ -14,12 +12,10 @@ exports.list_users = [
 
 
 exports.new_user = [
-  ensureLoggedIn('/login'),
   (req, res) => { res.render('users/new.html'); }
 ];
 
 exports.user_details = [
-  ensureLoggedIn('/login'),
   (req, res, next) => {
     User.get(req.params.id)
       .then((user) => {
@@ -33,7 +29,6 @@ exports.user_details = [
 
 
 exports.user_edit = [
-  ensureLoggedIn('/login'),
   (req, res, next) => {
     Promise.all([User.get(req.params.id), App.list(), Bucket.list()])
       .then(([user, apps, buckets]) => {

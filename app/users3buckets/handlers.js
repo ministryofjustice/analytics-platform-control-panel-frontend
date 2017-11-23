@@ -1,9 +1,7 @@
-const { ensureLoggedIn } = require('connect-ensure-login');
 const { UserS3Bucket } = require('../models');
 
 
 exports.create = [
-  ensureLoggedIn('/login'),
   (req, res, next) => {
     const { user_id, bucket_id } = req.body;
 
@@ -22,7 +20,6 @@ exports.create = [
 ];
 
 exports.update = [
-  ensureLoggedIn('/login'),
   (req, res, next) => {
     const users3bucket_id = req.params.id;
     const { access_level, redirect_to } = req.body;
@@ -38,7 +35,6 @@ exports.update = [
 ];
 
 exports.delete = [
-  ensureLoggedIn('/login'),
   (req, res, next) => {
     UserS3Bucket.delete(req.params.id)
       .then(() => { res.redirect(req.body.redirect_to); })

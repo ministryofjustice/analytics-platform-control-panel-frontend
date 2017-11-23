@@ -2,13 +2,11 @@ const { api } = require('../api-client');
 const { User } = require('../models');
 const config = require('../config');
 const passport = require('passport');
-const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 const raven = require('raven');
 const routes = require('../routes');
 
 
 exports.home = [
-  ensureLoggedIn('/login'),
   function (req, res, next) {
     res.render('home.html');
   }

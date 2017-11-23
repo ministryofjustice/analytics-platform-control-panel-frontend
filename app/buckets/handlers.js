@@ -1,9 +1,7 @@
-const { ensureLoggedIn } = require('connect-ensure-login');
 const { App, Bucket, User } = require('../models');
 
 
 exports.list_buckets = [
-  ensureLoggedIn('/login'),
   (req, res, next) => {
     Bucket.list()
       .then((buckets) => {
@@ -14,7 +12,6 @@ exports.list_buckets = [
 
 
 exports.new_bucket = [
-  ensureLoggedIn('/login'),
   (req, res) => {
     res.render('buckets/new.html', { prefix: process.env.ENV + '-' });
   }
@@ -22,7 +19,6 @@ exports.new_bucket = [
 
 
 exports.create_bucket = [
-  ensureLoggedIn('/login'),
   (req, res, next) => {
     new Bucket({
       name: req.body['new-datasource-name'],
@@ -43,7 +39,6 @@ exports.create_bucket = [
 
 
 exports.bucket_details = [
-  ensureLoggedIn('/login'),
   (req, res, next) => {
     Promise.all([Bucket.get(req.params.id), App.list(), User.list()])
       .then(([bucket, apps, users]) => {

@@ -35,7 +35,7 @@ describe('Edit bucket form', () => {
           }
         };
 
-        handlers.create[1](req, res, reject);
+        handlers.create(req, res, reject);
       });
 
       return request

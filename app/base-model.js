@@ -14,6 +14,26 @@ const model_proxy = {
 };
 
 
+class ModelSet extends Array {
+  constructor(ModelConstructor, data = []) {
+    super(...data.map(obj => new ModelConstructor(obj)));
+    this.model = ModelConstructor;
+  }
+
+  exclude(other) {
+    let others = other;
+    if (other instanceof this.model) {
+      others = [other];
+    }
+
+    const pks = others.map(instance => instance[this.model.pk]);
+
+    return this.filter(instance => !pks.includes(instance[this.model.pk]));
+  }
+}
+
+
+exports.ModelSet = ModelSet;
 class Model {
   constructor(data) {
     this.data = data;
@@ -69,24 +89,3 @@ class Model {
 }
 
 exports.Model = Model;
-
-
-class ModelSet extends Array {
-  constructor(Model, data = []) {
-    super(...data.map(obj => new Model(obj)));
-    this.model = Model;
-  }
-
-  exclude(other) {
-    let others = other;
-    if (other instanceof this.model) {
-      others = [other];
-    }
-
-    const pks = others.map(instance => instance[this.model.pk]);
-
-    return this.filter(instance => !pks.includes(instance[this.model.pk]));
-  }
-}
-
-exports.ModelSet = ModelSet;

@@ -26,7 +26,7 @@ describe('Edit bucket form', () => {
           },
         };
 
-        handlers.delete[1](req, res, reject);
+        handlers.delete(req, res, reject);
       });
 
       return request

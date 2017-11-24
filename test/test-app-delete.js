@@ -28,7 +28,7 @@ describe('Delete app', () => {
           },
         };
 
-        handlers.delete[1](req, res, reject);
+        handlers.delete(req, res, reject);
       });
 
       return request

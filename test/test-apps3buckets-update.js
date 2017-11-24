@@ -32,7 +32,7 @@ describe('Edit bucket form', () => {
           },
         };
 
-        handlers.update[1](req, res, reject);
+        handlers.update(req, res, reject);
       });
 
       return request

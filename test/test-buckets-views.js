@@ -39,7 +39,7 @@ describe('buckets view', () => {
         req.body = bucket_data;
         res.redirect = resolve;
         res.render = unexpected;
-        handlers.create_bucket[1](req, res, reject);
+        handlers.create_bucket(req, res, reject);
       });
 
       return request

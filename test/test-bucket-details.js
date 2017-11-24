@@ -35,7 +35,7 @@ describe('Edit bucket form', () => {
           },
         };
 
-        handlers.bucket_details[1](req, res, reject);
+        handlers.bucket_details(req, res, reject);
       });
 
       const expected = {

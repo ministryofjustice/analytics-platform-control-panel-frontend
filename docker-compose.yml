@@ -22,7 +22,7 @@ services:
       - ./static:/home/cpanel/static
       - ./test:/home/cpanel/test
   api:
-    image: "quay.io/mojanalytics/control-panel:api"
+    image: "quay.io/mojanalytics/control-panel:master"
     ports:
       - "8000:8000"
     depends_on:

@@ -5,11 +5,9 @@ exports.create = (req, res, next) => {
   const { app_id, bucket_id } = req.body;
 
   App.get(app_id)
-    .then((app) => {
-      return app.grant_bucket_access(bucket_id, 'readonly');
-    })
-    .then((_) => {
-      const { url_for } = require('../routes');
+    .then(app => app.grant_bucket_access(bucket_id, 'readonly'))
+    .then(() => {
+      const { url_for } = require('../routes'); // eslint-disable-line global-require
       res.redirect(url_for('apps.details', { id: app_id }));
     })
     .catch(next);
@@ -20,10 +18,10 @@ exports.update = (req, res, next) => {
 
   new AppS3Bucket({
     id: req.params.id,
-    access_level: access_level
+    access_level,
   })
     .update()
-    .then((_) => {
+    .then(() => {
       res.redirect(redirect_to);
     })
     .catch(next);

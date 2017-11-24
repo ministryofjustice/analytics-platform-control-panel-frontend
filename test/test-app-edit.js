@@ -33,7 +33,7 @@ describe('Edit app form', () => {
           }
         };
 
-        handlers.app_details(req, res, reject);
+        handlers.details(req, res, reject);
       });
 
       const expected = {

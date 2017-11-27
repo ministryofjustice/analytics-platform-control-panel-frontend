@@ -14,6 +14,10 @@ class App extends Model {
     return new ModelSet(Bucket, this.data.apps3buckets.map(as => as.s3bucket));
   }
 
+  get users() {
+    return new ModelSet(User, this.data.userapps.map(ua => ua.user));
+  }
+
   grant_bucket_access(bucket, access_level = 'readonly') {
     if (!['readonly', 'readwrite'].includes(access_level)) {
       throw new Error(`Invalid access_level "${access_level}"`);
@@ -29,6 +33,25 @@ class App extends Model {
       app: this.id,
       s3bucket: bucket_id,
       access_level,
+    }).create();
+  }
+
+  grant_user_access(user, access_level = 'readonly', is_admin = false) {
+    if (!['readonly', 'readwrite'].includes(access_level)) {
+      throw new Error(`Invalid access_level "${access_level}"`);
+    }
+
+    let user_id = user;
+
+    if (typeof user === 'function' && user.prototype.constructor === User) {
+      user_id = user.id;
+    }
+
+    return new UserApp({
+      app: this.id,
+      user: user_id,
+      access_level,
+      is_admin,
     }).create();
   }
 }
@@ -102,3 +125,12 @@ class UserS3Bucket extends Model {
 }
 
 exports.UserS3Bucket = UserS3Bucket;
+
+
+class UserApp extends Model {
+  static get endpoint() {
+    return 'userapps';
+  }
+}
+
+exports.UserApp = UserApp;

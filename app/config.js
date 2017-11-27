@@ -22,6 +22,7 @@ config.apps = [
   'buckets',
   'apps3buckets',
   'users3buckets',
+  'userapps',
 ];
 
 config.auth0 = {

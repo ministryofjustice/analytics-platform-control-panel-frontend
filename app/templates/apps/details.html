@@ -19,28 +19,60 @@
   {% endif %}
 </p>
 
-<!--
-TODO: hook up app users properly to this once @jmoz has finished work to
-      provide more info than just an array of IDs
--->
-<h2 class="heading-medium">App users</h2>
-{% if app.users.length %}
-  <ul class="list list-bullet">
-    {% for user in app.users %}
-      <li>
-        <a href="{{ url_for('user.details', {id: user.id}) }}">{{ user.name }}</a>
-        {% if user.admin %}
-          (Admin)
-        {% endif %}
-      </li>
-    {% endfor %}
-  </ul>
+<h2 class="heading-medium">App admins</h2>
+{% if app.userapps.length %}
+  <table class="form-group">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th><span class="visuallyhidden">Actions</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for userapp in app.userapps %}
+        <tr>
+          <td>
+            <a class="{% if current_user.user_id == userapp.user.auth0_id %}highlight-current{% endif %}" href="{{ url_for('users.details', {id: userapp.user.auth0_id}) }}">{{ userapp.user.name }}</a>
+          </td>
+          <td class="align-right">
+            {% if current_user_is_app_admin %}
+              <!-- Button to revoke user admin access -->
+              <form action="{{ url_for('userapps.delete', {id: userapp.id}) }}" method="post" class="inline-form clearfix">
+                <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', {id: app.id}) }}">
+
+                <input type="submit" class="js-confirm button button-secondary right" value="Revoke admin" />
+              </form>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 {% else %}
   <p>None</p>
 {% endif %}
-<!--
-TODO: provide form to add users – also dependent on the above work from @jmoz
- -->
+
+{% if current_user_is_app_admin %}
+  {% if users_options.length %}
+    <form action="{{ url_for('userapps.create') }}" method="post" class="form-group">
+      <input type="hidden" name="app_id" value="{{ app.id }}" />
+      <div class="form-group">
+        <label class="form-label" for="user_id">Give a user admin rights to this app</label>
+        <select class="form-control no-blank" id="user_id" name="user_id">
+          <option value="">Select user</option>
+          {% for user in users_options %}
+            <option value="{{ user.auth0_id }}">{{ user.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <input type="submit" class="button button-secondary" value="Grant access">
+      </div>
+    </form>
+  {% else %}
+    <p>(All available users are already admins of this app.)</p>
+  {% endif %}
+{% endif %}
 
 <h2 class="heading-medium">App data sources</h2>
 <p>{{ app.apps3buckets.length }} app data source{%- if app.apps3buckets.length != 1 -%}s{%- endif %} connected to this app</p>
@@ -51,7 +83,11 @@ TODO: provide form to add users – also dependent on the above work from @jmoz
       <tr>
         <th>Name</th>
         <th>App has read/write access</th>
-        <th></th>
+        <th>
+          {% if current_user_is_app_admin %}
+            <span class="visuallyhidden">Actions</span>
+          {% endif %}
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -60,66 +96,79 @@ TODO: provide form to add users – also dependent on the above work from @jmoz
           <td><a href="{{ url_for('buckets.details', {id: apps3bucket.s3bucket.id}) }}">{{ apps3bucket.s3bucket.name }}</a></td>
           <td>{{ yes_no(apps3bucket.access_level, 'readwrite') }}</td>
           <td class="align-right">
-            <!-- Button to change access level -->
-            <form action="{{ url_for('apps3buckets.update', {id: apps3bucket.id}) }}" method="post" class="inline-form clearfix">
-              <input type="hidden" name="access_level" value="{{ yes_no(apps3bucket.access_level, 'readwrite', 'readonly', 'readwrite') }}">
+            {% if current_user_is_app_admin %}
+              <!-- Button to change access level -->
+              <form action="{{ url_for('apps3buckets.update', {id: apps3bucket.id}) }}" method="post" class="inline-form clearfix">
+                <input type="hidden" name="access_level" value="{{ yes_no(apps3bucket.access_level, 'readwrite', 'readonly', 'readwrite') }}">
 
-              <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', {id: app.id}) }}">
+                <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', {id: app.id}) }}">
 
-              <input type="submit" class="js-confirm button button-secondary right" value="{{
-yes_no(apps3bucket.access_level, 'readwrite', 'Revoke', 'Grant') }} read/write access" />
-            </form>
+                <input type="submit" class="js-confirm button button-secondary right" value="{{
+  yes_no(apps3bucket.access_level, 'readwrite', 'Revoke', 'Grant') }} read/write access" />
+              </form>
 
-            <!-- Button to revoke access -->
-            <form action="{{ url_for('apps3buckets.delete', {id: apps3bucket.id}) }}" method="post" class="inline-form clearfix">
-              <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', {id: app.id}) }}">
+              <!-- Button to revoke access -->
+              <form action="{{ url_for('apps3buckets.delete', {id: apps3bucket.id}) }}" method="post" class="inline-form clearfix">
+                <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', {id: app.id}) }}">
 
-              <input type="submit" class="js-confirm button button-warning right" value="Revoke access" />
-            </form>
+                <input type="submit" class="js-confirm button button-secondary right" value="Revoke access" />
+              </form>
+            {% endif %}
           </td>
         </tr>
       {% endfor %}
     </tbody>
   </table>
-{% else %}
-  <p>None</p>
-{% endif %}
-
-{% if buckets_options.length %}
-  <form action="{{ url_for('apps3buckets.create') }}" method="post">
-    <input type="hidden" name="app_id" value="{{ app.id }}" />
-    <div class="form-group">
-      <label class="form-label" for="bucket_id">Connect an app data source</label>
-      <select class="form-control no-blank" id="bucket_id" name="bucket_id">
-        <option value="">Select app data source</option>
-        {% for bucket in buckets_options %}
-          <option value="{{ bucket.id }}">{{ bucket.name }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <div class="form-group">
-      <input type="submit" class="button button-secondary" value="Grant access">
-    </div>
-  </form>
-{% else %}
-  <p>(All available app data sources are already connected to this app.)</p>
 {% endif %}
 
 
+{% if current_user_is_app_admin %}
+  {% if buckets_options.length %}
+    <form action="{{ url_for('apps3buckets.create') }}" method="post">
+      <input type="hidden" name="app_id" value="{{ app.id }}" />
+      <div class="form-group">
+        <label class="form-label" for="bucket_id">Connect an app data source</label>
+        <select class="form-control no-blank" id="bucket_id" name="bucket_id">
+          <option value="">Select app data source</option>
+          {% for bucket in buckets_options %}
+            <option value="{{ bucket.id }}">{{ bucket.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <input type="submit" class="button button-secondary" value="Grant access">
+      </div>
+    </form>
+  {% else %}
+    <p>(All available app data sources are already connected to this app.)</p>
+  {% endif %}
+{% endif %}
+
+{% if current_user_is_app_admin %}
 <hr>
-
-<!-- only show if signed in user has admin rights to this app -->
 <form action="{{ url_for('apps.delete', {id: app.id}) }}" method="post" class="clearfix">
   <input type="submit" class="button button-warning right js-confirm" value="Delete app" data-confirm-message="Are you sure you want to delete this app?">
 </form>
-<!-- end -->
+{% endif %}
 
 
 <details class="debug">
   <summary>Debug</summary>
+
+  current_user_is_app_admin
+  <h2 class="heading-medium">current_user_is_app_admin</h2>
+  <div>
+    <pre>{{ current_user_is_app_admin }}</pre>
+  </div>
+
   <h2 class="heading-medium">App dump</h2>
   <div>
     <pre>{{ app | dump(2) }}</pre>
+  </div>
+
+  <h2 class="heading-medium">Users dump</h2>
+  <div>
+    <pre>{{ users | dump(2) }}</pre>
   </div>
 </details>
 

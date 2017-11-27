@@ -13,6 +13,7 @@ describe('Edit app form', () => {
     it('loads app, buckets and users from API', () => {
       const app = require('./fixtures/app');
       const buckets = require('./fixtures/buckets');
+      const user = require('./fixtures/user');
       const users = require('./fixtures/users');
 
       let app_details_request = mock_api()
@@ -26,7 +27,10 @@ describe('Edit app form', () => {
         .reply(200, users);
 
       let request = new Promise((resolve, reject) => {
-        let req = {params: {id: app.id}};
+        let req = {
+          params: {id: app.id},
+          user: {user_id: user.auth0_id}
+        };
         let res = {
           render: (template, context) => {
             resolve({'template': template, 'context': context});

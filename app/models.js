@@ -48,6 +48,11 @@ class App extends Model {
       is_admin,
     }).create();
   }
+
+  has_admin(user_id) {
+    return true; // TODO: remove this and return real value once perms have been implemented
+    // return this.data.userapps.some(ua => ua.is_admin && ua.user.auth0_id === user_id);
+  }
 }
 
 exports.App = App;

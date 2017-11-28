@@ -41,15 +41,9 @@ class App extends Model {
       throw new Error(`Invalid access_level "${access_level}"`);
     }
 
-    let user_id = user;
-
-    if (typeof user === 'function' && user.prototype.constructor === User) {
-      user_id = user.id;
-    }
-
     return new UserApp({
       app: this.id,
-      user: user_id,
+      user,
       access_level,
       is_admin,
     }).create();

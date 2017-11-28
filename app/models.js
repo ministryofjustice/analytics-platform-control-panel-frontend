@@ -36,14 +36,14 @@ class App extends Model {
     }).create();
   }
 
-  grant_user_access(user, access_level = 'readonly', is_admin = false) {
+  grant_user_access(user_id, access_level = 'readonly', is_admin = false) {
     if (!['readonly', 'readwrite'].includes(access_level)) {
       throw new Error(`Invalid access_level "${access_level}"`);
     }
 
     return new UserApp({
       app: this.id,
-      user,
+      user: user_id,
       access_level,
       is_admin,
     }).create();

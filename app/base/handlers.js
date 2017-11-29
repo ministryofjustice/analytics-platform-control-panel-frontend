@@ -3,7 +3,6 @@ const { User } = require('../models');
 const config = require('../config');
 const passport = require('passport');
 const raven = require('raven');
-const routes = require('../routes');
 
 
 exports.home = function (req, res, next) {
@@ -28,9 +27,7 @@ exports.auth_callback = [
     raven.setContext({user: req.user});
     api.auth.set_token(req.user.id_token);
 
-    log.debug(`fetching user ${req.user.sub} from api`);
-
-    User.get(req.user.sub)
+    User.get(req.user.auth0_id)
       .then((user) => {
         log.debug(`got user from api`);
         req.user.is_superuser = true;

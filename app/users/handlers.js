@@ -15,7 +15,7 @@ exports.user_details = (req, res, next) => {
   User.get(req.params.id)
     .then((user) => {
       res.render('users/details.html', {
-        signedInuser: user.auth0_id === req.user.sub,
+        signedInUser: user.auth0_id === req.user.auth0_id,
         user,
       });
     })

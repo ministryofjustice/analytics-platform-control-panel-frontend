@@ -14,9 +14,9 @@ exports.home = (req, res, next) => {
 };
 
 
-exports.error_test = function (req, res, next) {
-  api.users.get('non-existent')
-    .then(function (user) { res.send(user.id); })
+exports.error_test = (req, res, next) => {
+  User.get('non-existent')
+    .then((user) => { res.send(user.id); })
     .catch(next);
 };
 
@@ -43,14 +43,14 @@ exports.auth_callback = [
   }
 ];
 
-exports.login = function (req, res) {
+exports.login = (req, res) => {
   res.render('login.html', {
     env: process.env,
     session: req.session
   });
 };
 
-exports.logout = function (req, res) {
+exports.logout = (req, res) => {
   req.logout();
   api.auth.unset_token();
   req.session.destroy((err) => {

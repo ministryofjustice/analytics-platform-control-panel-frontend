@@ -37,7 +37,7 @@ exports.create = (req, res, next) => {
         created_app.grant_bucket_access(req.body['select-existing-datasource'], 'readonly');
       }
       if(req.body['new-app-datasource'] === 'create') {
-        created_app.grant_bucket_access(new_bucket.data.id, 'readonly');
+        created_app.grant_bucket_access(new_bucket.id, 'readonly');
       }
       new_app = created_app;
     })

@@ -34,3 +34,24 @@ exports.user_edit = (req, res, next) => {
     })
     .catch(next);
 };
+
+
+exports.verify_email = (req, res, next) => {
+  User.get(req.params.id)
+    .then((user) => {
+      if (req.method == 'POST') {
+        user.email = req.body['email'];
+        user.verified_email = true;
+
+        return user.update()
+          .then(() => {
+            req.session.flash_messages.push("Updated email address");
+            res.redirect(req.session.returnTo || '/');
+          })
+          .catch(next);
+      }
+
+      res.render('users/verify_email.html', { user });
+    })
+    .catch(next);
+};

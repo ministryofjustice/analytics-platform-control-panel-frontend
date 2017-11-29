@@ -23,7 +23,7 @@ exports.user_details = (req, res, next) => {
 };
 
 
-exports.edit = (req, res, next) => {
+exports.user_edit = (req, res, next) => {
   Promise.all([User.get(req.params.id), App.list(), Bucket.list()])
     .then(([user, apps, buckets]) => {
       res.render('users/edit.html', {

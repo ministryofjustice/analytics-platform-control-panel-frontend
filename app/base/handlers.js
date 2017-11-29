@@ -5,8 +5,12 @@ const passport = require('passport');
 const raven = require('raven');
 
 
-exports.home = function (req, res, next) {
-  res.render('home.html');
+exports.home = (req, res, next) => {
+  if (req.user.is_superuser) {
+    res.render('home/superuser.html');
+  } else {
+    res.render('home/user.html');
+  }
 };
 
 

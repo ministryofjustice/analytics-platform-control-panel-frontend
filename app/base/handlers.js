@@ -23,33 +23,23 @@ exports.error_test = function (req, res, next) {
 
 exports.auth_callback = [
   passport.authenticate('auth0-oidc'),
-  function (req, res, next) {
-    let log = require('bole')('oidc-callback');
-
-    log.debug('authenticated');
-
+  (req, res, next) => {
     raven.setContext({user: req.user});
+
     api.auth.set_token(req.user.id_token);
 
     User.get(req.user.auth0_id)
       .then((user) => {
-        log.debug(`got user from api`);
-        req.user.is_superuser = true;
-        log.debug(`redirecting to ${req.session.returnTo || '/'}`);
-        res.redirect(req.session.returnTo || '/');
-      })
-      .catch((error) => {
-        log.debug('error fetching user');
-        log.debug(error);
-        if (error.statusCode && error.statusCode == 403) {
-          log.debug('api permission denied - user not superuser');
-          req.user.is_superuser = false;
-          log.debug('redirecting to friendly error message');
-          res.redirect('/');
+        req.user.data = Object.assign(req.user.data, user.data);
+
+        if (!user.verified_email) {
+          const { url_for } = require('../routes');
+          res.redirect(url_for('users.verify_email', {id: user.auth0_id}));
         } else {
-          next(error);
+          res.redirect(req.session.returnTo || '/');
         }
-      });
+      })
+      .catch(next);
   }
 ];
 

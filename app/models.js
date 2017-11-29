@@ -14,6 +14,10 @@ class App extends Model {
     return new ModelSet(Bucket, this.data.apps3buckets.map(as => as.s3bucket));
   }
 
+  get users() {
+    return new ModelSet(User, this.data.userapps.map(ua => ua.user));
+  }
+
   grant_bucket_access(bucket, access_level = 'readonly') {
     if (!['readonly', 'readwrite'].includes(access_level)) {
       throw new Error(`Invalid access_level "${access_level}"`);
@@ -30,6 +34,24 @@ class App extends Model {
       s3bucket: bucket_id,
       access_level,
     }).create();
+  }
+
+  grant_user_access(user_id, access_level = 'readonly', is_admin = false) {
+    if (!['readonly', 'readwrite'].includes(access_level)) {
+      throw new Error(`Invalid access_level "${access_level}"`);
+    }
+
+    return new UserApp({
+      app: this.id,
+      user: user_id,
+      access_level,
+      is_admin,
+    }).create();
+  }
+
+  has_admin(user_id) {
+    return true; // TODO: remove this and return real value once perms have been implemented
+    // return this.data.userapps.some(ua => ua.is_admin && ua.user.auth0_id === user_id);
   }
 }
 
@@ -102,3 +124,12 @@ class UserS3Bucket extends Model {
 }
 
 exports.UserS3Bucket = UserS3Bucket;
+
+
+class UserApp extends Model {
+  static get endpoint() {
+    return 'userapps';
+  }
+}
+
+exports.UserApp = UserApp;

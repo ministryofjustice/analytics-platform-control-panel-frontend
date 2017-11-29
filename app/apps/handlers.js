@@ -1,6 +1,5 @@
 const { App, Bucket, User } = require('../models');
 
-
 exports.new = (req, res, next) => {
   Bucket.list()
     .then((buckets) => {
@@ -57,10 +56,13 @@ exports.list = (req, res, next) => {
 exports.details = (req, res, next) => {
   Promise.all([App.get(req.params.id), Bucket.list(), User.list()])
     .then(([app, buckets, users]) => {
+      const current_user_is_app_admin = app.has_admin(req.user.user_id);
       res.render('apps/details.html', {
         app,
         buckets_options: buckets.exclude(app.buckets),
         users,
+        users_options: users.exclude(app.users),
+        current_user_is_app_admin,
       });
     })
     .catch(next);

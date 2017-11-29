@@ -12,6 +12,10 @@ ul {
   color: $grey-1;
 }
 
+.highlight-current {
+  font-weight: bold;
+}
+
 pre {
   @include core-14;
   font-family: monospace;

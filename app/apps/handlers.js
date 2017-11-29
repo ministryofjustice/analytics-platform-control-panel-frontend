@@ -19,31 +19,26 @@ exports.create = (req, res, next) => {
     repo_url: req.body.repo_url,
     userapps: [],
   });
-  let new_app;
-  let new_bucket;
+  const create_bucket = new Promise((resolve, reject) => {
+    if (req.body['new-app-datasource'] === 'create') {
+      resolve(new Bucket({
+        name: req.body['new-datasource-name']
+      }).create());
+    } else {
+      resolve(null);
+    }
+  });
 
-  if(req.body['new-app-datasource'] === 'create') {
-    new Bucket({
-      name: req.body['new-datasource-name']
-    }).create()
-      .then((created_bucket) => {
-        new_bucket = created_bucket;
-      });
-  }
-
-  app.create()
-    .then((created_app) => {
-      if(req.body['new-app-datasource'] === 'select') {
+  Promise.all([app.create(), create_bucket])
+    .then(([created_app, created_bucket]) => {
+      if (created_bucket) {
+        created_app.grant_bucket_access(created_bucket.id, 'readonly');
+      } else if(req.body['new-app-datasource'] === 'select') {
         created_app.grant_bucket_access(req.body['select-existing-datasource'], 'readonly');
       }
-      if(req.body['new-app-datasource'] === 'create') {
-        created_app.grant_bucket_access(new_bucket.id, 'readonly');
-      }
-      new_app = created_app;
-    })
-    .then(() => {
+
       const { url_for } = require('../routes'); // eslint-disable-line global-require
-      res.redirect(url_for('apps.details', { id: new_app.id }));
+      res.redirect(url_for('apps.details', { id: created_app.id }));
     })
     .catch((err) => {
       if (err.statusCode === 400) {

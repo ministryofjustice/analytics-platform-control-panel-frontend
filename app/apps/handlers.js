@@ -20,11 +20,24 @@ exports.create = (req, res, next) => {
     userapps: [],
   });
   let new_app;
+  let new_bucket;
+
+  if(req.body['new-app-datasource'] === 'create') {
+    new Bucket({
+      name: req.body['new-datasource-name']
+    }).create()
+      .then((created_bucket) => {
+        new_bucket = created_bucket;
+      });
+  }
 
   app.create()
     .then((created_app) => {
       if(req.body['new-app-datasource'] === 'select') {
         created_app.grant_bucket_access(req.body['select-existing-datasource'], 'readonly');
+      }
+      if(req.body['new-app-datasource'] === 'create') {
+        created_app.grant_bucket_access(new_bucket.data.id, 'readonly');
       }
       new_app = created_app;
     })

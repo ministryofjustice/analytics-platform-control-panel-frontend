@@ -72,6 +72,7 @@ config.middleware = [
   'session',
   'authentication',
   'api',
+  'flash-messages',
   'template-locals',
   'ensure-login',
   'routes',

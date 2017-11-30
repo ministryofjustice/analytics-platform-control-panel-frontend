@@ -1,4 +1,4 @@
-const { App, Bucket, User, UserApp } = require('../models');
+const { App, Bucket, User } = require('../models');
 
 exports.new = (req, res, next) => {
   Bucket.list()
@@ -38,7 +38,9 @@ exports.create = (req, res, next) => {
         grant_access = created_app.grant_bucket_access(req.body['select-existing-datasource'], 'readonly');
       }
       grant_access
-        .then(() => created_app.grant_user_access(req.user.user_id, 'readwrite', true))
+        .then(() => {
+          created_app.grant_user_access(req.user.user_id, 'readwrite', true)
+        })
         .then(() => {
           const { url_for } = require('../routes'); // eslint-disable-line global-require
           res.redirect(url_for('apps.details', { id: created_app.id }));

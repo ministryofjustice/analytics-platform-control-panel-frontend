@@ -18,7 +18,7 @@ module.exports = (app, conf, log) => {
         'is_superuser': false,
         'name': profile._json.name,
         'username': profile._json.nickname,
-        'verified_email': false,
+        'email_verified': false,
       }));
     }));
 

@@ -41,7 +41,7 @@ exports.verify_email = (req, res, next) => {
     .then((user) => {
       if (req.method == 'POST') {
         user.email = req.body['email'];
-        user.verified_email = true;
+        user.email_verified = true;
 
         return user.update()
           .then(() => {

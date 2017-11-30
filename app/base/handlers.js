@@ -32,7 +32,7 @@ exports.auth_callback = [
       .then((user) => {
         req.user.data = Object.assign(req.user.data, user.data);
 
-        if (!user.verified_email) {
+        if (!user.email_verified) {
           const { url_for } = require('../routes');
           res.redirect(url_for('users.verify_email', {id: user.auth0_id}));
         } else {

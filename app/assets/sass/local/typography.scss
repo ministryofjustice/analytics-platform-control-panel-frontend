@@ -20,3 +20,7 @@ pre {
   @include core-14;
   font-family: monospace;
 }
+
+label.heading-medium {
+  @include bold-24;
+}

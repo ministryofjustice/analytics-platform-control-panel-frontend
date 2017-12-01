@@ -4,7 +4,12 @@ exports.new = (req, res, next) => {
   Bucket.list()
     .then((buckets) => {
       res.render('apps/new.html', {
-        prefix: `${process.env.ENV}-`,
+        repo_prefix: 'https://github.com',
+        orgs: [
+          'moj-analytical-services',
+          'ministryofjustice',
+        ],
+        bucket_prefix: `${process.env.ENV}-`,
         buckets,
       });
     })

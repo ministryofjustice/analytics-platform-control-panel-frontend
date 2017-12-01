@@ -4,38 +4,53 @@
 
 {% block main_column %}
 
-<form action="{{ url_for('apps.create') }}" method="post">
+<div class="text">
+  <p class="lede form-group">After <a href="https://moj-analytical-services.github.io/platform_user_guidance/deploying-a-shiny-app.html">creating an app in Github</a>, use this form to register your app and connect it to sensitive data stored in S3.</p>
+</div>
 
+
+<form action="{{ url_for('apps.create') }}" method="post">
   <div class="form-group {% if errors.name %} form-group-error {% endif %}">
-    <label for="name" class="form-label">Name</label>
+    <label for="name" class="heading-medium form-label">
+      Github repo url
+    </label>
     {% if errors.name %}
       {% for error in errors.name %}
         <span class="error-message">{{ error }}</span>
       {% endfor %}
     {% endif %}
-    <input class="form-control {% if errors.name %} form-control-error {% endif %}" type="text" id="name" name="name" value="{{ app.name }}">
-  </div>
-
-  <div class="form-group">
-    <label for="description" class="form-label">
-      Description
-      <span class="form-hint">Optional</span>
-    </label>
-    <textarea class="form-control" name="description" id="description" cols="30" rows="10">{{ app.description }}</textarea>
-  </div>
-
-  <div class="form-group {% if errors.repo_url %} form-group-error {% endif %}">
-    <label for="repo_url" class="form-label">
-      Github repo url
-      <span class="form-hint">e.g. https://github.com/something-org/lorem-fantastic-app</span>
-    </label>
-    {% if errors.repo_url %}
-      {% for error in errors.repo_url %}
-        <span class="error-message">{{ error }}</span>
+    <input type="hidden" name="repo_prefix" id="repo_prefix" value="{{ repo_prefix }}">
+    <label for="name" class="form-control-prefix">{{ repo_prefix }}</label>
+    <span>/</span>
+    <select name="repo_org" id="repo_org" class="form-control form-control-1-3">
+      {% for org in orgs %}
+        <option value="{{ org }}">{{ org }}</option>
       {% endfor %}
-    {% endif %}
-    <input class="form-control {% if errors.repo_url %} form-control-error {% endif %}" type="text" id="repo_url" name="repo_url" value="{{ app.repo_url }}">
+    </select>
+    <span>/</span>
+    <input class="form-control form-control-prefixed form-control-1-3 {% if errors.name %} form-control-error {% endif %}" type="text" id="name" name="name" value="{{ app.name }}">
   </div>
+
+  <input type="hidden" id="repo_url" name="repo_url" value="{{ app.repo_url }}">
+
+  <div id="repo-check" class="form-group js-hidden">
+    <div id="repo-checking" class="js-hidden">
+      <div class="spinner">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
+      </div>
+      <p></p>
+    </div>
+    <div id="repo-results" class="js-hidden panel text">
+      <h3 class="heading-small">Description:</h3>
+      <span id="repo-description"></span>
+      <input type="hidden" name="description" id="description" value="">
+    </div>
+  </div>
+
 
   <div class="form-group">
 
@@ -80,5 +95,6 @@
   </div>
 
 </form>
+
 
 {% endblock %}

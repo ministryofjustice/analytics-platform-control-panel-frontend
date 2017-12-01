@@ -11,7 +11,7 @@ exports.list_buckets = (req, res, next) => {
 
 
 exports.new_bucket = (req, res) => {
-  res.render('buckets/new.html', { prefix: `${process.env.ENV}-` });
+  res.render('buckets/new.html', { bucket_prefix: `${process.env.ENV}-` });
 };
 
 

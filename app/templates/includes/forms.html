@@ -1,0 +1,12 @@
+{% macro form_field(name, label, value="") %}
+  <div class="form-group {%- if errors[name] %} form-group-error {%- endif %}">
+    <label for="{{ name }}" class="form-label">{{ label }}</label>
+    {% if errors[name] %}
+      {% for error in errors[name] %}
+        <span class="error-message">{{ error }}</span>
+      {% endfor %}
+    {% endif %}
+    <input class="form-control {%- if errors[name] %} form-control-error {%- endif %}" type="text" id="{{ name }}" name="{{ name }}" value="{{ value }}">
+  </div>
+{% endmacro %}
+

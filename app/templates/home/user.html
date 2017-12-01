@@ -1,0 +1,11 @@
+{% extends "layouts/one-column.html" %}
+
+{% set page_title = "Hello " + ( current_user.name if current_user ) %}
+
+{% block main_column %}
+
+  <h2 class="heading-medium">No access yet</h2>
+  <p>Only superadmins have access to the control panel at the moment.</p>
+  <p>Ask a superadmin to grant you access.</p>
+
+{% endblock %}

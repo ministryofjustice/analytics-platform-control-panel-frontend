@@ -3,63 +3,54 @@ const { User } = require('../models');
 const config = require('../config');
 const passport = require('passport');
 const raven = require('raven');
-const routes = require('../routes');
 
 
-exports.home = function (req, res, next) {
-  res.render('home.html');
+exports.home = (req, res, next) => {
+  if (req.user.is_superuser) {
+    res.render('home/superuser.html');
+  } else {
+    res.render('home/user.html');
+  }
 };
 
 
-exports.error_test = function (req, res, next) {
-  api.users.get('non-existent')
-    .then(function (user) { res.send(user.id); })
+exports.error_test = (req, res, next) => {
+  User.get('non-existent')
+    .then((user) => { res.send(user.id); })
     .catch(next);
 };
 
 
 exports.auth_callback = [
   passport.authenticate('auth0-oidc'),
-  function (req, res, next) {
-    let log = require('bole')('oidc-callback');
-
-    log.debug('authenticated');
-
+  (req, res, next) => {
     raven.setContext({user: req.user});
+
     api.auth.set_token(req.user.id_token);
 
-    log.debug(`fetching user ${req.user.sub} from api`);
-
-    User.get(req.user.sub)
+    User.get(req.user.auth0_id)
       .then((user) => {
-        log.debug(`got user from api`);
-        req.user.is_superuser = true;
-        log.debug(`redirecting to ${req.session.returnTo || '/'}`);
-        res.redirect(req.session.returnTo || '/');
-      })
-      .catch((error) => {
-        log.debug('error fetching user');
-        log.debug(error);
-        if (error.statusCode && error.statusCode == 403) {
-          log.debug('api permission denied - user not superuser');
-          req.user.is_superuser = false;
-          log.debug('redirecting to friendly error message');
-          res.redirect('/');
+        req.user.data = Object.assign(req.user.data, user.data);
+
+        if (!user.email_verified) {
+          const { url_for } = require('../routes');
+          res.redirect(url_for('users.verify_email', {id: user.auth0_id}));
         } else {
-          next(error);
+          res.redirect(req.session.returnTo || '/');
         }
-      });
+      })
+      .catch(next);
   }
 ];
 
-exports.login = function (req, res) {
+exports.login = (req, res) => {
   res.render('login.html', {
     env: process.env,
     session: req.session
   });
 };
 
-exports.logout = function (req, res) {
+exports.logout = (req, res) => {
   req.logout();
   api.auth.unset_token();
   req.session.destroy((err) => {

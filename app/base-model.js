@@ -11,6 +11,13 @@ const model_proxy = {
     }
     return undefined;
   },
+
+  set: (model, property, value) => {
+    if (Reflect.has(model, property)) {
+      return Reflect.set(model, property, value);
+    }
+    model.data[property] = value;
+  }
 };
 
 

@@ -12,7 +12,7 @@
 <form action="{{ url_for('apps.create') }}" method="post">
   <div class="form-group {% if errors.name %} form-group-error {% endif %}">
     <label for="name" class="heading-medium form-label">
-      Github repo url
+      Github repository URL
     </label>
     {% if errors.name %}
       {% for error in errors.name %}

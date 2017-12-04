@@ -22,7 +22,7 @@
       <tr>
         <td>{{ app.id }}</td>
         <td><a href="{{ url_for('apps.details', {id: app.id}) }}">{{ app.name }}</a></td>
-        <td>{{ app.description }}</td>
+        <td class="text">{{ app.description }}</td>
         <td><a href="{{ app.repo_url }}">Github</a></td>
         <td class="align-right no-wrap">
           <a class="button button-secondary" href="/apps/edit/{{ app.id }}">Edit</a>

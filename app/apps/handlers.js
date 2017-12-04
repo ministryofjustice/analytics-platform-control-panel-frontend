@@ -1,10 +1,13 @@
 const { App, Bucket, User } = require('../models');
+const { repos } = require('../config');
 
 exports.new = (req, res, next) => {
   Bucket.list()
     .then((buckets) => {
       res.render('apps/new.html', {
-        prefix: `${process.env.ENV}-`,
+        repo_prefix: repos.host,
+        orgs: repos.orgs,
+        bucket_prefix: `${process.env.ENV}-`,
         buckets,
       });
     })

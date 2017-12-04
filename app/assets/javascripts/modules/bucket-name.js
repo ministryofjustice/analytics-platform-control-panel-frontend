@@ -8,7 +8,7 @@ moj.Modules.bucketName = {
     self.$input = $('#' + self.inputName);
 
     if (self.$input.length) {
-      self.prefix = self.$input.data('prefix');
+      self.prefix = self.$input.data('bucket-prefix');
       self.bindEvents();
     }
   },

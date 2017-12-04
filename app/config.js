@@ -81,6 +81,14 @@ config.middleware = [
   'errors'
 ];
 
+config.repos = {
+  host: 'https://github.com',
+  orgs: [
+    'moj-analytical-services',
+    'ministryofjustice',
+  ]
+};
+
 config.sass = {
   sources: [
     {

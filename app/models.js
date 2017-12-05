@@ -1,4 +1,5 @@
 const { Model, ModelSet } = require('./base-model');
+const { K8sModel } = require('./k8s-model');
 
 
 class App extends Model {
@@ -133,3 +134,29 @@ class UserApp extends Model {
 }
 
 exports.UserApp = UserApp;
+
+
+class Deployment extends K8sModel {
+  static get endpoint() {
+    return 'deployments';
+  }
+
+  get_pods() {
+    return Pod.list({ labelSelector: `app=${this.data.metadata.labels.app}` });
+  }
+
+  restart() {
+    return Pod.delete_all({ labelSelector: `app=${this.data.metadata.labels.app}` });
+  }
+}
+
+exports.Deployment = Deployment;
+
+
+class Pod extends K8sModel {
+  static get endpoint() {
+    return 'pods';
+  }
+}
+
+exports.Pod = Pod;

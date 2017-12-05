@@ -32,7 +32,7 @@
       {% for userapp in app.userapps %}
         <tr>
           <td>
-            <a class="{% if current_user.user_id == userapp.user.auth0_id %}highlight-current{% endif %}" href="{{ url_for('users.details', {id: userapp.user.auth0_id}) }}">{{ userapp.user.name }}</a>
+            <a class="{% if current_user.auth0_id == userapp.user.auth0_id %}highlight-current{% endif %}" href="{{ url_for('users.details', {id: userapp.user.auth0_id}) }}">{{ userapp.user.name }}</a>
           </td>
           <td class="align-right">
             {% if current_user_is_app_admin %}

@@ -42,7 +42,7 @@ exports.create = (req, res, next) => {
       }
       grant_access
         .then(() => {
-          created_app.grant_user_access(req.user.user_id, 'readwrite', true)
+          created_app.grant_user_access(req.user.auth0_id, 'readwrite', true)
         })
         .then(() => {
           const { url_for } = require('../routes'); // eslint-disable-line global-require
@@ -73,7 +73,7 @@ exports.list = (req, res, next) => {
 exports.details = (req, res, next) => {
   Promise.all([App.get(req.params.id), Bucket.list(), User.list()])
     .then(([app, buckets, users]) => {
-      const current_user_is_app_admin = app.has_admin(req.user.user_id);
+      const current_user_is_app_admin = app.has_admin(req.user.auth0_id);
       res.render('apps/details.html', {
         app,
         buckets_options: buckets.exclude(app.buckets),

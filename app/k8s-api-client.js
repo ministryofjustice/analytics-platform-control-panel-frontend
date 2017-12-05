@@ -4,9 +4,18 @@ const url = require('url');
 
 
 class KubernetesAPIClient extends APIClient {
-  endpoint_url(endpoint, namespace = 'default') {
+  endpoint_url(endpoint, namespace = undefined) {
     if (!endpoint) {
       throw new Error('Missing endpoint');
+    }
+
+    let ns = namespace;
+    if (!namespace) {
+      ns = this.namespace;
+
+      if (!ns) {
+        ns = 'default';
+      }
     }
 
     const api = {
@@ -14,7 +23,7 @@ class KubernetesAPIClient extends APIClient {
       'pods': 'api/v1',
     }[endpoint];
 
-    return url.resolve(this.base_url, `k8s/${api}/namespaces/${namespace}/${endpoint}`);
+    return url.resolve(this.base_url, `k8s/${api}/namespaces/${ns}/${endpoint}`);
   }
 }
 

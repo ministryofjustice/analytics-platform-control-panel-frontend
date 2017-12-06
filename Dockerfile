@@ -7,8 +7,8 @@ WORKDIR /home/cpanel
 ADD package.json package.json
 RUN npm install
 
-ADD app app/
 ADD bin bin/
+ADD app app/
 
 RUN npm run-script collect-static
 

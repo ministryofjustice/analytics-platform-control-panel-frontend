@@ -8,6 +8,7 @@ You need to set a few [environment variables](#env) which will be picked up by D
 ### Build and run
 Checkout the repo and run
 ```sh
+docker-compose pull
 docker-compose build
 docker-compose up
 ```
@@ -51,6 +52,14 @@ You should set these in a file named `.env` with each variable on a separate lin
 | `K8S_WORKER_ROLE_NAME` | Used to construct ARN of IAM role |
 | `SAML_PROVIDER` | Used to contruct ARN of SAML provider |
 | `NODE_RESTART` | Set to `1` to enable restarting the app on file changes |
+| `REDIS_PASSWORD` | Set to any string (if not set, it will break) |
+| `ENABLE_WRITE_TO_CLUSTER` | Set to `0` to prevent writing to Kubernetes or AWS (which will break if you have no AWS credentials) |
+| `ENABLE_ACCESS_LOGS` | Set to `false` to disable HTTP request logging |
+
+### Run a Redis server
+```sh
+redis-server --requirepass $REDIS_PASSWORD
+```
 
 ### Run the webapp
 ```sh

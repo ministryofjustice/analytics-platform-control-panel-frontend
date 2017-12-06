@@ -5,7 +5,7 @@
 
 {% block main_column %}
 
-  {% if isSuperuser %}
+  {% if current_user.is_superuser %}
     <h2 class="heading-medium">Superuser functions</h2>
     <ul class="list list-bullet">
       <li><a href="{{ url_for('users.list') }}">List all users</a></li>
@@ -16,7 +16,7 @@
 
   {% include 'users/includes/tables.html' %}
 
-  {% if isSuperuser %}
+  {% if current_user.is_superuser %}
     <details class="debug">
       <summary>Debug</summary>
       <div class="panel">

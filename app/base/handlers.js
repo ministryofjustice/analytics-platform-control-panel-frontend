@@ -11,7 +11,6 @@ exports.home = (req, res, next) => {
       res.render('base/home.html', {
         signedInUser: true,
         user,
-        isSuperuser: req.user.is_superuser,
       });
     })
     .catch(next);

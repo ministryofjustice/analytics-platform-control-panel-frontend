@@ -6,7 +6,6 @@ exports.list_users = (req, res, next) => {
     .then((users) => {
       res.render('users/list.html', {
         users,
-        isSuperuser: req.user.is_superuser,
       });
     })
     .catch(next);

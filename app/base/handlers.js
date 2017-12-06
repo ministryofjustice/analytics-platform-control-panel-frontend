@@ -6,11 +6,15 @@ const raven = require('raven');
 
 
 exports.home = (req, res, next) => {
-  if (req.user.is_superuser) {
-    res.render('home/superuser.html');
-  } else {
-    res.render('home/user.html');
-  }
+  User.get(req.user.auth0_id)
+    .then((user) => {
+      res.render('base/home.html', {
+        signedInUser: true,
+        user,
+        isSuperuser: req.user.is_superuser,
+      });
+    })
+    .catch(next);
 };
 
 

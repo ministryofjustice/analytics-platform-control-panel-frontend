@@ -1,0 +1,29 @@
+{% extends "layouts/one-column.html" %}
+
+{% set page_title = "Hello " + ( current_user.name if current_user ) %}
+{% set heading_prefix = "Your" %}
+
+{% block main_column %}
+
+  {% if isSuperuser %}
+    <h2 class="heading-medium">Superuser functions</h2>
+    <ul class="list list-bullet">
+      <li><a href="{{ url_for('users.list') }}">List all users</a></li>
+      <li><a href="{{ url_for('apps.list') }}">List all apps</a></li>
+      <li><a href="{{ url_for('buckets.list') }}">List all buckets</a></li>
+    </ul>
+  {% endif %}
+
+  {% include 'users/includes/tables.html' %}
+
+  {% if isSuperuser %}
+    <details class="debug">
+      <summary>Debug</summary>
+      <div class="panel">
+        <h2 class="heading-medium">Logged-in user dump</h2>
+        <pre>{{ current_user | dump(2) | safe }}</pre>
+      </div>
+    </details>
+  {% endif %}
+
+{% endblock %}

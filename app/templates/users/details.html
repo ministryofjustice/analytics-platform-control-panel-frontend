@@ -1,6 +1,7 @@
 {% extends "layouts/one-column.html" %}
 
 {% set page_title = "User: " + user.name %}
+{% set heading_prefix = "User's" %}
 
 {% block page_title %}
   {{ page_title }} | Analytics Platform Control Panel
@@ -8,93 +9,8 @@
 
 {% block main_column %}
 
-<div class="form-group">
-  <h2>User's apps</h2>
-  {% if user.apps.length %}
-    <table class="form-group">
-      <thead>
-        <tr>
-          <th>App name</th>
-          <th>Admin</th>
-          {% if signedInUser %}
-            <td>&nbsp;</td>
-          {% endif %}
-        </tr>
-      </thead>
-      <tbody>
-        {% for app in user.apps %}
-          <tr>
-            <td>
-              <a href="/apps/{{ app.id }}">{{ app.name }}</a>
-            </td>
-            <td>
-              {% if app.role == 0 %}
-                Yes
-              {% else %}
-                No
-              {% endif %}
-            </td>
-            {% if signedInUser %}
-              <td class="align-right">
-                {% if app.role == 0 %}
-                  <a class="button button-secondary" href="{{ url_for('apps.details', {id: app.id}) }}">Manage app</a>
-                  <a class="button button-warning js-confirm" href="/apps/delete/{{ app.id }}/{{ user.id }}">Delete app</a>
-                {% endif %}
-              </td>
-            {% endif %}
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  {% else %}
-    <p>None</p>
-  {% endif %}
 
-  {% if signedInUser %}
-    <p><a class="button button-secondary" href="/apps/new">Create new app</a></p>
-  {% endif %}
-</div>
-
-
-<h2>User's app data sources</h2>
-{% if user.users3buckets.length %}
-  <table class="form-group">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>User has admin access</th>
-        <th>User has read/write access</th>
-        <td><span class="visuallyhidden">Actions</span></td>
-      </tr>
-    </thead>
-    {% for users3bucket in user.users3buckets %}
-      <tr>
-        <td>{{ users3bucket.s3bucket.name }}</td>
-        <td>
-          {% if users3bucket.is_admin %}
-            Yes
-          {% else %}
-            No
-          {% endif %}
-        </td>
-        <td>
-          {% if users3bucket.access_level == 'readonly' %}
-            No
-          {% else %}
-            Yes
-          {% endif %}
-        </td>
-        <td class="align-right">
-          {% if users3bucket.is_admin %}
-            <a class="button button-secondary" href="{{ url_for('buckets.details', {id: users3bucket.id}) }}">Manage bucket access</a>
-          {% endif %}
-        </td>
-      </tr>
-    {% endfor %}
-  </table>
-{% else %}
-  <p>None</p>
-{% endif %}
+{% include 'users/includes/tables.html' %}
 
 
 <details class="debug">

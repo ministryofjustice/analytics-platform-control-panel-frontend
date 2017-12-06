@@ -11,7 +11,8 @@ describe('Delete app', () => {
     it('makes a DELETE request to the API', () => {
 
       const app_id = 2;
-      const redirect_to = '/apps';
+      const redirect_to = '/';
+      const user = require('./fixtures/user');
 
       const delete_app = mock_api()
         .delete(`/apps/${app_id}/`)
@@ -19,6 +20,7 @@ describe('Delete app', () => {
 
       const request = new Promise((resolve, reject) => {
         const req = {
+          user: { user },
           params: { id: app_id },
           body: { redirect_to },
         };

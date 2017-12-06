@@ -90,7 +90,11 @@ exports.delete = (req, res, next) => {
   App.delete(req.params.id)
     .then(() => {
       const { url_for } = require('../routes'); // eslint-disable-line global-require
-      res.redirect(url_for('apps.list'));
+      let redirect_to = 'base.home';
+      if (req.user.is_superuser) {
+        redirect_to = 'apps.list';
+      }
+      res.redirect(url_for(redirect_to));
     })
     .catch(next);
 };

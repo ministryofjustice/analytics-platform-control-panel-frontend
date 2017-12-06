@@ -4,7 +4,9 @@ const { App, Bucket, User } = require('../models');
 exports.list_users = (req, res, next) => {
   User.list()
     .then((users) => {
-      res.render('users/list.html', { users });
+      res.render('users/list.html', {
+        users,
+      });
     })
     .catch(next);
 };

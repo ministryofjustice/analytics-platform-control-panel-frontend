@@ -24,6 +24,8 @@ class JWTAuth {
   }
 }
 
+exports.JWTAuth = JWTAuth;
+
 
 class APIClient {
   constructor(conf) {
@@ -31,7 +33,7 @@ class APIClient {
     this.auth = null;
   }
 
-  request(endpoint, method = 'GET', body = null) {
+  request(endpoint, { method='GET', body=null, params={} } = {}) {
     const headers = {};
 
     if (this.auth) {
@@ -44,11 +46,12 @@ class APIClient {
         uri: this.endpoint_url(endpoint),
         headers,
         body,
+        qs: params,
         json: true,
       };
+      log.debug(`${method} ${options.uri}`);
       return request(options)
         .then((result) => {
-          log.debug(`${method} ${options.uri}`);
           // console.dir(result);
           return result;
         });
@@ -57,24 +60,24 @@ class APIClient {
     }
   }
 
-  get(endpoint) {
-    return this.request(endpoint);
+  get(endpoint, params = {}) {
+    return this.request(endpoint, { params });
   }
 
   post(endpoint, body = '') {
-    return this.request(endpoint, 'POST', body);
+    return this.request(endpoint, { method: 'POST', body });
   }
 
-  delete(endpoint) {
-    return this.request(endpoint, 'DELETE');
+  delete(endpoint, params = {}) {
+    return this.request(endpoint, { method: 'DELETE', params });
   }
 
   patch(endpoint, body = '') {
-    return this.request(endpoint, 'PATCH', body);
+    return this.request(endpoint, { method: 'PATCH', body});
   }
 
   put(endpoint, body = '') {
-    return this.request(endpoint, 'PUT', body);
+    return this.request(endpoint, { method: 'PUT', body});
   }
 
   endpoint_url(endpoint) {
@@ -91,6 +94,7 @@ class APIClient {
   }
 }
 
+exports.APIClient = APIClient;
 
 const api = new APIClient(config.api);
 api.auth = new JWTAuth();

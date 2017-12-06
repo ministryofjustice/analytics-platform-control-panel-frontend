@@ -26,14 +26,7 @@ class KubernetesAPIClient extends APIClient {
       throw new Error('Missing endpoint');
     }
 
-    let ns = namespace;
-    if (!namespace) {
-      ns = this.namespace;
-
-      if (!ns) {
-        ns = 'default';
-      }
-    }
+    let ns = namespace || this.namespace || 'default';
 
     const api = {
       'deployments': 'apis/apps/v1beta2',

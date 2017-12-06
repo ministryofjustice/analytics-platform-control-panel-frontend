@@ -2,7 +2,7 @@ module.exports = {
   "auth0_id": "github|1",
   "url": "http://localhost:8000/users/github%7C1/",
   "username": "johndoe",
-  "name": "",
+  "name": "John Doe",
   "email": "",
   "groups": [],
   "userapps": [
@@ -33,5 +33,6 @@ module.exports = {
       "access_level": "readwrite",
       "is_admin": true
     }
-  ]
+  ],
+  "is_superuser": false
 }

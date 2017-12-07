@@ -7,18 +7,17 @@
 {% block content %}
 
 {% for message in messages %}
-<p>{{ message }}</p>
+  <p>{{ message }}</p>
 {% endfor %}
 
 <main id="content" role="main">
 
-    <h1 class="heading-large">
-      {{ page_title }}
-    </h1>
+  <h1 class="heading-large">
+    {{ page_title }}
+  </h1>
 
-    {% block main_column %}{% endblock %}
+  {% block main_column %}{% endblock %}
 
-  </div>
 </main>
 
 {% endblock %}

@@ -7,6 +7,11 @@
 {% block content %}
 
 <main id="content" role="main">
+
+  {% for message in messages %}
+    <p class="message">{{ message }}</p>
+  {% endfor %}
+
   <div class="grid-row">
     <div class="column-two-thirds">
 

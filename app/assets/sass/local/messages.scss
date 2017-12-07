@@ -1,0 +1,12 @@
+.message {
+  @include bold-19;
+  color: $green;
+  border: 5px solid $green;
+  margin: 1em 0;
+  padding: 1em;
+
+  &.warning {
+    color: $red;
+    border-color: $red;
+  }
+}

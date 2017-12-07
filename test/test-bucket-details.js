@@ -28,7 +28,10 @@ describe('Edit bucket form', () => {
         .reply(200, users);
 
       const request = new Promise((resolve, reject) => {
-        const req = {params: {id: bucket.id}};
+        const req = {
+          params: { id: bucket.id },
+          user: users.results[0]
+        };
         const res = {
           render: (template, context) => {
             resolve({template: template, context: context});

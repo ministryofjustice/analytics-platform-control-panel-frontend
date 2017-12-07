@@ -6,11 +6,11 @@
 
 {% block content %}
 
-{% for message in messages %}
-  <p>{{ message }}</p>
-{% endfor %}
-
 <main id="content" role="main">
+
+  {% for message in messages %}
+    <p class="message">{{ message }}</p>
+  {% endfor %}
 
   <h1 class="heading-large">
     {{ page_title }}

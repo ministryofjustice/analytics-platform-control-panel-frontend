@@ -27,6 +27,30 @@ class JWTAuth {
 exports.JWTAuth = JWTAuth;
 
 
+class APIError extends Error {
+  constructor(error) {
+    super(error.message);
+    this.name = this.constructor.name;
+
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, this.constructor);
+    } else {
+      this.stack = (new Error(message)).stack;
+    }
+  }
+}
+
+exports.APIError = APIError;
+
+
+class APIForbidden extends APIError {
+  constructor(error) {
+    super(error);
+    this.message = `${error.response.request.method} ${error.response.request.path} was not permitted: ${error.error.detail}`;
+  }
+}
+
+
 class APIClient {
   constructor(conf) {
     this.base_url = conf.base_url;
@@ -54,6 +78,12 @@ class APIClient {
         .then((result) => {
           // console.dir(result);
           return result;
+        })
+        .catch((error) => {
+          if (error.statusCode && error.statusCode === 403) {
+            throw new APIForbidden(error);
+          }
+          throw error;
         });
     } catch (error) {
       throw new Error(`API: ${method} ${endpoint} failed: ${error}`);

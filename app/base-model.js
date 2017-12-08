@@ -1,4 +1,4 @@
-const { api } = require('./api-client');
+const { APIError, api } = require('./api-client');
 
 
 const model_proxy = {
@@ -41,6 +41,18 @@ class ModelSet extends Array {
 
 
 exports.ModelSet = ModelSet;
+
+
+class DoesNotExist extends APIError {
+  constructor(error, Model, id) {
+    super(error);
+    this.message = `${Model.name} not found with ${Model.pk} "${id}"`;
+  }
+}
+
+exports.DoesNotExist = DoesNotExist;
+
+
 class Model {
   constructor(data) {
     this.data = data;
@@ -58,11 +70,23 @@ class Model {
 
   static get(id) {
     return api.get(`${this.endpoint}/${id}`)
-      .then(data => new this.prototype.constructor(data));
+      .then(data => new this.prototype.constructor(data))
+      .catch((error) => {
+        if (error.statusCode && error.statusCode === 404) {
+          throw new DoesNotExist(error, this.prototype.constructor, id);
+        }
+        throw error;
+      });
   }
 
   static delete(id) {
-    return api.delete(`${this.endpoint}/${id}`);
+    return api.delete(`${this.endpoint}/${id}`)
+      .catch((error) => {
+        if (error.statusCode && error.statusCode === 404) {
+          throw new DoesNotExist(error, this.prototype.constructor, id);
+        }
+        throw error;
+      });
   }
 
   create() {

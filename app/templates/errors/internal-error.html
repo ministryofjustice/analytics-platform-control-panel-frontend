@@ -1,4 +1,8 @@
-<h1>Internal Error</h1>
+{% extends "layouts/one-column.html" %}
+
+{% set page_title = 'Internal Error' %}
+
+{% block main_column %}
 
 <p class="error">{{ error.message }}</p>
 
@@ -7,18 +11,23 @@
 {{ error.stack | safe }}
 </pre>
 
-<pre>
-session:
-{{ req.session | default({}) | dump(2) | safe }}
-</pre>
+<details class="debug">
+  <summary>Debug</summary>
 
-<pre>
-current_user:
-{{ current_user | dump(2) | safe }}
-</pre>
+  <div class="panel">
+    <h2 class="heading-medium">Session</h2>
+    <pre>{{ req.session | default({}) | dump(2) | safe }}</pre>
+  </div>
 
-<pre>
-env:
-{{ env | dump(2) | safe }}
-</pre>
-{% endif %}
+  <div class="panel">
+    <h2 class="heading-medium">Logged-in user</h2>
+    <pre>{{ current_user | dump(2) | safe }}</pre>
+  </div>
+
+  <div class="panel">
+    <h2 class="heading-medium">Environment</h2>
+    <pre>{{ env | dump(2) | safe }}</pre>
+  </div
+</details>
+  {% endif %}
+{% endblock %}

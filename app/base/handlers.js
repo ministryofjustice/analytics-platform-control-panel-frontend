@@ -18,8 +18,10 @@ exports.home = (req, res, next) => {
 
 
 exports.error_test = (req, res, next) => {
-  User.get('non-existent')
-    .then((user) => { res.send(user.id); })
+  if (req.query.forbidden) {
+    api.auth.set_token('invalid token');
+  }
+  return User.get('non-existent')
     .catch(next);
 };
 

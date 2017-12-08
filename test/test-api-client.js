@@ -14,6 +14,7 @@ describe('API Client', () => {
     it('rejects an invalid auth token', () => {
       const reason = {
         'detail': 'Authentication credentials were not provided.'};
+      const expected = 'GET /apps/ was not permitted: Authentication credentials were not provided.';
 
       mock_api()
         .get('/apps/')
@@ -22,7 +23,7 @@ describe('API Client', () => {
 
       return App.list()
         .then((apps) => { throw new Error('expected failure'); })
-        .catch((err) => { assert.deepEqual(err.error, reason); });
+        .catch((err) => { assert.equal(err.message, expected); });
     });
 
     it('accepts a valid auth token', () => {

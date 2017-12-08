@@ -11,7 +11,7 @@ exports.list = (req, res, next) => {
 
 
 exports.restart = (req, res, next) => {
-  Deployment.get(req.params.id)
+  Deployment.get(req.params.name)
     .then((tool) => {
       req.session.flash_messages.push(`Restarting ${tool.metadata.name}`);
       return tool.restart();

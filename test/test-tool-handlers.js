@@ -60,7 +60,7 @@ describe('tools handler', () => {
 
       const request = new Promise((resolve, reject) => {
         let req = {
-          params: { id: tool.metadata.name },
+          params: { name: tool.metadata.name },
           session: { flash_messages: [] },
         };
         let res = {};

@@ -154,8 +154,7 @@ class Deployment extends K8sModel {
   }
 
   get_status() {
-    for (let i in this.status.conditions) {
-      let condition = this.status.conditions[i];
+    for (let condition of this.status.conditions) {
       if (condition.type === 'Available') {
         if (condition.status === 'True') {
           return 'Available';

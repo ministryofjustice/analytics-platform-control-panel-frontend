@@ -22,16 +22,16 @@ exports.get_namespace = get_namespace;
 
 class KubernetesAPIClient extends APIClient {
   endpoint_url(endpoint, namespace = undefined) {
+    let ns = namespace || this.namespace || 'default';
+
     if (!endpoint) {
       throw new Error('Missing endpoint');
     }
 
-    let ns = namespace || this.namespace || 'default';
-
     const api = {
       'deployments': 'apis/apps/v1beta2',
       'pods': 'api/v1',
-    }[endpoint];
+    }[endpoint.split('/')[0]];
 
     return url.resolve(this.base_url, `k8s/${api}/namespaces/${ns}/${endpoint}`);
   }

@@ -40,6 +40,9 @@ services:
       - DB_USER=controlpanel
       - DEBUG=True
       - DJANGO_SETTINGS_MODULE=control_panel_api.settings
+      - KUBECONFIG=/home/control-panel/.kube/config
+    volumes:
+      - $HOME/.kube:/home/control-panel/.kube
   db:
     image: "circleci/postgres:9.6.2"
     environment:

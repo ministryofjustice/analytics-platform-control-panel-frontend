@@ -141,12 +141,30 @@ class Deployment extends K8sModel {
     return 'deployments';
   }
 
+  static restart(label) {
+    return Pod.delete_all({ labelSelector: `app=${label}` });
+  }
+
   get_pods() {
     return Pod.list({ labelSelector: `app=${this.data.metadata.labels.app}` });
   }
 
   restart() {
     return Pod.delete_all({ labelSelector: `app=${this.data.metadata.labels.app}` });
+  }
+
+  get_status() {
+    for (let i in this.status.conditions) {
+      let condition = this.status.conditions[i];
+      if (condition.type === 'Available') {
+        if (condition.status === 'True') {
+          return 'Available';
+        } else {
+          return 'Unavailable';
+        }
+      }
+    }
+    return 'Unknown';
   }
 }
 

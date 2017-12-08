@@ -1,0 +1,38 @@
+{% extends "layouts/one-column.html" %}
+
+{% set page_title = "Tools" %}
+
+{% block main_column %}
+
+<p>{{ tools.length }} tool{%- if tools.length != 1 -%}s{%- endif -%}</p>
+
+{% if tools.length %}
+  <table class="form-group list">
+    <thead>
+      <tr>
+        {% if current_user.is_superuser %}
+        <th>Namespace</th>
+        {% endif %}
+        <th>Name</th>
+        <th>Status</th>
+        <th><span class="visuallyhidden">Actions</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for tool in tools %}
+      <tr>
+        {% if current_user.is_superuser %}
+        <td>{{ tool.metadata.namespace }}</td>
+        {% endif %}
+        <td>{{ tool.metadata.labels.app }}</td>
+        <td>{{ tool.get_status() }}</td>
+        <td class="align-right no-wrap">
+          <a class="button button-secondary" href="{{ url_for('tools.restart', {id: tool.metadata.name}) }}">Restart</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endif %}
+
+{% endblock %}

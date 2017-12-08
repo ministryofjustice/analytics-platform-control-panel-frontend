@@ -21,6 +21,7 @@ config.apps = [
   'users',
   'buckets',
   'apps3buckets',
+  'tools',
   'users3buckets',
   'userapps',
 ];

@@ -1,4 +1,5 @@
 const { api } = require('../api-client');
+const k8s = require('../k8s-api-client');
 const { User } = require('../models');
 const config = require('../config');
 const passport = require('passport');
@@ -32,6 +33,7 @@ exports.auth_callback = [
     raven.setContext({user: req.user});
 
     api.auth.set_token(req.user.id_token);
+    k8s.api.auth.set_token(req.user.id_token);
 
     User.get(req.user.auth0_id)
       .then((user) => {

@@ -88,6 +88,10 @@ class Bucket extends Model {
   get users3buckets() {
     return new ModelSet(UserS3Bucket, this.data.users3buckets);
   }
+
+  has_admin(user_id) {
+    return true; // TODO: remove this and return real value once perms have been implemented
+  }
 }
 
 exports.Bucket = Bucket;

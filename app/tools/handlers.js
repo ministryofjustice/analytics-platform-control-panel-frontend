@@ -1,8 +1,25 @@
-const { Deployment, User } = require('../models');
+const { Deployment, Pod, User } = require('../models');
 
 
 exports.list = (req, res, next) => {
-  Deployment.list()
+  Promise.all([Deployment.list(), Pod.list()])
+    .then(([tools, pods]) => {
+      let tools_lookup = {};
+
+      tools.forEach((tool) => {
+        tools_lookup[tool.metadata.labels.app] = tool;
+        tool.pods = [];
+      });
+
+      pods.forEach((pod) => {
+        let tool = tools_lookup[pod.metadata.labels.app];
+        if (tool) {
+          tool.pods.push(pod);
+        }
+      });
+
+      return tools;
+    })
     .then((tools) => {
       res.render('tools/list.html', { tools });
     })

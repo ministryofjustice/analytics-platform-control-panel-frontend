@@ -4,26 +4,31 @@ const { config, mock_api, url_for } = require('./conftest');
 const { api } = require('../app/k8s-api-client');
 const handlers = require('../app/tools/handlers');
 const { ModelSet } = require('../app/base-model');
-const { Deployment } = require('../app/models');
+const { Deployment, Pod } = require('../app/models');
 
 
 describe('tools handler', () => {
   const deployments_response = require('./fixtures/deployments');
-
+  const pods_response = require('./fixtures/deployment-pods');
 
   describe('list', () => {
 
     it('lists current user\'s tools', () => {
       const namespace = 'user-andyhd';
-      api.namespace = namespace;
-      const url = `/k8s/apis/apps/v1beta2/namespaces/${namespace}/deployments`;
       const expected = {
         tools: new ModelSet(Deployment, deployments_response.items),
       };
+      expected.tools[0].pods = new ModelSet(Pod, pods_response.items);
 
-      const api_request = mock_api()
-        .get(url)
+      const get_deployments = mock_api()
+        .get(`/k8s/apis/apps/v1beta2/namespaces/${namespace}/deployments`)
         .reply(200, deployments_response);
+
+      const get_pods = mock_api()
+        .get(`/k8s/api/v1/namespaces/${namespace}/pods`)
+        .reply(200, pods_response);
+
+      api.namespace = namespace;
 
       const request = new Promise((resolve, reject) => {
         let req = {};
@@ -36,7 +41,8 @@ describe('tools handler', () => {
 
       return request
         .then(({ template, data }) => {
-          assert(api_request.isDone());
+          assert(get_deployments.isDone());
+          assert(get_pods.isDone());
           assert.deepEqual(data, expected);
         });
     });

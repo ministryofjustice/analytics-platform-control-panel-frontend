@@ -178,6 +178,37 @@ class Pod extends K8sModel {
   static get endpoint() {
     return 'pods';
   }
+
+  get display_status() {
+    // based on
+    // https://github.com/kubernetes/dashboard/blob/91c54261c6a3d7f601c67a2ccfbbe79f3b6a89f9/src/app/frontend/pod/list/card_component.js#L98
+
+    let containerStatus = this.data.status.containerStatuses;
+
+    if (containerStatus) {
+      let state = containerStatus[0].state;
+
+      if (state.waiting) {
+        return `Waiting: ${state.waiting.reason}`;
+      }
+
+      if (state.terminated) {
+        let reason = state.terminated.reason;
+
+        if (!reason) {
+          if (state.terminated.signal) {
+            reason = `Signal:${state.terminated.signal}`;
+          } else {
+            reason = `ExitCode:${state.terminated.exitCode}`;
+          }
+        }
+
+        return `Terminated: ${reason}`;
+      }
+    }
+
+    return this.data.status.phase;
+  }
 }
 
 exports.Pod = Pod;

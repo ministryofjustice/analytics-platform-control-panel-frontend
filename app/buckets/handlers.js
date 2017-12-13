@@ -42,7 +42,8 @@ exports.bucket_details = (req, res, next) => {
         bucket,
         apps_options: apps.exclude(bucket.apps),
         users_options: users.exclude(bucket.users),
-        current_user_is_bucket_admin
+        signedInUserId: req.user.auth0_id,
+        current_user_is_bucket_admin,
       });
     })
     .catch(next);

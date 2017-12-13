@@ -15,6 +15,10 @@ config.app = {
   asset_path: '/static/'
 };
 
+config.cluster = {
+  tools_domain: process.env.TOOLS_DOMAIN,
+};
+
 config.apps = [
   'base',
   'apps',

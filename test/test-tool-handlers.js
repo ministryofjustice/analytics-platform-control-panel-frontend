@@ -43,7 +43,8 @@ describe('tools handler', () => {
         .then(({ template, data }) => {
           assert(get_deployments.isDone());
           assert(get_pods.isDone());
-          assert.deepEqual(data, expected);
+          assert.deepEqual(data.tools, expected.tools);
+          assert.typeOf(data.get_tool_url, 'function');
         });
     });
 

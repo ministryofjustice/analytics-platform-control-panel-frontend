@@ -1,4 +1,4 @@
-const { Deployment, Pod, User } = require('../models');
+const { Deployment, Pod, ToolDeployment, User } = require('../models');
 
 
 exports.list = (req, res, next) => {
@@ -38,4 +38,16 @@ exports.restart = (req, res, next) => {
       res.redirect(url_for('tools.list'));
     })
     .catch(next);
+};
+
+
+exports.deploy = (req, res, next) => {
+  const { url_for } = require('../routes'); // eslint-disable-line global-require
+
+  new ToolDeployment({tool_name: req.params.name}).create()
+
+  req.session.flash_messages.push(`Deploying '${req.params.name}'...`);
+  setTimeout(() => {
+    res.redirect(url_for('tools.list'));
+  }, 2000);
 };

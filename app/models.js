@@ -1,3 +1,4 @@
+const { api } = require('./api-client');
 const { Model, ModelSet } = require('./base-model');
 const { K8sModel } = require('./k8s-model');
 
@@ -212,3 +213,22 @@ class Pod extends K8sModel {
 }
 
 exports.Pod = Pod;
+
+
+class ToolDeployment {
+
+  constructor(data) {
+    this.tool_name = data.tool_name;
+  }
+
+  create() {
+    return api.post(this.endpoint, {});
+  }
+
+  get endpoint() {
+    return `tools/${this.tool_name}/deployments`;
+  }
+
+}
+
+exports.ToolDeployment = ToolDeployment;

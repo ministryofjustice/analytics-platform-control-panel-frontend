@@ -52,7 +52,7 @@ exports.deploy = (req, res, next) => {
 
   new ToolDeployment({tool_name: req.params.name}).create()
 
-  req.session.flash_messages.push(`Deploying '${req.params.name}'...`);
+  req.session.flash_messages.push(`Deploying '${req.params.name}'...this may take up to 5 minutes`);
   setTimeout(() => {
     res.redirect(url_for('tools.list'));
   }, 2000);

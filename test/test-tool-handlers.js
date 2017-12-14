@@ -85,4 +85,36 @@ describe('tools handler', () => {
 
   });
 
+  describe('deploy', () => {
+
+    it('deploy the specified tool for the user', function() {
+      this.timeout(2200);
+      const tool_name = 'rstudio';
+
+      const post_deployment = mock_api()
+        .post(`/tools/${tool_name}/deployments/`)
+        .reply(201, {});
+
+      const request = new Promise((resolve, reject) => {
+        let req = {
+          params: { name: tool_name },
+          session: { flash_messages: [] },
+        };
+        let res = {};
+        res.redirect = resolve;
+        res.render = reject;
+        handlers.deploy(req, res, reject);
+      });
+
+      return request
+        .then((redirect_url) => {
+          const expected_redirect_url = url_for('tools.list');
+
+          assert.equal(redirect_url, expected_redirect_url);
+          assert(post_deployment.isDone());
+        });
+    });
+
+  });
+
 });

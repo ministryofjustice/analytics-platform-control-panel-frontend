@@ -159,13 +159,12 @@ class Deployment extends K8sModel {
   }
 
   get_status() {
-    for (let condition of this.status.conditions) {
+    for (const condition of this.status.conditions) {
       if (condition.type === 'Available') {
         if (condition.status === 'True') {
           return 'Available';
-        } else {
-          return 'Unavailable';
         }
+        return 'Unavailable';
       }
     }
     return 'Unknown';
@@ -184,17 +183,17 @@ class Pod extends K8sModel {
     // based on
     // https://github.com/kubernetes/dashboard/blob/91c54261c6a3d7f601c67a2ccfbbe79f3b6a89f9/src/app/frontend/pod/list/card_component.js#L98
 
-    let containerStatus = this.data.status.containerStatuses;
+    const containerStatus = this.data.status.containerStatuses;
 
     if (containerStatus) {
-      let state = containerStatus[0].state;
+      const { state } = containerStatus[0];
 
       if (state.waiting) {
         return `Waiting: ${state.waiting.reason}`;
       }
 
       if (state.terminated) {
-        let reason = state.terminated.reason;
+        let { reason } = state.terminated;
 
         if (!reason) {
           if (state.terminated.signal) {
@@ -216,7 +215,6 @@ exports.Pod = Pod;
 
 
 class ToolDeployment {
-
   constructor(data) {
     this.tool_name = data.tool_name;
   }
@@ -228,7 +226,6 @@ class ToolDeployment {
   get endpoint() {
     return `tools/${this.tool_name}/deployments`;
   }
-
 }
 
 exports.ToolDeployment = ToolDeployment;

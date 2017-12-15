@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/ministryofjustice/analytics-platform-control-panel-frontend#readme",
   "dependencies": {
+    "auth0": "^2.9.1",
     "body-parser": "^1.18.2",
     "bole": "3.0.2",
     "concat-files": "^0.1.1",
@@ -29,6 +30,7 @@
     "dotenv": "^4.0.0",
     "express": "4.15.4",
     "express-session": "^1.15.6",
+    "github": "^13.0.1",
     "glob": "^7.1.2",
     "govuk-elements-sass": "3.0.1",
     "govuk_frontend_toolkit": "7.0.0",

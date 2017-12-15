@@ -33,6 +33,7 @@ config.apps = [
 config.auth0 = {
   domain: process.env.AUTH0_DOMAIN,
   clientID: process.env.AUTH0_CLIENT_ID,
+  clientId: process.env.AUTH0_CLIENT_ID,
   clientSecret: process.env.AUTH0_CLIENT_SECRET,
   callbackURL: process.env.AUTH0_CALLBACK_URL || 'http://localhost:3000/callback',
   passReqToCallback: true,
@@ -87,8 +88,9 @@ config.middleware = [
   'errors',
 ];
 
-config.repos = {
-  host: 'https://github.com',
+config.github = {
+  host: 'api.github.com',
+  web_host: 'https://github.com',
   orgs: [
     'moj-analytical-services',
     'ministryofjustice',

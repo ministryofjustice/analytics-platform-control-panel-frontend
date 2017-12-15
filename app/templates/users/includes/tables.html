@@ -63,7 +63,7 @@
       </thead>
       {% for users3bucket in user.users3buckets %}
         <tr>
-          <td><a href="{{ url_for('buckets.details', {id: users3bucket.id}) }}">{{ users3bucket.s3bucket.name }}</a></td>
+          <td><a href="{{ url_for('buckets.details', {id: users3bucket.s3bucket.id}) }}">{{ users3bucket.s3bucket.name }}</a></td>
           <td>
             {% if users3bucket.is_admin %}
               Yes

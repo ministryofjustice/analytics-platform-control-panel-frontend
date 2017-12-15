@@ -43,7 +43,8 @@ describe('tools handler', () => {
         .then(({ template, data }) => {
           assert(get_deployments.isDone());
           assert(get_pods.isDone());
-          assert.deepEqual(data, expected);
+          assert.deepEqual(data.tools, expected.tools);
+          assert.typeOf(data.get_tool_url, 'function');
         });
     });
 
@@ -84,4 +85,34 @@ describe('tools handler', () => {
 
   });
 
+  describe('deploy', () => {
+
+    it('deploy the specified tool for the user', function() {
+      this.timeout(2200);
+      const tool_name = 'rstudio';
+
+      const post_deployment = mock_api()
+        .post(`/tools/${tool_name}/deployments/`)
+        .reply(201, {});
+
+      const request = new Promise((resolve, reject) => {
+        const req = {
+          params: { name: tool_name },
+          session: { flash_messages: [] },
+        };
+        const res = {};
+        res.redirect = resolve;
+        res.render = reject;
+        handlers.deploy(req, res, reject);
+      });
+
+      return request
+        .then((redirect_url) => {
+          const expected_redirect_url = url_for('tools.list');
+
+          assert.equal(redirect_url, expected_redirect_url);
+          assert(post_deployment.isDone());
+        });
+    });
+  });
 });

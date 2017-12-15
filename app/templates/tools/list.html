@@ -20,11 +20,15 @@
     </thead>
     <tbody>
       {% for tool in tools %}
+
+      {%- set tool_name = tool.metadata.labels.app -%}
+      {%- set tool_url = get_tool_url(tool_name) -%}
+
       <tr>
         {% if current_user.is_superuser %}
         <td>{{ tool.metadata.namespace }}</td>
         {% endif %}
-        <td>{{ tool.metadata.labels.app }}</td>
+        <td><a target="_blank" href="{{ tool_url }}">{{ tool_name }}</a></td>
         <td>{% for pod in tool.pods %}{{ loop.index }}. {{ pod.display_status }}<br>{% endfor %}</td>
         <td class="align-right no-wrap">
           <a class="button button-secondary" href="{{ url_for('tools.restart', {name: tool.metadata.name}) }}">Restart</a>
@@ -34,5 +38,11 @@
     </tbody>
   </table>
 {% endif %}
+
+{%- if tools.length != 1 -%}
+  <form action="{{ url_for('tools.deploy', {name: 'rstudio'}) }}" method="post" class="inline-form clearfix">
+    <input type="submit" class="js-confirm button button-secondary right" value="Deploy RStudio" />
+  </form>
+{%- endif -%}
 
 {% endblock %}

@@ -2,9 +2,8 @@
 const { assert } = require('chai');
 const { mock_api } = require('./conftest');
 
-const { api } = require('../app/api-client');
-const { ModelSet } = require('../app/base-model');
-const { App } = require('../app/models');
+const { api } = require('../app/api_clients/control_panel_api');
+const { App, ModelSet } = require('../app/models');
 
 
 describe('API Client', () => {
@@ -40,7 +39,7 @@ describe('API Client', () => {
         .matchHeader('Authorization', 'JWT ' + valid_token)
         .reply(200, response);
 
-      api.auth.set_token(valid_token);
+      api.authenticate({ type: 'jwt', token: valid_token });
 
       const expected = new ModelSet(App, response.results);
 

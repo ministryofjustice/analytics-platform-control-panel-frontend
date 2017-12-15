@@ -1,5 +1,4 @@
-const { ModelSet } = require('../app/base-model');
-const { App, Bucket, User } = require('../app/models');
+const { App, Bucket, ModelSet, User } = require('../app/models');
 const { assert } = require('chai');
 
 const { config, mock_api, url_for } = require('./conftest');

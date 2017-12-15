@@ -1,6 +1,92 @@
-const { api } = require('./api-client');
-const { Model, ModelSet } = require('./base-model');
-const { K8sModel } = require('./k8s-model');
+const { APIError } = require('../api_clients/base');
+const { api } = require('../api_clients/control_panel_api');
+const base = require('./base');
+
+
+class DoesNotExist extends APIError {
+  constructor(error, Model, id) {
+    super(error);
+    this.message = `${Model.name} not found with ${Model.pk} "${id}"`;
+  }
+}
+
+exports.DoesNotExist = DoesNotExist;
+
+
+class ModelSet extends base.ModelSet {
+  exclude(other) {
+    let others = other;
+    if (other instanceof this.model) {
+      others = [other];
+    }
+
+    const pks = others.map(instance => instance[this.model.pk]);
+
+    return this.filter(instance => !pks.includes(instance[this.model.pk]));
+  }
+}
+
+
+class Model extends base.Model {
+  static get pk() {
+    return 'id';
+  }
+
+  static list() {
+    return api.get(this.endpoint)
+      .then(result => new ModelSet(this.prototype.constructor, result.results));
+  }
+
+  static get(id) {
+    return api.get(`${this.endpoint}/${id}`)
+      .then(data => new this.prototype.constructor(data))
+      .catch((error) => {
+        if (error.statusCode && error.statusCode === 404) {
+          throw new DoesNotExist(error, this.prototype.constructor, id);
+        }
+        throw error;
+      });
+  }
+
+  static delete(id) {
+    return api.delete(`${this.endpoint}/${id}`)
+      .catch((error) => {
+        if (error.statusCode && error.statusCode === 404) {
+          throw new DoesNotExist(error, this.prototype.constructor, id);
+        }
+        throw error;
+      });
+  }
+
+  create() {
+    return api.post(this.constructor.endpoint, this.data)
+      .then(data => new this.constructor(data));
+  }
+
+  replace() {
+    const pk_name = this.constructor.pk;
+    const pk = this.data[pk_name];
+
+    if (pk !== undefined) {
+      return api.put(`${this.constructor.endpoint}/${pk}`, this.data)
+        .then(data => new this.constructor(data));
+    }
+
+    return Promise.reject(new Error(`Missing ${pk_name} for PUT ${this.constructor.endpoint}`));
+  }
+
+  update() {
+    const pk_name = this.constructor.pk;
+    const pk = this.data[pk_name];
+
+    if (pk !== undefined) {
+      return api.patch(`${this.constructor.endpoint}/${pk}`, this.data)
+        .then(data => new this.constructor(data));
+    }
+
+    return Promise.reject(new Error(`Missing ${pk_name} for PATCH ${this.constructor.endpoint}`));
+  }
+}
 
 
 class App extends Model {
@@ -139,118 +225,3 @@ class UserApp extends Model {
 }
 
 exports.UserApp = UserApp;
-
-
-class Deployment extends K8sModel {
-  static get endpoint() {
-    return 'deployments';
-  }
-
-  static restart(label) {
-    return Pod.delete_all({ labelSelector: `app=${label}` });
-  }
-
-  get_pods() {
-    return Pod.list({ labelSelector: `app=${this.data.metadata.labels.app}` });
-  }
-
-  restart() {
-    return Pod.delete_all({ labelSelector: `app=${this.data.metadata.labels.app}` });
-  }
-
-  get_status() {
-    for (const condition of this.status.conditions) {
-      if (condition.type === 'Available') {
-        if (condition.status === 'True') {
-          return 'Available';
-        }
-        return 'Unavailable';
-      }
-    }
-    return 'Unknown';
-  }
-}
-
-exports.Deployment = Deployment;
-
-
-class Pod extends K8sModel {
-  static get endpoint() {
-    return 'pods';
-  }
-
-  get display_status() {
-    // based on
-    // https://github.com/kubernetes/dashboard/blob/91c54261c6a3d7f601c67a2ccfbbe79f3b6a89f9/src/app/frontend/pod/list/card_component.js#L98
-
-    const containerStatus = this.data.status.containerStatuses;
-
-    if (containerStatus) {
-      const { state } = containerStatus[0];
-
-      if (state.waiting) {
-        return `Waiting: ${state.waiting.reason}`;
-      }
-
-      if (state.terminated) {
-        let { reason } = state.terminated;
-
-        if (!reason) {
-          if (state.terminated.signal) {
-            reason = `Signal:${state.terminated.signal}`;
-          } else {
-            reason = `ExitCode:${state.terminated.exitCode}`;
-          }
-        }
-
-        return `Terminated: ${reason}`;
-      }
-    }
-
-    return this.data.status.phase;
-  }
-}
-
-exports.Pod = Pod;
-
-class Tool {
-  static list() {
-    return Promise
-      .all([Deployment.list(), Pod.list()])
-      .then(([tools, pods]) => {
-        const tools_lookup = {};
-
-        tools.forEach((tool) => {
-          tools_lookup[tool.metadata.labels.app] = tool;
-          tool.pods = [];
-        });
-
-        pods.forEach((pod) => {
-          const tool = tools_lookup[pod.metadata.labels.app];
-          if (tool) {
-            tool.pods.push(pod);
-          }
-        });
-
-        return tools;
-      });
-  }
-}
-
-exports.Tool = Tool;
-
-class ToolDeployment {
-  constructor(data) {
-    this.tool_name = data.tool_name;
-  }
-
-  create() {
-    return api.post(this.endpoint, {});
-  }
-
-  get endpoint() {
-    return `tools/${this.tool_name}/deployments`;
-  }
-}
-
-exports.ToolDeployment = ToolDeployment;

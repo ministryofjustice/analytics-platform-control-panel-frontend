@@ -1,9 +1,6 @@
-const passport = require('passport');
-const raven = require('raven');
-
-const { api } = require('../api-client');
-const k8s = require('../k8s-api-client');
-const { Tool, User } = require('../models');
+const { api } = require('../api_clients/control_panel_api');
+const kubernetes = require('../api_clients/kubernetes');
+const { User } = require('../models');
 const config = require('../config');
 const { get_tool_url } = require('../tools/helpers');
 
@@ -27,7 +24,7 @@ exports.home = (req, res, next) => {
 
 exports.error_test = (req, res, next) => {
   if (req.query.forbidden) {
-    api.auth.set_token('invalid token');
+    api.authenticate({ type: 'jwt', token: 'invalid token' });
   }
   return User.get('non-existent')
     .catch(next);
@@ -39,8 +36,8 @@ exports.auth_callback = [
   (req, res, next) => {
     raven.setContext({user: req.user});
 
-    api.auth.set_token(req.user.id_token);
-    k8s.api.auth.set_token(req.user.id_token);
+    api.authenticate({ type: 'jwt', token: req.user.id_token });
+    kubernetes.api.authenticate({ type: 'jwt', token: req.user.id_token });
 
     User.get(req.user.auth0_id)
       .then((user) => {

@@ -1,5 +1,5 @@
-const config = require('./config');
-const { APIClient, JWTAuth } = require('./api-client');
+const config = require('../config');
+const { APIClient } = require('./control_panel_api');
 const url = require('url');
 
 
@@ -33,7 +33,7 @@ class KubernetesAPIClient extends APIClient {
       'pods': 'api/v1',
     }[endpoint.split('/')[0]];
 
-    return url.resolve(this.base_url, `k8s/${api}/namespaces/${ns}/${endpoint}`);
+    return url.resolve(this.conf.base_url, `k8s/${api}/namespaces/${ns}/${endpoint}`);
   }
 }
 
@@ -41,6 +41,5 @@ class KubernetesAPIClient extends APIClient {
 exports.KubernetesAPIClient = KubernetesAPIClient;
 
 const api = new KubernetesAPIClient(config.api);
-api.auth = new JWTAuth();
 
 exports.api = api;

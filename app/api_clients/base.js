@@ -1,30 +1,9 @@
-const config = require('./config');
+const config = require('../config');
 const request = require('request-promise');
 const url = require('url');
 
 
 const log = require('bole')('api-client');
-
-
-class JWTAuth {
-  constructor(token) {
-    this.token = token || 'invalid token';
-  }
-
-  set_token(token) {
-    this.token = token;
-  }
-
-  unset_token() {
-    this.token = 'invalid token';
-  }
-
-  get header() {
-    return `JWT ${this.token}`;
-  }
-}
-
-exports.JWTAuth = JWTAuth;
 
 
 class APIError extends Error {
@@ -53,8 +32,17 @@ class APIForbidden extends APIError {
 
 class APIClient {
   constructor(conf) {
-    this.base_url = conf.base_url;
+    this.conf = conf;
     this.auth = null;
+    this.supported_auth_types = [];
+  }
+
+  authenticate(options) {
+    const { type } = options;
+
+    if (!type || !this.supported_auth_types.includes(type)) {
+      throw new Error(`Invalid authentication type "${type}". Must be one of ${this.supported_auth_types.join(', ')}`);
+    }
   }
 
   request(endpoint, { method='GET', body=null, params={} } = {}) {
@@ -120,13 +108,8 @@ class APIClient {
       suffix = '/';
     }
 
-    return url.resolve(this.base_url, endpoint + suffix);
+    return url.resolve(this.conf.base_url, endpoint + suffix);
   }
 }
 
 exports.APIClient = APIClient;
-
-const api = new APIClient(config.api);
-api.auth = new JWTAuth();
-
-exports.api = api;

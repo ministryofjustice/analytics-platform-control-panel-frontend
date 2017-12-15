@@ -1,4 +1,4 @@
-const join = require('path').join;
+const { join } = require('path');
 
 
 const config = module.exports;
@@ -7,12 +7,12 @@ const node_modules = join(__dirname, '../node_modules');
 config.api = {
   base_url: process.env.API_URL || 'http://localhost:8000',
   username: process.env.API_USER,
-  password: process.env.API_PASSWORD
+  password: process.env.API_PASSWORD,
 };
 
 config.app = {
   env: process.env.ENV || 'dev',
-  asset_path: '/static/'
+  asset_path: '/static/',
 };
 
 config.cluster = {
@@ -35,7 +35,7 @@ config.auth0 = {
   clientID: process.env.AUTH0_CLIENT_ID,
   clientSecret: process.env.AUTH0_CLIENT_SECRET,
   callbackURL: process.env.AUTH0_CALLBACK_URL || 'http://localhost:3000/callback',
-  passReqToCallback: true
+  passReqToCallback: true,
 };
 
 config.ensure_login = {
@@ -44,28 +44,28 @@ config.ensure_login = {
     /^\/error/,
     /^\/login/,
     /^\/logout/,
-    /^\/static/
-  ]
+    /^\/static/,
+  ],
 };
 
 config.express = {
   port: process.env.EXPRESS_PORT || 3000,
-  host: process.env.EXPRESS_HOST || '127.0.0.1'
+  host: process.env.EXPRESS_HOST || '127.0.0.1',
 };
 
 config.js = {
   sourceFiles: join(__dirname, 'assets/javascripts/**/*.js'),
   ignorePaths: [
-    join(__dirname, 'assets/javascripts/vendor/**/*')
+    join(__dirname, 'assets/javascripts/vendor/**/*'),
   ],
   outDir: join(__dirname, '../static/javascripts/'),
-  filename: 'app.js'
+  filename: 'app.js',
 };
 
 config.log = {
   requests: process.env.ENABLE_ACCESS_LOGS !== 'false',
   stream: process.stdout,
-  level: process.env.LOG_LEVEL || 'debug'
+  level: process.env.LOG_LEVEL || 'debug',
 };
 
 // order is important!
@@ -84,7 +84,7 @@ config.middleware = [
   'routes',
   '404',
   'raven-error-handler',
-  'errors'
+  'errors',
 ];
 
 config.repos = {
@@ -92,7 +92,7 @@ config.repos = {
   orgs: [
     'moj-analytical-services',
     'ministryofjustice',
-  ]
+  ],
 };
 
 config.sass = {
@@ -102,13 +102,13 @@ config.sass = {
       includePaths: [
         join(node_modules, 'govuk_frontend_toolkit/stylesheets'),
         join(node_modules, 'govuk_template_jinja/assets/stylesheets'),
-        join(node_modules, 'govuk-elements-sass/public/sass')
+        join(node_modules, 'govuk-elements-sass/public/sass'),
       ],
       outputStyle: 'expanded',
       sourceMap: true,
-      outDir: join(__dirname, '../static/stylesheets/')
-    }
-  ]
+      outDir: join(__dirname, '../static/stylesheets/'),
+    },
+  ],
 };
 
 config.sentry = {
@@ -116,12 +116,12 @@ config.sentry = {
   options: {
     autoBreadcrumbs: {
       console: true,
-      http: true
+      http: true,
     },
     tags: {
-      environment: process.env.ENV || 'dev'
-    }
-  }
+      environment: process.env.ENV || 'dev',
+    },
+  },
 };
 
 config.session = {
@@ -129,14 +129,14 @@ config.session = {
   secret: process.env.COOKIE_SECRET || 'shh-its-a-secret',
   resave: false,
   saveUninitialized: false,
-  logFn: console.log
+  logFn: console.log, // eslint-disable-line no-console
 };
 
 config.session_store = {
   host: process.env.REDIS_HOST || 'redis',
   port: 6379,
   logErrors: true,
-  pass: process.env.REDIS_PASSWORD
+  pass: process.env.REDIS_PASSWORD,
 };
 
 config.static = {
@@ -145,10 +145,10 @@ config.static = {
       join(__dirname, '../static'),
       join(node_modules, 'govuk_template_jinja/assets'),
       join(node_modules, 'govuk_frontend_toolkit'),
-      join(node_modules, 'jquery/dist')
+      join(node_modules, 'jquery/dist'),
     ],
     '/static/images/icons': [
-      join(node_modules, 'govuk_frontend_toolkit/images')
-    ]
-  }
+      join(node_modules, 'govuk_frontend_toolkit/images'),
+    ],
+  },
 };

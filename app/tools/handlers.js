@@ -1,4 +1,4 @@
-const { Deployment, Pod, ToolDeployment, User } = require('../models');
+const { Deployment, Pod, ToolDeployment } = require('../models');
 
 const { tools_domain } = require('../config').cluster;
 
@@ -6,7 +6,7 @@ const { tools_domain } = require('../config').cluster;
 exports.list = (req, res, next) => {
   const get_tool_url = (tool_name) => {
     return `https://${req.user.username}-${tool_name}.${tools_domain}`;
-  }
+  };
 
   Promise.all([Deployment.list(), Pod.list()])
     .then(([tools, pods]) => {
@@ -18,7 +18,7 @@ exports.list = (req, res, next) => {
       });
 
       pods.forEach((pod) => {
-        let tool = tools_lookup[pod.metadata.labels.app];
+        const tool = tools_lookup[pod.metadata.labels.app];
         if (tool) {
           tool.pods.push(pod);
         }
@@ -50,7 +50,7 @@ exports.restart = (req, res, next) => {
 exports.deploy = (req, res, next) => {
   const { url_for } = require('../routes'); // eslint-disable-line global-require
 
-  new ToolDeployment({tool_name: req.params.name}).create()
+  new ToolDeployment({ tool_name: req.params.name }).create();
 
   req.session.flash_messages.push(`Deploying '${req.params.name}'...this may take up to 5 minutes`);
   setTimeout(() => {

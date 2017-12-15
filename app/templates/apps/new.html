@@ -28,7 +28,11 @@
       {% endfor %}
     </select>
     <span>/</span>
-    <input class="form-control form-control-prefixed form-control-1-3 {% if errors.name %} form-control-error {% endif %}" type="text" id="name" name="name" value="{{ app.name }}">
+    <select name="name" id="name" class="form-control form-control-1-3">
+      {% for repo in repos %}
+        <option value="{{ repo.name }}">{{ repo.name }}</option>
+      {% endfor %}
+    </select>
   </div>
 
   <input type="hidden" id="repo_url" name="repo_url" value="{{ app.repo_url }}">

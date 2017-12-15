@@ -1,14 +1,12 @@
 {% extends "layouts/one-column.html" %}
 
-{% set page_title = "Bucket: " + bucket.name %}
+{% set page_title = "App data source: " + bucket.name %}
 
 {% block main_column %}
-<!-- TODO: This is only a placeholder template - Update me -->
 
 
-<!-- TODO: Placeholder list - double check wording and everything -->
-<h2 class="heading-medium">Users with access</h2>
-<p>{{ bucket.users3buckets.length }} user{%- if bucket.users3buckets.length != 1 -%}s have{% else %} has{% endif %} access to this data source</p>
+<h2 class="heading-medium">Users with admin access</h2>
+<p>{{ bucket.users3buckets.length }} user{%- if bucket.users3buckets.length != 1 -%}s are{% else %} is{% endif %} admin of this app data source</p>
 
 {% if bucket.users3buckets.length %}
   <table class="form-group">
@@ -16,30 +14,36 @@
       <tr>
         <th>User</th>
         <th>User has read/write access</th>
-        <th></th>
+        <th>
+          {% if current_user_is_bucket_admin or current_user.is_superuser %}
+            <span class="visuallyhidden">Actions</span>
+          {% endif %}
+        </th>
       </tr>
     </thead>
     <tbody>
       {% for users3bucket in bucket.users3buckets %}
         <tr>
-          <td><a href="{{ url_for('users.details', {id: users3bucket.user.auth0_id}) }}">{{ users3bucket.user.username }}</a></td>
+          <td><a class="{% if current_user_id == users3bucket.user.auth0_id %}highlight-current{% endif %}" href="{{ url_for('users.details', {id: users3bucket.user.auth0_id}) }}">{{ users3bucket.user.name }}</a></td>
           <td>{{ yes_no(users3bucket.access_level, 'readwrite') }}</td>
           <td class="align-right">
-            <!-- Button to change access level -->
-            <form action="{{ url_for('users3buckets.update', {id: users3bucket.id}) }}" method="post" class="inline-form clearfix">
-              <input type="hidden" name="access_level" value="{{ yes_no(users3bucket.access_level, 'readwrite', 'readonly', 'readwrite') }}" />
+            {% if current_user_is_bucket_admin or current_user.is_superuser %}
+              <!-- Button to change access level -->
+              <form action="{{ url_for('users3buckets.update', {id: users3bucket.id}) }}" method="post" class="inline-form clearfix">
+                <input type="hidden" name="access_level" value="{{ yes_no(users3bucket.access_level, 'readwrite', 'readonly', 'readwrite') }}" />
 
-              <input type="hidden" name="redirect_to" value="{{ url_for('buckets.details', {id: bucket.id}) }}" />
+                <input type="hidden" name="redirect_to" value="{{ url_for('buckets.details', {id: bucket.id}) }}" />
 
-              <input type="submit" class="js-confirm button button-secondary" value="{{ yes_no(users3bucket.access_level, 'readwrite', 'Revoke', 'Grant') }} read/write access" />
-            </form>
+                <input type="submit" class="js-confirm button button-secondary" value="{{ yes_no(users3bucket.access_level, 'readwrite', 'Revoke', 'Grant') }} read/write access" />
+              </form>
 
-            <!-- Button to revoke access -->
-            <form action="{{ url_for('users3buckets.delete', {id: users3bucket.id}) }}" method="post" class="inline-form clearfix">
-              <input type="hidden" name="redirect_to" value="{{ url_for('buckets.details', {id: bucket.id}) }}">
+              <!-- Button to revoke access -->
+              <form action="{{ url_for('users3buckets.delete', {id: users3bucket.id}) }}" method="post" class="inline-form clearfix">
+                <input type="hidden" name="redirect_to" value="{{ url_for('buckets.details', {id: bucket.id}) }}">
 
-              <input type="submit" class="js-confirm button button-warning" value="Revoke access" />
-            </form>
+                <input type="submit" class="js-confirm button button-secondary" value="Revoke admin access" />
+              </form>
+            {% endif %}
           </td>
         </tr>
       {% endfor %}
@@ -49,33 +53,33 @@
   <p>None</p>
 {% endif %}
 
-<!-- TODO: Check/Update - Placeholder "form" -->
-{% if users_options.length %}
-  <form action="{{ url_for('users3buckets.create') }}" method="post">
-    <input type="hidden" name="bucket_id" value="{{ bucket.id }}" />
-    <div class="form-group">
-      <label class="form-label" for="user_id">Grant user access to this data source</label>
-      <select class="form-control no-blank" id="user_id" name="user_id">
-        <option value="">Select a user</option>
-        {% for user in users_options %}
-          <option value="{{ user.auth0_id }}">{{ user.username }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <div class="form-group">
-      <input type="submit" class="button button-secondary" value="Grant access">
-    </div>
-  </form>
-{% else %}
-  <p>(All available users already have access to this data source.)</p>
-{% endif %}
 
-{% if current_user_is_bucket_admin %}
-<hr>
-<form action="{{ url_for('buckets.delete', {id: bucket.id}) }}" method="post" class="clearfix">
-  <input type="hidden" id="redirect" name="redirect" value="{{ url_for('base.home') }}">
-  <input type="submit" class="button button-warning right js-confirm" value="Delete bucket" data-confirm-message="Are you sure you want to delete this bucket?">
-</form>
+{% if current_user_is_bucket_admin or current_user.is_superuser %}
+  {% if users_options.length %}
+    <form action="{{ url_for('users3buckets.create') }}" method="post">
+      <input type="hidden" name="bucket_id" value="{{ bucket.id }}" />
+      <div class="form-group">
+        <label class="form-label" for="user_id">Make user admin of this app data source</label>
+        <select class="form-control no-blank" id="user_id" name="user_id">
+          <option value="">Select a user</option>
+          {% for user in users_options %}
+            <option value="{{ user.auth0_id }}">{{ user.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <input type="submit" class="button button-secondary" value="Grant admin access">
+      </div>
+    </form>
+  {% else %}
+    <p>(All available users are already admin of this app data source.)</p>
+  {% endif %}
+
+  <hr>
+  <form action="{{ url_for('buckets.delete', {id: bucket.id}) }}" method="post" class="clearfix">
+    <input type="hidden" id="redirect" name="redirect" value="{{ url_for('base.home') }}">
+    <input type="submit" class="button button-warning right js-confirm" value="Delete bucket" data-confirm-message="Are you sure you want to delete this bucket?">
+  </form>
 {% endif %}
 
 

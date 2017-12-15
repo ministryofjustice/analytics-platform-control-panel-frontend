@@ -111,7 +111,7 @@
               <form action="{{ url_for('apps3buckets.delete', {id: apps3bucket.id}) }}" method="post" class="inline-form clearfix">
                 <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', {id: app.id}) }}">
 
-                <input type="submit" class="js-confirm button button-secondary right" value="Revoke access" />
+                <input type="submit" class="js-confirm button button-secondary right" value="Disconnect data source" />
               </form>
             {% endif %}
           </td>

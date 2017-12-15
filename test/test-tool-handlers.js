@@ -96,11 +96,11 @@ describe('tools handler', () => {
         .reply(201, {});
 
       const request = new Promise((resolve, reject) => {
-        let req = {
+        const req = {
           params: { name: tool_name },
           session: { flash_messages: [] },
         };
-        let res = {};
+        const res = {};
         res.redirect = resolve;
         res.render = reject;
         handlers.deploy(req, res, reject);
@@ -114,7 +114,5 @@ describe('tools handler', () => {
           assert(post_deployment.isDone());
         });
     });
-
   });
-
 });

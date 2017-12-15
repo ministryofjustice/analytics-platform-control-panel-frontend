@@ -24,7 +24,7 @@
     <tbody>
       {% for users3bucket in bucket.users3buckets %}
         <tr>
-          <td><a class="{% if signedInUserId == users3bucket.user.auth0_id %}highlight-current{% endif %}" href="{{ url_for('users.details', {id: users3bucket.user.auth0_id}) }}">{{ users3bucket.user.name }}</a></td>
+          <td><a class="{% if current_user_id == users3bucket.user.auth0_id %}highlight-current{% endif %}" href="{{ url_for('users.details', {id: users3bucket.user.auth0_id}) }}">{{ users3bucket.user.name }}</a></td>
           <td>{{ yes_no(users3bucket.access_level, 'readwrite') }}</td>
           <td class="align-right">
             {% if current_user_is_bucket_admin or current_user.is_superuser %}

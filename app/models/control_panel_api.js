@@ -37,6 +37,11 @@ class Model extends base.Model {
       .then(result => new ModelSet(this.prototype.constructor, result.results));
   }
 
+  static create(data) {
+    return api.post(this.endpoint, data)
+      .then(response => new this.prototype.constructor(response));
+  }
+
   static get(id) {
     return api.get(`${this.endpoint}/${id}`)
       .then(data => new this.prototype.constructor(data))
@@ -58,21 +63,12 @@ class Model extends base.Model {
       });
   }
 
-  create() {
-    return api.post(this.constructor.endpoint, this.data)
-      .then(data => new this.constructor(data));
+  delete() {
+    return this.constructor.delete(this[this.constructor.pk]);
   }
 
-  replace() {
-    const pk_name = this.constructor.pk;
-    const pk = this.data[pk_name];
-
-    if (pk !== undefined) {
-      return api.put(`${this.constructor.endpoint}/${pk}`, this.data)
-        .then(data => new this.constructor(data));
-    }
-
-    return Promise.reject(new Error(`Missing ${pk_name} for PUT ${this.constructor.endpoint}`));
+  create() {
+    return this.constructor.create(this.data);
   }
 
   update() {

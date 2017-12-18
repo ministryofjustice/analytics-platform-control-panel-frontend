@@ -31,7 +31,12 @@ exports.Model = Model;
 class ModelSet extends Array {
   constructor(ModelConstructor, data = []) {
     super(...data.map(obj => new ModelConstructor(obj)));
-    this.model = ModelConstructor;
+    Object.defineProperty(this, 'model', {
+      configurable: false,
+      enumerable: false,
+      writable: false,
+      value: ModelConstructor
+    });
   }
 }
 

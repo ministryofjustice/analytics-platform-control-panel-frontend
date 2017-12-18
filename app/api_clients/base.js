@@ -25,9 +25,14 @@ exports.APIError = APIError;
 class APIForbidden extends APIError {
   constructor(error) {
     super(error);
-    this.message = `${error.response.request.method} ${error.response.request.path} was not permitted: ${error.error.detail}`;
+    this.message = `${error.response.request.method} ${error.response.request.path} was not permitted`;
+    if (error.error && error.error.detail) {
+      this.message += `: ${error.error.detail}`;
+    }
   }
 }
+
+exports.APIForbidden = APIForbidden;
 
 
 class APIClient {
@@ -41,7 +46,13 @@ class APIClient {
     const { type } = options;
 
     if (!type || !this.supported_auth_types.includes(type)) {
-      throw new Error(`Invalid authentication type "${type}". Must be one of ${this.supported_auth_types.join(', ')}`);
+      if (this.supported_auth_types.length) {
+        const types = this.supported_auth_types.join(', ');
+        throw new Error(
+          `Invalid authentication type "${type}". Must be one of ${types}`
+        );
+      }
+      throw new Error('Authentication not supported');
     }
   }
 
@@ -92,10 +103,6 @@ class APIClient {
 
   patch(endpoint, body = '') {
     return this.request(endpoint, { method: 'PATCH', body});
-  }
-
-  put(endpoint, body = '') {
-    return this.request(endpoint, { method: 'PUT', body});
   }
 
   endpoint_url(endpoint) {

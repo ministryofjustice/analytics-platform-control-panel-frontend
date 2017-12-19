@@ -31,7 +31,7 @@
         <td><a target="_blank" href="{{ tool_url }}">{{ tool_name }}</a></td>
         <td>{% for pod in tool.pods %}{{ loop.index }}. {{ pod.display_status }}<br>{% endfor %}</td>
         <td class="align-right no-wrap">
-          <a class="button button-secondary" href="{{ url_for('tools.restart', {name: tool.metadata.name}) }}">Restart</a>
+          <a class="button button-secondary" href="{{ url_for('tools.restart', { params: { name: tool.metadata.name } }) }}">Restart</a>
         </td>
       </tr>
       {% endfor %}
@@ -40,7 +40,7 @@
 {% endif %}
 
 {%- if tools.length != 1 -%}
-  <form action="{{ url_for('tools.deploy', {name: 'rstudio'}) }}" method="post" class="inline-form clearfix">
+  <form action="{{ url_for('tools.deploy', { params: { name: 'rstudio' } }) }}" method="post" class="inline-form clearfix">
     <input type="submit" class="js-confirm button button-secondary right" value="Deploy RStudio" />
   </form>
 {%- endif -%}

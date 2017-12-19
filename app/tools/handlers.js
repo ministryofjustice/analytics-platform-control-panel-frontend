@@ -1,6 +1,5 @@
 const { Deployment, Tool, ToolDeployment } = require('../models');
 
-const { tools_domain } = require('../config').cluster;
 const { get_tool_url } = require('./helpers');
 
 
@@ -21,7 +20,7 @@ exports.restart = (req, res, next) => {
     })
     .then(() => {
       const { url_for } = require('../routes'); // eslint-disable-line global-require
-      res.redirect(url_for('tools.list'));
+      res.redirect(url_for('base.home', { fragment: 'Analytical tools' }));
     })
     .catch(next);
 };

@@ -8,7 +8,7 @@ exports.create = (req, res, next) => {
     .then(app => app.grant_user_access(user_id, 'readonly', true))
     .then(() => {
       const { url_for } = require('../routes'); // eslint-disable-line global-require
-      res.redirect(url_for('apps.details', { id: app_id }));
+      res.redirect(url_for('apps.details', { params: { id: app_id } }));
     })
     .catch(next);
 };

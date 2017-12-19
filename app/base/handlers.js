@@ -34,7 +34,7 @@ exports.auth_callback = [
 
         if (!user.email_verified) {
           const { url_for } = require('../routes');
-          res.redirect(url_for('users.verify_email', {id: user.auth0_id}));
+          res.redirect(url_for('users.verify_email', { params: { id: user.auth0_id } }));
         } else {
           res.redirect(req.session.returnTo || '/');
         }

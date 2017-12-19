@@ -5,16 +5,121 @@
 
 {% block main_column %}
 
+  <ul class="tabs">
+    {% if current_user.is_superuser %}
+      <li>Superuser</li>
+    {% endif %}
+    <li>Analytical tools</li>
+    <li>Data</li>
+    <li>Webapps</li>
+  </ul>
+
   {% if current_user.is_superuser %}
-    <h2 class="heading-medium">Superuser functions</h2>
-    <ul class="list list-bullet">
-      <li><a href="{{ url_for('users.list') }}">List all users</a></li>
-      <li><a href="{{ url_for('apps.list') }}">List all apps</a></li>
-      <li><a href="{{ url_for('buckets.list') }}">List all app data sources</a></li>
-    </ul>
+    <section class="tab-panel">
+      <h2 class="heading-medium">Superuser functions</h2>
+      <ul class="list list-bullet">
+        <li><a href="{{ url_for('users.list') }}">List all users</a></li>
+        <li><a href="{{ url_for('apps.list') }}">List all apps</a></li>
+        <li><a href="{{ url_for('buckets.list') }}">List all app data sources</a></li>
+      </ul>
+    </section>
   {% endif %}
 
-  {% include 'users/includes/tables.html' %}
+  <section class="tab-panel">
+    <h2 class="heading-medium">Your tools</h2>
+    <a href="{{ url_for('tools.list') }}" class="button button-secondary">View your tools</a>
+  </section>
+
+  <section class="tab-panel">
+    <div class="form-group">
+      <h2 class="heading-medium">{{ heading_prefix }} app data sources</h2>
+      {% if user.users3buckets.length %}
+        <table class="form-group">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>User has admin access</th>
+              <th>User has read/write access</th>
+              <td><span class="visuallyhidden">Actions</span></td>
+            </tr>
+          </thead>
+          {% for users3bucket in user.users3buckets %}
+            <tr>
+              <td><a href="{{ url_for('buckets.details', {id: users3bucket.id}) }}">{{ users3bucket.s3bucket.name }}</a></td>
+              <td>
+                {{ yes_no(users3bucket.is_admin) }}
+              </td>
+              <td>
+                {{ yes_no(users3bucket.access_level, 'readwrite') }}
+              </td>
+              <td class="align-right no-wrap">
+                {% if users3bucket.is_admin %}
+                  <a class="button button-secondary" href="{{ url_for('buckets.details', {id: users3bucket.id}) }}">Manage data source access</a>
+                  <form action="{{ url_for('buckets.delete', {id: users3bucket.id}) }}" method="post" class="inline-form">
+                    <input type="hidden" id="redirect" name="redirect" value="{{ url_for('base.home') }}">
+                    <input type="submit" class="button button-secondary right js-confirm" value="Delete app data source" data-confirm-message="Are you sure you want to delete this app data source?">
+                  </form>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </table>
+      {% else %}
+        <p>None</p>
+      {% endif %}
+
+      {% if signedInUser %}
+        <p><a class="button button-secondary" href="/buckets/new">Create new app data source</a></p>
+      {% endif %}
+    </div>
+  </section>
+
+  <section class="tab-panel">
+    <div class="form-group">
+      <h2 class="heading-medium">{{ heading_prefix }} apps</h2>
+      {% if user.userapps.length %}
+        <table class="form-group">
+          <thead>
+            <tr>
+              <th>App name</th>
+              <th>User has admin access</th>
+              {% if signedInUser %}
+                <th><span class="visuallyhidden">Actions</span></th>
+              {% endif %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for userapp in user.userapps %}
+              <tr>
+                <td>
+                  <a href="{{ url_for('apps.details', {id: userapp.app.id}) }}">{{ userapp.app.name }}</a>
+                </td>
+                <td>
+                  {{ yes_no(userapp.is_admin) }}
+                </td>
+                {% if signedInUser %}
+                  <td class="align-right">
+                    {% if userapp.is_admin %}
+                      <a class="button button-secondary" href="{{ url_for('apps.details', {id: userapp.app.id}) }}">Manage app</a>
+                      <form action="{{ url_for('apps.delete', {id: userapp.app.id}) }}" method="post" class="inline-form">
+                        <input type="submit" class="button button-secondary right js-confirm" value="Delete app" data-confirm-message="Are you sure you want to delete this app?">
+                      </form>
+                    {% endif %}
+                  </td>
+                {% endif %}
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p>None</p>
+      {% endif %}
+
+      {% if signedInUser %}
+        <p><a class="button button-secondary" href="/apps/new">Create new app</a></p>
+      {% endif %}
+    </div>
+  </section>
 
   {% if current_user.is_superuser %}
     <details class="debug">
@@ -27,3 +132,4 @@
   {% endif %}
 
 {% endblock %}
+

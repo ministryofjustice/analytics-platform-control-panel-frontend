@@ -5,10 +5,7 @@ const github = require('../api_clients/github');
 
 
 exports.new = (req, res, next) => {
-  github.get_access_token(req.user)
-    .then((token) => {
-      github.api.authenticate({ type: 'token', token });
-    })
+  github.api.authenticate(req.user)
     .then(() => {
       return Promise.all([Repo.list(), Bucket.list()]);
     })

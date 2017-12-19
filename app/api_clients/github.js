@@ -3,26 +3,40 @@ const GithubAPI = require('github');
 const { ManagementClient } = require('auth0');
 
 
-function get_access_token(user) {
-  if (!user.github_access_token) {
-    const management = new ManagementClient({
-      domain: config.auth0.domain,
-      clientId: config.auth0.clientId,
-      clientSecret: config.auth0.clientSecret,
-    });
+class GithubAPIClient extends GithubAPI {
+  constructor(config) {
+    super(config.github);
+    this.auth0_config = config.auth0;
+  }
 
-    return management.getUser({ id: user.auth0_id })
-      .then((profile) => {
-        user.github_access_token = profile.identities[0].access_token;
-        return user.github_access_token;
+  authenticate(user) {
+    return this.get_access_token(user)
+      .then((token) => {
+        super.authenticate({ type: 'token', token });
       });
   }
 
-  return Promise.resolve(user.github_access_token);
+  get_access_token(user) {
+    if (!user.github_access_token) {
+      const management = new ManagementClient({
+        domain: this.auth0_config.domain,
+        clientId: this.auth0_config.clientId,
+        clientSecret: this.auth0_config.clientSecret,
+      });
+
+      return management.getUser({ id: user.auth0_id })
+        .then((profile) => {
+          user.github_access_token = profile.identities[0].access_token;
+          return user.github_access_token;
+        });
+    }
+
+    return Promise.resolve(user.github_access_token);
+  }
 }
 
-exports.get_access_token = get_access_token;
+exports.GithubAPIClient = GithubAPIClient;
 
-const api = new GithubAPI(config.github);
+const api = new GithubAPIClient(config);
 
 exports.api = api;

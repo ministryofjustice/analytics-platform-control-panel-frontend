@@ -1,5 +1,5 @@
 const { assert } = require('chai');
-const { api, get_access_token } = require('../../app/api_clients/github');
+const { GithubAPIClient } = require('../../app/api_clients/github');
 const { config } = require('../conftest');
 const nock = require('nock');
 const { User } = require('../../app/models');
@@ -21,6 +21,8 @@ describe('Github API client', () => {
       host: 'api.github.com',
     };
 
+    const api = new GithubAPIClient(config);
+
     const client_credentials_grant = nock(`https://${config.auth0.domain}`)
       .post(`/oauth/token`)
       .reply(200, {
@@ -39,7 +41,7 @@ describe('Github API client', () => {
 
     const test_user = new User({ auth0_id });
 
-    return get_access_token(test_user)
+    return api.authenticate(test_user)
       .then(() => {
         assert(get_auth0_user.isDone());
         return api.repos.getAll({});

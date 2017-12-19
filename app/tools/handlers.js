@@ -1,13 +1,10 @@
 const { Deployment, Tool, ToolDeployment } = require('../models');
 
 const { tools_domain } = require('../config').cluster;
+const { get_tool_url } = require('./helpers');
 
 
 exports.list = (req, res, next) => {
-  const get_tool_url = (tool_name) => {
-    return `https://${req.user.username}-${tool_name}.${tools_domain}`;
-  };
-
   Tool.list()
     .then((tools) => {
       res.render('tools/list.html', { tools, get_tool_url });

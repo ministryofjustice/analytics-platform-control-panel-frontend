@@ -22,7 +22,7 @@
       {% for tool in tools %}
 
       {%- set tool_name = tool.metadata.labels.app -%}
-      {%- set tool_url = get_tool_url(tool_name) -%}
+      {%- set tool_url = get_tool_url(tool_name, current_user.username) -%}
 
       <tr>
         {% if current_user.is_superuser %}

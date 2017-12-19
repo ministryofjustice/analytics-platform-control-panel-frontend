@@ -1,13 +1,19 @@
-const { api } = require('../api-client');
-const k8s = require('../k8s-api-client');
-const { User } = require('../models');
-const config = require('../config');
 const passport = require('passport');
 const raven = require('raven');
 
+const { api } = require('../api-client');
+const k8s = require('../k8s-api-client');
+const { Tool, User } = require('../models');
+const config = require('../config');
+const { get_tool_url } = require('../tools/helpers');
+
 
 exports.home = (req, res, next) => {
-  res.render('base/home.html');
+  Tool.list()
+    .then((tools) => {
+      res.render('base/home.html', { tools, get_tool_url });
+    })
+    .catch(next);
 };
 
 

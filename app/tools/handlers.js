@@ -1,15 +1,5 @@
 const { Deployment, Tool, ToolDeployment } = require('../models');
-
 const { get_tool_url } = require('./helpers');
-
-
-exports.list = (req, res, next) => {
-  Tool.list()
-    .then((tools) => {
-      res.render('tools/list.html', { tools, get_tool_url });
-    })
-    .catch(next);
-};
 
 
 exports.restart = (req, res, next) => {
@@ -33,6 +23,6 @@ exports.deploy = (req, res, next) => {
 
   req.session.flash_messages.push(`Deploying '${req.params.name}'...this may take up to 5 minutes`);
   setTimeout(() => {
-    res.redirect(url_for('tools.list'));
+    res.redirect(url_for('base.home', { fragment: 'Analytical tools' }));
   }, 2000);
 };

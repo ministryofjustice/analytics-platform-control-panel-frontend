@@ -27,7 +27,8 @@
 
   <section class="tab-panel">
     <h2 class="heading-medium">Your tools</h2>
-    <a href="{{ url_for('tools.list') }}" class="button button-secondary">View your tools</a>
+
+    {% include 'tools/includes/list.html' %}
   </section>
 
   <section class="tab-panel">

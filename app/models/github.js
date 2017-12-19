@@ -1,14 +1,33 @@
 const config = require('../config');
 const { Model, ModelSet } = require('./base');
-const { api } = require('../api_clients/github');
+const github = require('../api_clients/github');
 
 
 class Repo extends Model {
   static list(params = {}) {
-    return api.repos.getAll(params)
-      .then((result) => {
-        return new ModelSet(this.prototype.constructor, result.data);
+    return Promise.all(
+      config.github.orgs.map((org) => {
+        return github.api.repos.getForOrg({
+          org,
+          type: 'all',
+          page: params.page || 1,
+          per_page: params.per_page || 500
+        });
+      }))
+      .then((results) => {
+        return new ModelSet(
+          this.prototype.constructor,
+          [].concat(...results.map(result => result.data))
+        );
       });
+  }
+
+  get org() {
+    const name = this.data.full_name;
+    const delimiter_pos = name.indexOf('/');
+    if (delimiter_pos > 0) {
+      return name.slice(0, delimiter_pos);
+    }
   }
 }
 

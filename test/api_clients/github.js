@@ -14,7 +14,7 @@ describe('Github API client', () => {
 
     config.auth0 = {
       domain: 'test.eu.auth0.com',
-      clientId: 'dummy-client-id',
+      clientID: 'dummy-client-id',
       clientSecret: 'dummy-client-secret',
     };
     config.github = {

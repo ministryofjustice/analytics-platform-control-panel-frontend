@@ -28,9 +28,10 @@
         {% if current_user.is_superuser %}
         <td>{{ tool.metadata.namespace }}</td>
         {% endif %}
-        <td><a target="_blank" href="{{ tool_url }}">{{ tool_name }}</a></td>
+        <td>{{ tool_name }}</td>
         <td>{% for pod in tool.pods %}{{ loop.index }}. {{ pod.display_status }}<br>{% endfor %}</td>
         <td class="align-right no-wrap">
+          <a class="button button-secondary" target="_blank" href="{{ tool_url }}">Open</a>
           <a class="button button-secondary" href="{{ url_for('tools.restart', { params: { name: tool.metadata.name } }) }}">Restart</a>
         </td>
       </tr>

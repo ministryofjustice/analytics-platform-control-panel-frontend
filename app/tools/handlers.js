@@ -1,4 +1,4 @@
-const { Deployment, Pod, ToolDeployment } = require('../models');
+const { Deployment, Tool, ToolDeployment } = require('../models');
 
 const { tools_domain } = require('../config').cluster;
 
@@ -8,24 +8,7 @@ exports.list = (req, res, next) => {
     return `https://${req.user.username}-${tool_name}.${tools_domain}`;
   };
 
-  Promise.all([Deployment.list(), Pod.list()])
-    .then(([tools, pods]) => {
-      let tools_lookup = {};
-
-      tools.forEach((tool) => {
-        tools_lookup[tool.metadata.labels.app] = tool;
-        tool.pods = [];
-      });
-
-      pods.forEach((pod) => {
-        const tool = tools_lookup[pod.metadata.labels.app];
-        if (tool) {
-          tool.pods.push(pod);
-        }
-      });
-
-      return tools;
-    })
+  Tool.list()
     .then((tools) => {
       res.render('tools/list.html', { tools, get_tool_url });
     })

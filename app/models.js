@@ -213,6 +213,31 @@ class Pod extends K8sModel {
 
 exports.Pod = Pod;
 
+class Tool {
+  static list() {
+    return Promise
+      .all([Deployment.list(), Pod.list()])
+      .then(([tools, pods]) => {
+        const tools_lookup = {};
+
+        tools.forEach((tool) => {
+          tools_lookup[tool.metadata.labels.app] = tool;
+          tool.pods = [];
+        });
+
+        pods.forEach((pod) => {
+          const tool = tools_lookup[pod.metadata.labels.app];
+          if (tool) {
+            tool.pods.push(pod);
+          }
+        });
+
+        return tools;
+      });
+  }
+}
+
+exports.Tool = Tool;
 
 class ToolDeployment {
   constructor(data) {

@@ -4,9 +4,11 @@ const glob = Bluebird.promisify(require('glob').glob);
 const render = Bluebird.promisify(require('node-sass').render);
 const concatfiles = require('concat-files');
 const path = require('path');
+const babel = require('babel-core');
 
 const config = require('./config');
 const log = require('bole')('assets');
+
 
 
 exports.compile_sass = () => {
@@ -39,7 +41,28 @@ function concat_js(files) {
   log.info(
     `compiling ${relative(config.js.sourceFiles)} -> ${relative(outFile)}`);
 
-  concatfiles(files, outFile);
+  concatfiles(files, outFile, function(err) {
+    if(err) {
+      throw err;
+    }
+
+    transpile_js();
+  });
+}
+
+
+function transpile_js() {
+  let inFile = path.join(config.js.outDir, config.js.filename);
+  let outFile = path.join(config.js.outDir, 'transpiled_' + config.js.filename);
+
+  log.info(
+    `transpiling ${relative(inFile)} -> ${relative(outFile)}`);
+
+  babel.transformFile(inFile, { "presets": ["es2015"] }, function(err, result) {
+    if(err) { console.error(err); process.exit(1); }
+
+    fs.writeFile(outFile, result.code);
+  });
 }
 
 

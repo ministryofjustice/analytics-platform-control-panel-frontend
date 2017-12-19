@@ -1,17 +1,15 @@
-'use strict';
-
 moj.Modules.flashMessage = {
   messageClass: 'flash-message',
 
-  init: function() {
-    this.bindEvents()
+  init() {
+    this.bindEvents();
   },
 
-  bindEvents: function() {
-    var self = this;
+  bindEvents() {
+    const self = this;
 
-    $(document).on('click', '.' + self.messageClass, function(e) {
+    $(document).on('click', `.${self.messageClass}`, (e) => {
       $(e.target).fadeOut();
     });
-  }
+  },
 };

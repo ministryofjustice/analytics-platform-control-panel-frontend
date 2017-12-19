@@ -1,35 +1,32 @@
-'use strict';
-
 moj.Modules.auth0lock = {
   containerId: 'js-login-container',
 
-  init: function() {
-    var self = this;
+  init() {
+    const self = this;
 
-    if($('#' + self.containerId).length) {
+    if ($(`#${self.containerId}`).length) {
       self.showLock();
     }
   },
 
-  showLock: function() {
-    var self = this,
-        $el = $('#' + self.containerId),
-        clientId = $el.data('auth0-clientid'),
-        domain = $el.data('auth0-domain'),
-        callbackurl = $el.data('auth0-callbackurl'),
-        lock;
+  showLock() {
+    const self = this;
+    const $el = $(`#${self.containerId}`);
+    const clientId = $el.data('auth0-clientid');
+    const domain = $el.data('auth0-domain');
+    const callbackurl = $el.data('auth0-callbackurl');
+    const lock = new Auth0Lock(clientId, domain);
 
-    lock = new Auth0Lock(clientId, domain);
     lock.show({
       callbackURL: callbackurl,
-      responseType: "code",
+      responseType: 'code',
       authParams: {
         connection_scopes: {
-          'github': ['read:org', 'read:user', 'repo'],
+          github: ['read:org', 'read:user', 'repo'],
         },
-        scope: "openid profile offline_access"
+        scope: 'openid profile offline_access',
       },
-      container: self.containerId
+      container: self.containerId,
     });
-  }
+  },
 };

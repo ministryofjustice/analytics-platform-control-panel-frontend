@@ -1,16 +1,14 @@
-'use strict';
-
 moj.Modules.tabs = {
   listSelector: 'ul.tabs',
   panelSelector: 'section.tab-panel',
   activeClass: 'active',
 
-  init: function() {
-    var self = this;
+  init() {
+    const self = this;
 
     self.$list = $(self.listSelector);
 
-    if(self.$list.length) {
+    if (self.$list.length) {
       self.$tabs = self.$list.find('li');
       self.$panels = $(self.panelSelector);
 
@@ -20,22 +18,22 @@ moj.Modules.tabs = {
     }
   },
 
-  bindEvents: function() {
-    var self = this;
+  bindEvents() {
+    const self = this;
 
-    self.$list.on('click', function(e) {
+    self.$list.on('click', (e) => {
       self.selectTab($(e.target));
     });
   },
 
-  showInitialTab: function() {
-    var self = this;
-    var docHash = document.location.hash;
-    var tabIndex = 0;
+  showInitialTab() {
+    const self = this;
+    const docHash = document.location.hash;
+    let tabIndex = 0;
 
-    if(docHash.length) {
-      var checkSlug = docHash.slice(1);
-      var slugIndex = self.slugs.indexOf(checkSlug);
+    if (docHash.length) {
+      const checkSlug = docHash.slice(1);
+      const slugIndex = self.slugs.indexOf(checkSlug);
 
       if (slugIndex > 0) {
         tabIndex = slugIndex;
@@ -45,26 +43,26 @@ moj.Modules.tabs = {
     self.showTab(tabIndex);
   },
 
-  storeSlugs: function() {
-    var self = this;
+  storeSlugs() {
+    const self = this;
 
     self.slugs = [];
-    self.$tabs.each(function(x, tab) {
-      var tabSlug = encodeURIComponent($(tab).text());
+    self.$tabs.each((x, tab) => {
+      const tabSlug = encodeURIComponent($(tab).text());
 
       self.slugs.push(tabSlug);
     });
   },
 
-  selectTab: function($tab) {
-    var self = this;
-    var index = self.$tabs.index($tab);
+  selectTab($tab) {
+    const self = this;
+    const index = self.$tabs.index($tab);
 
     self.showTab(index);
   },
 
-  showTab: function(index) {
-    var self = this;
+  showTab(index) {
+    const self = this;
 
     self.$tabs.removeClass(self.activeClass);
     self.$panels.removeClass(self.activeClass);
@@ -72,5 +70,5 @@ moj.Modules.tabs = {
     self.$panels.eq(index).addClass(self.activeClass);
 
     document.location.hash = self.slugs[index];
-  }
+  },
 };

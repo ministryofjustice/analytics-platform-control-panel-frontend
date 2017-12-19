@@ -20,7 +20,7 @@ class GithubAPIClient extends GithubAPI {
     if (!user.github_access_token) {
       const management = new ManagementClient({
         domain: this.auth0_config.domain,
-        clientId: this.auth0_config.clientId,
+        clientId: this.auth0_config.clientID,
         clientSecret: this.auth0_config.clientSecret,
       });
 

@@ -7,14 +7,7 @@ const raven = require('raven');
 
 
 exports.home = (req, res, next) => {
-  User.get(req.user.auth0_id)
-    .then((user) => {
-      res.render('base/home.html', {
-        signedInUser: true,
-        user,
-      });
-    })
-    .catch(next);
+  res.render('base/home.html');
 };
 
 

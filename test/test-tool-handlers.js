@@ -108,7 +108,7 @@ describe('tools handler', () => {
 
       return request
         .then((redirect_url) => {
-          const expected_redirect_url = url_for('tools.list');
+          const expected_redirect_url = url_for('base.home', { fragment: 'Analytical tools' });
 
           assert.equal(redirect_url, expected_redirect_url);
           assert(post_deployment.isDone());

@@ -87,8 +87,9 @@ config.middleware = [
   'errors',
 ];
 
-config.repos = {
-  host: 'https://github.com',
+config.github = {
+  host: 'api.github.com',
+  web_host: 'https://github.com',
   orgs: [
     'moj-analytical-services',
     'ministryofjustice',

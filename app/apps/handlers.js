@@ -1,12 +1,19 @@
 const { App, Bucket, User } = require('../models');
-const { repos } = require('../config');
+const { Repo } = require('../models/github');
+const config = require('../config');
+const github = require('../api_clients/github');
+
 
 exports.new = (req, res, next) => {
-  Bucket.list()
-    .then((buckets) => {
+  github.api.authenticate(req.user)
+    .then(() => {
+      return Promise.all([Repo.list(), Bucket.list()]);
+    })
+    .then(([repos, buckets]) => {
       res.render('apps/new.html', {
-        repo_prefix: repos.host,
-        orgs: repos.orgs,
+        repo_prefix: config.github.web_host,
+        orgs: config.github.orgs,
+        repos,
         bucket_prefix: `${process.env.ENV}-`,
         buckets,
       });

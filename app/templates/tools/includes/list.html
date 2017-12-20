@@ -38,7 +38,7 @@
 
 {%- if tools.length != 1 -%}
   <form action="{{ url_for('tools.deploy', { params: { name: 'rstudio' } }) }}" method="post" class="inline-form clearfix">
-    <input type="submit" class="js-confirm button button-secondary right" value="Deploy RStudio" />
+    <input type="submit" class="button button-secondary right" value="Deploy RStudio" />
   </form>
 {%- endif -%}
 

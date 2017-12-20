@@ -1,5 +1,4 @@
-const { Deployment, Tool, ToolDeployment } = require('../models');
-const { get_tool_url } = require('./helpers');
+const { Deployment, ToolDeployment } = require('../models');
 
 
 exports.restart = (req, res, next) => {

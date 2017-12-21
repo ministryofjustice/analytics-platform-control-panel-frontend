@@ -41,6 +41,7 @@ services:
       - DEBUG=True
       - DJANGO_SETTINGS_MODULE=control_panel_api.settings
       - KUBECONFIG=/home/control-panel/.kube/config
+      - PYTHONUNBUFFERED=1
     volumes:
       - $HOME/.kube:/home/control-panel/.kube
   db:

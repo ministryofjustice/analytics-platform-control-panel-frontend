@@ -33,23 +33,25 @@ function add_route(route, router) {
   router[route.method](route.pattern, route.handler);
 }
 
-
-exports.url_for = function (route_name, args = {}) {
-
-  let route = routes[route_name];
+exports.url_for = function (route_name, {params = {}, fragment} = {}) {
+  const route = routes[route_name];
 
   if (!route) {
     throw new Error(`route ${route_name} not found`);
   }
 
   try {
-    return replace_route_params(route.pattern, args) + query_string(args);
+    let url = replace_route_params(route.pattern, params) + query_string(params);
 
+    if (fragment) {
+      url += '#' + encodeURIComponent(fragment);
+    }
+
+    return url;
   } catch (error) {
     throw new Error(`url_for("${route_name}") failed: ${error}`);
   }
 };
-
 
 function replace_route_params(pattern, param_values) {
 

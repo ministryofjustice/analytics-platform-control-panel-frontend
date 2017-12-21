@@ -53,7 +53,7 @@ exports.create = (req, res, next) => {
         })
         .then(() => {
           const { url_for } = require('../routes'); // eslint-disable-line global-require
-          res.redirect(url_for('apps.details', { id: created_app.id }));
+          res.redirect(url_for('apps.details', { params: { id: created_app.id } }));
         });
     })
     .catch((err) => {

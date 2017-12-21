@@ -1,18 +1,17 @@
-const { api } = require('../api-client');
-const k8s = require('../k8s-api-client');
-const { User } = require('../models');
-const config = require('../config');
 const passport = require('passport');
 const raven = require('raven');
 
+const { api } = require('../api-client');
+const k8s = require('../k8s-api-client');
+const { Tool, User } = require('../models');
+const config = require('../config');
+const { get_tool_url } = require('../tools/helpers');
+
 
 exports.home = (req, res, next) => {
-  User.get(req.user.auth0_id)
-    .then((user) => {
-      res.render('base/home.html', {
-        signedInUser: true,
-        user,
-      });
+  Tool.list()
+    .then((tools) => {
+      res.render('base/home.html', { tools, get_tool_url });
     })
     .catch(next);
 };
@@ -41,7 +40,7 @@ exports.auth_callback = [
 
         if (!user.email_verified) {
           const { url_for } = require('../routes');
-          res.redirect(url_for('users.verify_email', {id: user.auth0_id}));
+          res.redirect(url_for('users.verify_email', { params: { id: user.auth0_id } }));
         } else {
           res.redirect(req.session.returnTo || '/');
         }

@@ -32,13 +32,13 @@
       {% for userapp in app.userapps %}
         <tr>
           <td>
-            <a class="{% if current_user.auth0_id == userapp.user.auth0_id %}highlight-current{% endif %}" href="{{ url_for('users.details', {id: userapp.user.auth0_id}) }}">{{ userapp.user.name }}</a>
+            <a class="{% if current_user.auth0_id == userapp.user.auth0_id %}highlight-current{% endif %}" href="{{ url_for('users.details', { params: { id: userapp.user.auth0_id } }) }}">{{ userapp.user.name }}</a>
           </td>
           <td class="align-right">
             {% if current_user_is_app_admin %}
               <!-- Button to revoke user admin access -->
-              <form action="{{ url_for('userapps.delete', {id: userapp.id}) }}" method="post" class="inline-form clearfix">
-                <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', {id: app.id}) }}">
+              <form action="{{ url_for('userapps.delete', { params: { id: userapp.id } }) }}" method="post" class="inline-form clearfix">
+                <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', { params: { id: app.id } }) }}">
 
                 <input type="submit" class="js-confirm button button-secondary right" value="Revoke admin" />
               </form>
@@ -93,23 +93,23 @@
     <tbody>
       {% for apps3bucket in app.apps3buckets %}
         <tr>
-          <td><a href="{{ url_for('buckets.details', {id: apps3bucket.s3bucket.id}) }}">{{ apps3bucket.s3bucket.name }}</a></td>
+          <td><a href="{{ url_for('buckets.details', { params: { id: apps3bucket.s3bucket.id } }) }}">{{ apps3bucket.s3bucket.name }}</a></td>
           <td>{{ yes_no(apps3bucket.access_level, 'readwrite') }}</td>
           <td class="align-right">
             {% if current_user_is_app_admin %}
               <!-- Button to change access level -->
-              <form action="{{ url_for('apps3buckets.update', {id: apps3bucket.id}) }}" method="post" class="inline-form clearfix">
+              <form action="{{ url_for('apps3buckets.update', { params: { id: apps3bucket.id } }) }}" method="post" class="inline-form clearfix">
                 <input type="hidden" name="access_level" value="{{ yes_no(apps3bucket.access_level, 'readwrite', 'readonly', 'readwrite') }}">
 
-                <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', {id: app.id}) }}">
+                <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', { params: { id: app.id } }) }}">
 
                 <input type="submit" class="js-confirm button button-secondary right" value="{{
   yes_no(apps3bucket.access_level, 'readwrite', 'Revoke', 'Grant') }} read/write access" />
               </form>
 
               <!-- Button to revoke access -->
-              <form action="{{ url_for('apps3buckets.delete', {id: apps3bucket.id}) }}" method="post" class="inline-form clearfix">
-                <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', {id: app.id}) }}">
+              <form action="{{ url_for('apps3buckets.delete', { params: { id: apps3bucket.id } }) }}" method="post" class="inline-form clearfix">
+                <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', { params: { id: app.id } }) }}">
 
                 <input type="submit" class="js-confirm button button-secondary right" value="Disconnect data source" />
               </form>
@@ -146,7 +146,7 @@
 
 {% if current_user_is_app_admin %}
 <hr>
-<form action="{{ url_for('apps.delete', {id: app.id}) }}" method="post" class="clearfix">
+<form action="{{ url_for('apps.delete', { params: { id: app.id } }) }}" method="post" class="clearfix">
   <input type="submit" class="button button-warning right js-confirm" value="Delete app" data-confirm-message="Are you sure you want to delete this app?">
 </form>
 {% endif %}

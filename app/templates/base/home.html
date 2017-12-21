@@ -27,13 +27,14 @@
 
   <section class="tab-panel">
     <h2 class="heading-medium">Your tools</h2>
-    <a href="{{ url_for('tools.list') }}" class="button button-secondary">View your tools</a>
+
+    {% include 'tools/includes/list.html' %}
   </section>
 
   <section class="tab-panel">
     <div class="form-group">
       <h2 class="heading-medium">{{ heading_prefix }} app data sources</h2>
-      {% if user.users3buckets.length %}
+      {% if current_user.users3buckets.length %}
         <table class="form-group">
           <thead>
             <tr>
@@ -43,9 +44,9 @@
               <td><span class="visuallyhidden">Actions</span></td>
             </tr>
           </thead>
-          {% for users3bucket in user.users3buckets %}
+          {% for users3bucket in current_user.users3buckets %}
             <tr>
-              <td><a href="{{ url_for('buckets.details', {id: users3bucket.id}) }}">{{ users3bucket.s3bucket.name }}</a></td>
+              <td><a href="{{ url_for('buckets.details', { params: { id: users3bucket.id } }) }}">{{ users3bucket.s3bucket.name }}</a></td>
               <td>
                 {{ yes_no(users3bucket.is_admin) }}
               </td>
@@ -54,8 +55,8 @@
               </td>
               <td class="align-right no-wrap">
                 {% if users3bucket.is_admin %}
-                  <a class="button button-secondary" href="{{ url_for('buckets.details', {id: users3bucket.id}) }}">Manage data source access</a>
-                  <form action="{{ url_for('buckets.delete', {id: users3bucket.id}) }}" method="post" class="inline-form">
+                  <a class="button button-secondary" href="{{ url_for('buckets.details', { params: { id: users3bucket.id } }) }}">Manage data source access</a>
+                  <form action="{{ url_for('buckets.delete', { params: { id: users3bucket.id } }) }}" method="post" class="inline-form">
                     <input type="hidden" id="redirect" name="redirect" value="{{ url_for('base.home') }}">
                     <input type="submit" class="button button-secondary right js-confirm" value="Delete app data source" data-confirm-message="Are you sure you want to delete this app data source?">
                   </form>
@@ -68,45 +69,39 @@
         <p>None</p>
       {% endif %}
 
-      {% if signedInUser %}
-        <p><a class="button button-secondary" href="/buckets/new">Create new app data source</a></p>
-      {% endif %}
+      <p><a class="button button-secondary" href="/buckets/new">Create new app data source</a></p>
     </div>
   </section>
 
   <section class="tab-panel">
     <div class="form-group">
       <h2 class="heading-medium">{{ heading_prefix }} apps</h2>
-      {% if user.userapps.length %}
+      {% if current_user.userapps.length %}
         <table class="form-group">
           <thead>
             <tr>
               <th>App name</th>
               <th>User has admin access</th>
-              {% if signedInUser %}
-                <th><span class="visuallyhidden">Actions</span></th>
-              {% endif %}
+              <th><span class="visuallyhidden">Actions</span></th>
             </tr>
           </thead>
           <tbody>
-            {% for userapp in user.userapps %}
+            {% for userapp in current_user.userapps %}
               <tr>
                 <td>
-                  <a href="{{ url_for('apps.details', {id: userapp.app.id}) }}">{{ userapp.app.name }}</a>
+                  <a href="{{ url_for('apps.details', { params: { id: userapp.app.id } }) }}">{{ userapp.app.name }}</a>
                 </td>
                 <td>
                   {{ yes_no(userapp.is_admin) }}
                 </td>
-                {% if signedInUser %}
-                  <td class="align-right">
-                    {% if userapp.is_admin %}
-                      <a class="button button-secondary" href="{{ url_for('apps.details', {id: userapp.app.id}) }}">Manage app</a>
-                      <form action="{{ url_for('apps.delete', {id: userapp.app.id}) }}" method="post" class="inline-form">
-                        <input type="submit" class="button button-secondary right js-confirm" value="Delete app" data-confirm-message="Are you sure you want to delete this app?">
-                      </form>
-                    {% endif %}
-                  </td>
-                {% endif %}
+                <td class="align-right">
+                  {% if userapp.is_admin %}
+                    <a class="button button-secondary" href="{{ url_for('apps.details', { params: { id: userapp.app.id } }) }}">Manage app</a>
+                    <form action="{{ url_for('apps.delete', { params: { id: userapp.app.id } }) }}" method="post" class="inline-form">
+                      <input type="submit" class="button button-secondary right js-confirm" value="Delete app" data-confirm-message="Are you sure you want to delete this app?">
+                    </form>
+                  {% endif %}
+                </td>
               </tr>
             {% endfor %}
           </tbody>
@@ -115,9 +110,7 @@
         <p>None</p>
       {% endif %}
 
-      {% if signedInUser %}
-        <p><a class="button button-secondary" href="/apps/new">Create new app</a></p>
-      {% endif %}
+      <p><a class="button button-secondary" href="/apps/new">Create new app</a></p>
     </div>
   </section>
 

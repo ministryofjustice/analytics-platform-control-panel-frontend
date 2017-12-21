@@ -42,7 +42,7 @@ describe('Edit bucket form', () => {
         .then((redirect_url) => {
           assert(post_users3buckets.isDone(), 'Did not make POST request to API endpoint /users3buckets/ as expected');
 
-          const expected_redirect_url = url_for('buckets.details', {id: bucket_id});
+          const expected_redirect_url = url_for('buckets.details', { params: { id: bucket_id } });
           assert.equal(redirect_url, expected_redirect_url);
         });
     });

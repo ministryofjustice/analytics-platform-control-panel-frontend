@@ -4,96 +4,76 @@ moj.Modules.repoDescription = {
   repoPrefix: 'https://github.com',
   apiUrlPrefix: 'https://api.github.com/repos',
   orgSelectName: 'repo_org',
-  repoSlugInputName: 'name',
+  repoSlugSelectName: 'name',
   repoUrlHiddenInputName: 'repo_url',
   descriptionInputName: 'description',
 
-  messages: {
-    checking: 'Looking up repo...',
-    not_found: 'Repo not found',
-    found: 'Repo found'
-  },
-
   init: function() {
     var self = this;
-    self.$repoSlugInput = $('#' + self.repoSlugInputName);
+    self.$repoSlugSelect = $('#' + self.repoSlugSelectName);
     self.$orgSelect = $('#' + self.orgSelectName);
     self.$repoUrlHiddenInput = $('#' + self.repoUrlHiddenInputName);
 
-    if (self.$repoSlugInput.length) {
+    if (self.$repoSlugSelect.length) {
       self.bindEvents();
+      self.showOrgRepos();
     }
   },
 
   bindEvents: function() {
-    var self = this,
-      check = function() {
-        if(self.$repoSlugInput.val()) {
-          self.getRepoDescription();
-        } else {
-          $('#repo-check, #repo-checking, #repo-results').addClass('js-hidden');
-        }
-      };
+    var self = this;
 
-    self.$repoSlugInput.on('blur', check);
-    self.$orgSelect.on('change', check);
-  },
-
-  getRepoDescription: function() {
-    var self = this,
-      repoUrl = self.concatUrl(self.repoPrefix),
-      apiUrl = self.concatUrl(self.apiUrlPrefix);
-
-    $('#repo-check, #repo-checking, .spinner').removeClass('js-hidden');
-    $('#repo-checking p').removeClass('success error').text(self.messages.checking);
-    $('#repo-results').addClass('js-hidden');
-
-    $.ajax({
-      method: 'GET',
-      dataType: 'jsonp',
-      callback: 'callback',
-      url: apiUrl,
-      success: function(response, textStatus, jqxhr) {
-        self.updateDescription(response.data);
-        self.$repoUrlHiddenInput.val(repoUrl);
-      },
-      error: function(jqxhr, textStatus, errorThrown) {
-        console.log(textStatus);
-        console.log(jqxhr);
-
-        self.$repoUrlHiddenInput.val('');
+    self.$repoSlugSelect.on('change', function() {
+      if(self.$repoSlugSelect.val()) {
+        self.getRepoDescription();
+      } else {
+        self.updateDescription('');
+        $('#repo-results').addClass('js-hidden');
       }
+    });
+    self.$orgSelect.on('change', function() {
+      self.showOrgRepos();
     });
   },
 
+  showOrgRepos: function() {
+    var self = this;
+    var currentOrg = self.$orgSelect.val();
+
+    $('optgroup.org-repos').hide();
+    $('optgroup[label="' + currentOrg + '"]').show();
+    self.$repoSlugSelect.find('option').eq(0).prop('selected', true);
+    self.updateDescription('');
+    $('#repo-results').addClass('js-hidden');
+  },
+
+  getRepoDescription: function() {
+    var self = this;
+    var repoUrl = self.concatUrl(self.repoPrefix);
+    var description = self.$repoSlugSelect.find('option:selected').data('description');
+
+    self.updateDescription(description);
+    self.$repoUrlHiddenInput.val(repoUrl);
+    $('#repo-results').removeClass('js-hidden');
+  },
+
   concatUrl: function(prefix) {
-    var self = this,
-      org = self.$orgSelect.val(),
-      slug = self.$repoSlugInput.val();
+    var self = this;
+    var org = self.$orgSelect.val();
+    var slug = self.$repoSlugSelect.val();
 
     return [prefix, org, slug].join('/');
   },
 
-  updateDescription: function(data) {
-    var self = this,
-      description = data.description || '';
+  updateDescription: function(description) {
+    var self = this;
 
-    $('#repo-check, #repo-results').removeClass('js-hidden');
-    $('#repo-checking .spinner').addClass('js-hidden');
-
-    if(data.id) {
+    if(description) {
       $('#' + self.descriptionInputName).val(description);
-      if(description) {
-        $('#repo-' + self.descriptionInputName).text(description);
-      } else {
-        $('#repo-' + self.descriptionInputName).text('None provided');
-      }
-      $('#repo-checking p').removeClass('error').addClass('success').text(self.messages.found);
-      $('#repo-results').removeClass('js-hidden');
+      $('#repo-' + self.descriptionInputName).text(description);
     } else {
-      $('#repo-checking p').removeClass('success').addClass('error').text(self.messages.not_found);
-      $('#repo-results').addClass('js-hidden');
+      $('#repo-' + self.descriptionInputName).text('None provided');
+      $('#' + self.descriptionInputName).val('');
     }
-
   }
 };

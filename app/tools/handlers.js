@@ -20,8 +20,8 @@ exports.deploy = (req, res, next) => {
 
   new ToolDeployment({ tool_name: req.params.name }).create();
 
+  req.session.rstudio_is_deploying = true;
   req.session.flash_messages.push(`Deploying '${req.params.name}'...this may take up to 5 minutes`);
-  setTimeout(() => {
-    res.redirect(url_for('base.home', { fragment: 'Analytical tools' }));
-  }, 2000);
+
+  res.redirect(url_for('base.home', { fragment: 'Analytical tools' }));
 };

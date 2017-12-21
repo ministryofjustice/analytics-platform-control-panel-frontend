@@ -5,7 +5,6 @@ const handlers = require('../app/tools/handlers');
 
 
 describe('tools handler', () => {
-
   describe('restart', () => {
     const deployments_response = require('./fixtures/deployments');
 
@@ -39,37 +38,33 @@ describe('tools handler', () => {
           assert(delete_pods.isDone());
         });
     });
-
   });
 
   describe('deploy', () => {
-
-    it('deploy the specified tool for the user', function() {
-      this.timeout(2200);
+    it('deploy the specified tool for the user', (done) => {
       const tool_name = 'rstudio';
+      const expected_redirect_url = url_for('base.home', { fragment: 'Analytical tools' });
+      let redirected_to = 'NOT REDIRECTED';
 
-      const post_deployment = mock_api()
+      const req = {
+        params: { name: tool_name },
+        session: { flash_messages: [] },
+      };
+      const res = {
+        redirect: (redirect_url) => {
+          redirected_to = redirect_url;
+        },
+      };
+
+      mock_api()
         .post(`/tools/${tool_name}/deployments/`)
-        .reply(201, {});
-
-      const request = new Promise((resolve, reject) => {
-        const req = {
-          params: { name: tool_name },
-          session: { flash_messages: [] },
-        };
-        const res = {};
-        res.redirect = resolve;
-        res.render = reject;
-        handlers.deploy(req, res, reject);
-      });
-
-      return request
-        .then((redirect_url) => {
-          const expected_redirect_url = url_for('base.home', { fragment: 'Analytical tools' });
-
-          assert.equal(redirect_url, expected_redirect_url);
-          assert(post_deployment.isDone());
+        .reply(201, () => {
+          assert.equal(redirected_to, expected_redirect_url);
+          assert.isTrue(req.session.rstudio_is_deploying);
+          done(); // "Assert" that this request is done
         });
+
+      handlers.deploy(req, res);
     });
   });
 });

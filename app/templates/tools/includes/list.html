@@ -1,20 +1,20 @@
 {% block main_column %}
 
-<p>{{ tools.length }} tool{%- if tools.length != 1 -%}s{%- endif -%}</p>
+<p>Please refresh your browser to update the status of your tools.</p>
 
-{% if tools.length %}
-  <table class="form-group list">
-    <thead>
-      <tr>
-        {% if current_user.is_superuser %}
-        <th>Namespace</th>
-        {% endif %}
-        <th>Name</th>
-        <th>Status</th>
-        <th><span class="visuallyhidden">Actions</span></th>
-      </tr>
-    </thead>
-    <tbody>
+<table class="form-group list">
+  <thead>
+    <tr>
+      {% if current_user.is_superuser %}
+        </s><th>Namespace</th>
+      {% endif %}
+      <th>Name</th>
+      <th>Status</th>
+      <th><span class="visuallyhidden">Actions</span></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% if tools.length %}
       {% for tool in tools %}
 
       {%- set tool_name = tool.metadata.labels.app -%}
@@ -32,14 +32,27 @@
         </td>
       </tr>
       {% endfor %}
+    {% else %}
+      {% if current_user.is_superuser %}
+        <td>user-{{ current_user.username }}</td>
+      {% endif %}
+      <td>RStudio</td>
+      <td>
+        {% if rstudio_is_deploying %}
+          Deploying
+        {% else %}
+          Not deployed
+        {% endif %}
+      </td>
+      <td class="align-right no-wrap">
+        {% if not rstudio_is_deploying %}
+          <form action="{{ url_for('tools.deploy', { params: { name: 'rstudio' } }) }}" method="post" class="inline-form clearfix">
+            <input type="submit" class="button button-secondary right" value="Deploy" />
+          </form>
+        {% endif %}
+      </td>
+    {% endif %}
     </tbody>
   </table>
-{% endif %}
-
-{%- if tools.length != 1 -%}
-  <form action="{{ url_for('tools.deploy', { params: { name: 'rstudio' } }) }}" method="post" class="inline-form clearfix">
-    <input type="submit" class="button button-secondary right" value="Deploy RStudio" />
-  </form>
-{%- endif -%}
 
 {% endblock %}

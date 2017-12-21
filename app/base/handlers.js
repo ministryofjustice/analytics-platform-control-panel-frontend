@@ -9,9 +9,12 @@ const { get_tool_url } = require('../tools/helpers');
 
 
 exports.home = (req, res, next) => {
+  const rstudio_is_deploying = req.session.rstudio_is_deploying;
+  req.session.rstudio_is_deploying = false;
+
   Tool.list()
     .then((tools) => {
-      res.render('base/home.html', { tools, get_tool_url });
+      res.render('base/home.html', { tools, get_tool_url, rstudio_is_deploying });
     })
     .catch(next);
 };

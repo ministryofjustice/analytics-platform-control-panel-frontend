@@ -23,7 +23,7 @@ exports.create_bucket = (req, res) => {
     .create()
     .then((bucket) => {
       const { url_for } = require('../routes'); // eslint-disable-line global-require
-      res.redirect(url_for('buckets.details', { params: { id: bucket.id } }));
+      res.redirect(url_for('buckets.details', { id: bucket.id }));
     })
     .catch((error) => {
       res.render('buckets/new.html', {

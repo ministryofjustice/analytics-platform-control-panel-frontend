@@ -1,6 +1,7 @@
-const config = require('./config');
 const express = require('express');
 const join = require('path').join;
+
+const config = require('./config');
 
 
 exports.router = new express.Router();
@@ -33,7 +34,7 @@ function add_route(route, router) {
   router[route.method](route.pattern, route.handler);
 }
 
-exports.url_for = function (route_name, {params = {}, fragment} = {}) {
+exports.url_for = function (route_name, args = {}) {
   const route = routes[route_name];
 
   if (!route) {
@@ -41,13 +42,8 @@ exports.url_for = function (route_name, {params = {}, fragment} = {}) {
   }
 
   try {
-    let url = replace_route_params(route.pattern, params) + query_string(params);
+    return replace_route_params(route.pattern, args) + query_string(args);
 
-    if (fragment) {
-      url += '#' + encodeURIComponent(fragment);
-    }
-
-    return url;
   } catch (error) {
     throw new Error(`url_for("${route_name}") failed: ${error}`);
   }

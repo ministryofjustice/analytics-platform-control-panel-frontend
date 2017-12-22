@@ -15,7 +15,7 @@
         {% for userapp in user.userapps %}
           <tr>
             <td>
-              <a href="{{ url_for('apps.details', { params: { id: userapp.app.id } }) }}">{{ userapp.app.name }}</a>
+              <a href="{{ url_for('apps.details', { id: userapp.app.id }) }}">{{ userapp.app.name }}</a>
             </td>
             <td>
               {% if userapp.is_admin %}
@@ -27,8 +27,8 @@
             {% if signedInUser %}
               <td class="align-right">
                 {% if userapp.is_admin %}
-                  <a class="button button-secondary" href="{{ url_for('apps.details', { params: { id: userapp.app.id } }) }}">Manage app</a>
-                  <form action="{{ url_for('apps.delete', { params: { id: userapp.app.id } }) }}" method="post" class="inline-form">
+                  <a class="button button-secondary" href="{{ url_for('apps.details', { id: userapp.app.id }) }}">Manage app</a>
+                  <form action="{{ url_for('apps.delete', { id: userapp.app.id }) }}" method="post" class="inline-form">
                     <input type="submit" class="button button-secondary right js-confirm" value="Delete app" data-confirm-message="Are you sure you want to delete this app?">
                   </form>
                 {% endif %}
@@ -63,7 +63,7 @@
       </thead>
       {% for users3bucket in user.users3buckets %}
         <tr>
-          <td><a href="{{ url_for('buckets.details', { params: { id: users3bucket.s3bucket.id } }) }}">{{ users3bucket.s3bucket.name }}</a></td>
+          <td><a href="{{ url_for('buckets.details', { id: users3bucket.s3bucket.id }) }}">{{ users3bucket.s3bucket.name }}</a></td>
           <td>
             {% if users3bucket.is_admin %}
               Yes
@@ -80,8 +80,8 @@
           </td>
           <td class="align-right">
             {% if users3bucket.is_admin %}
-              <a class="button button-secondary" href="{{ url_for('buckets.details', { params: { id: users3bucket.id } }) }}">Manage data source access</a>
-              <form action="{{ url_for('buckets.delete', { params: { id: users3bucket.id } }) }}" method="post" class="inline-form">
+              <a class="button button-secondary" href="{{ url_for('buckets.details', { id: users3bucket.id }) }}">Manage data source access</a>
+              <form action="{{ url_for('buckets.delete', { id: users3bucket.id }) }}" method="post" class="inline-form">
                 <input type="hidden" id="redirect" name="redirect" value="{{ url_for('base.home') }}">
                 <input type="submit" class="button button-secondary right js-confirm" value="Delete app data source" data-confirm-message="Are you sure you want to delete this app data source?">
               </form>

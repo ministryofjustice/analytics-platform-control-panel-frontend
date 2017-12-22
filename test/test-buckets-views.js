@@ -44,7 +44,7 @@ describe('buckets view', () => {
 
       return request
         .then((redirect_url) => {
-          assert.equal(redirect_url, url_for('buckets.details', { params: { id: created_bucket.id } }));
+          assert.equal(redirect_url, url_for('buckets.details', { id: created_bucket.id }));
         });
     });
 

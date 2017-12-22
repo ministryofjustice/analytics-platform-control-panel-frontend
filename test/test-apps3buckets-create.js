@@ -43,7 +43,7 @@ describe('Edit bucket form', () => {
           assert(get_app.isDone(), `Did not GET /apps/${app_id}`);
           assert(post_apps3buckets.isDone(), 'Did not POST to /apps3buckets/');
 
-          const expected_redirect_url = url_for('apps.details', { params: { id: app_id } });
+          const expected_redirect_url = url_for('apps.details', { id: app_id });
           assert.equal(redirect_url, expected_redirect_url);
         });
     });

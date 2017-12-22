@@ -21,7 +21,7 @@
       {% for app in apps %}
       <tr>
         <td>{{ app.id }}</td>
-        <td><a href="{{ url_for('apps.details', { params: { id: app.id } }) }}">{{ app.name }}</a></td>
+        <td><a href="{{ url_for('apps.details', { id: app.id }) }}">{{ app.name }}</a></td>
         <td class="text">
           {% if app.description %}
             {{ app.description }}
@@ -31,8 +31,8 @@
         </td>
         <td><a href="{{ app.repo_url }}">Github</a></td>
         <td class="align-right no-wrap">
-          <a class="button button-secondary" href="{{ url_for('apps.details', { params: { id: app.id } }) }}">Manage app</a>
-          <form action="{{ url_for('apps.delete', { params: { id: app.id } }) }}" method="post" class="inline-form right clearfix">
+          <a class="button button-secondary" href="{{ url_for('apps.details', { id: app.id }) }}">Manage app</a>
+          <form action="{{ url_for('apps.delete', { id: app.id }) }}" method="post" class="inline-form right clearfix">
             <input type="submit" class="button button-warning right js-confirm" value="Delete app" data-confirm-message="Are you sure you want to delete this app?">
           </form>
         </td>

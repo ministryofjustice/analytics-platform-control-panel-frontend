@@ -5,7 +5,7 @@
 
 {% block main_column %}
 
-<form action="{{ url_for('users.verify_email', { params: { id: user.auth0_id } }) }}" method="post">
+<form action="{{ url_for('users.verify_email', { id: user.auth0_id }) }}" method="post">
 
   {{ form_field('email', 'Email', value=user.email) }}
 

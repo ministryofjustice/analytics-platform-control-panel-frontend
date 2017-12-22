@@ -43,7 +43,7 @@ describe('tools handler', () => {
   describe('deploy', () => {
     it('deploy the specified tool for the user', (done) => {
       const tool_name = 'rstudio';
-      const expected_redirect_url = url_for('base.home', { fragment: 'Analytical tools' });
+      const expected_redirect_url = url_for('base.home') + '#' + encodeURIComponent('Analytical tools');
       let redirected_to = 'NOT REDIRECTED';
 
       const req = {

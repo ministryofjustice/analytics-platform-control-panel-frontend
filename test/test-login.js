@@ -12,7 +12,7 @@ describe('Logging in', () => {
     it('fetches the API user details', () => {
       const id_token = 'test-token'
       const auth0_id = 'github|12345';
-      const next_url = url_for('users.verify_email', { params: { id: auth0_id } });
+      const next_url = url_for('users.verify_email', { id: auth0_id });
 
       const user = {
         'auth0_id': auth0_id,

@@ -24,22 +24,22 @@
     <tbody>
       {% for users3bucket in bucket.users3buckets %}
         <tr>
-          <td><a class="{% if current_user.auth0_id == users3bucket.user.auth0_id %}highlight-current{% endif %}" href="{{ url_for('users.details', { params: { id: users3bucket.user.auth0_id } }) }}">{{ users3bucket.user.name }}</a></td>
+          <td><a class="{% if current_user.auth0_id == users3bucket.user.auth0_id %}highlight-current{% endif %}" href="{{ url_for('users.details', { id: users3bucket.user.auth0_id }) }}">{{ users3bucket.user.name }}</a></td>
           <td>{{ yes_no(users3bucket.access_level, 'readwrite') }}</td>
           <td class="align-right">
             {% if bucket.has_admin(current_user) or current_user.is_superuser %}
               <!-- Button to change access level -->
-              <form action="{{ url_for('users3buckets.update', { params: { id: users3bucket.id } }) }}" method="post" class="inline-form clearfix">
+              <form action="{{ url_for('users3buckets.update', { id: users3bucket.id }) }}" method="post" class="inline-form clearfix">
                 <input type="hidden" name="access_level" value="{{ yes_no(users3bucket.access_level, 'readwrite', 'readonly', 'readwrite') }}" />
 
-                <input type="hidden" name="redirect_to" value="{{ url_for('buckets.details', { params: { id: bucket.id } }) }}" />
+                <input type="hidden" name="redirect_to" value="{{ url_for('buckets.details', { id: bucket.id }) }}" />
 
                 <input type="submit" class="js-confirm button button-secondary" value="{{ yes_no(users3bucket.access_level, 'readwrite', 'Revoke', 'Grant') }} read/write access" />
               </form>
 
               <!-- Button to revoke access -->
-              <form action="{{ url_for('users3buckets.delete', { params: { id: users3bucket.id } }) }}" method="post" class="inline-form clearfix">
-                <input type="hidden" name="redirect_to" value="{{ url_for('buckets.details', { params: { id: bucket.id } }) }}">
+              <form action="{{ url_for('users3buckets.delete', { id: users3bucket.id }) }}" method="post" class="inline-form clearfix">
+                <input type="hidden" name="redirect_to" value="{{ url_for('buckets.details', { id: bucket.id }) }}">
 
                 <input type="submit" class="js-confirm button button-secondary" value="Revoke admin access" />
               </form>
@@ -76,7 +76,7 @@
   {% endif %}
 
   <hr>
-  <form action="{{ url_for('buckets.delete', { params: { id: bucket.id } }) }}" method="post" class="clearfix">
+  <form action="{{ url_for('buckets.delete', { id: bucket.id }) }}" method="post" class="clearfix">
     <input type="hidden" id="redirect" name="redirect" value="{{ url_for('base.home') }}">
     <input type="submit" class="button button-warning right js-confirm" value="Delete bucket" data-confirm-message="Are you sure you want to delete this bucket?">
   </form>

@@ -2,33 +2,28 @@ moj.Modules.bucketName = {
   inputName: 'new-datasource-name',
 
   init() {
-    const self = this;
+    this.$input = $(`#${this.inputName}`);
 
-    self.$input = $(`#${self.inputName}`);
-
-    if (self.$input.length) {
-      self.prefix = self.$input.data('bucket-prefix');
-      self.bindEvents();
+    if (this.$input.length) {
+      this.prefix = this.$input.data('bucket-prefix');
+      this.bindEvents();
     }
   },
 
   bindEvents() {
-    const self = this;
-
-    self.$input.on('keypress blur', () => {
-      self.formatBucketName();
+    this.$input.on('keypress blur', () => {
+      this.formatBucketName();
     });
   },
 
   formatBucketName() {
-    const self = this;
-    let val = self.$input.val();
+    let val = this.$input.val();
 
-    if (val.length < self.prefix.length) {
-      val = self.prefix;
+    if (val.length < this.prefix.length) {
+      val = this.prefix;
     }
 
     val = val.toLowerCase().replace(/ /gi, '-');
-    self.$input.val(val);
+    this.$input.val(val);
   },
 };

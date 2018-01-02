@@ -2,16 +2,13 @@ moj.Modules.auth0lock = {
   containerId: 'js-login-container',
 
   init() {
-    const self = this;
-
-    if ($(`#${self.containerId}`).length) {
-      self.showLock();
+    if ($(`#${this.containerId}`).length) {
+      this.showLock();
     }
   },
 
   showLock() {
-    const self = this;
-    const $el = $(`#${self.containerId}`);
+    const $el = $(`#${this.containerId}`);
     const clientId = $el.data('auth0-clientid');
     const domain = $el.data('auth0-domain');
     const callbackurl = $el.data('auth0-callbackurl');
@@ -26,7 +23,7 @@ moj.Modules.auth0lock = {
         },
         scope: 'openid profile offline_access',
       },
-      container: self.containerId,
+      container: this.containerId,
     });
   },
 };

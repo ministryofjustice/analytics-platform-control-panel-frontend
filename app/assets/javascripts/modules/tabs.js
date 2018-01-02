@@ -4,71 +4,61 @@ moj.Modules.tabs = {
   activeClass: 'active',
 
   init() {
-    const self = this;
+    this.$list = $(this.listSelector);
 
-    self.$list = $(self.listSelector);
+    if (this.$list.length) {
+      this.$tabs = this.$list.find('li');
+      this.$panels = $(this.panelSelector);
 
-    if (self.$list.length) {
-      self.$tabs = self.$list.find('li');
-      self.$panels = $(self.panelSelector);
-
-      self.storeSlugs();
-      self.showInitialTab();
-      self.bindEvents();
+      this.storeSlugs();
+      this.showInitialTab();
+      this.bindEvents();
     }
   },
 
   bindEvents() {
-    const self = this;
-
-    self.$list.on('click', (e) => {
-      self.selectTab($(e.target));
+    this.$list.on('click', (e) => {
+      this.selectTab($(e.target));
     });
   },
 
   showInitialTab() {
-    const self = this;
     const docHash = document.location.hash;
     let tabIndex = 0;
 
     if (docHash.length) {
       const checkSlug = docHash.slice(1);
-      const slugIndex = self.slugs.indexOf(checkSlug);
+      const slugIndex = this.slugs.indexOf(checkSlug);
 
       if (slugIndex > 0) {
         tabIndex = slugIndex;
       }
     }
 
-    self.showTab(tabIndex);
+    this.showTab(tabIndex);
   },
 
   storeSlugs() {
-    const self = this;
-
-    self.slugs = [];
-    self.$tabs.each((x, tab) => {
+    this.slugs = [];
+    this.$tabs.each((x, tab) => {
       const tabSlug = encodeURIComponent($(tab).text());
 
-      self.slugs.push(tabSlug);
+      this.slugs.push(tabSlug);
     });
   },
 
   selectTab($tab) {
-    const self = this;
-    const index = self.$tabs.index($tab);
+    const index = this.$tabs.index($tab);
 
-    self.showTab(index);
+    this.showTab(index);
   },
 
   showTab(index) {
-    const self = this;
+    this.$tabs.removeClass(this.activeClass);
+    this.$panels.removeClass(this.activeClass);
+    this.$tabs.eq(index).addClass(this.activeClass);
+    this.$panels.eq(index).addClass(this.activeClass);
 
-    self.$tabs.removeClass(self.activeClass);
-    self.$panels.removeClass(self.activeClass);
-    self.$tabs.eq(index).addClass(self.activeClass);
-    self.$panels.eq(index).addClass(self.activeClass);
-
-    document.location.hash = self.slugs[index];
+    document.location.hash = this.slugs[index];
   },
 };

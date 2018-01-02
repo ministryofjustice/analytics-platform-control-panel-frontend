@@ -7,22 +7,20 @@ moj.Modules.jsConfirm = {
   },
 
   bindEvents() {
-    const self = this;
-
-    $(document).on('click', `a.${self.confirmClass}`, (e) => {
+    $(document).on('click', `a.${this.confirmClass}`, (e) => {
       const $el = $(e.target);
       e.preventDefault();
 
-      if (window.confirm(self.getConfirmMessage($el))) {
+      if (window.confirm(this.getConfirmMessage($el))) {
         window.document.location = $el.attr('href');
       }
     });
 
-    $(document).on('click', `input[type="submit"].${self.confirmClass}`, (e) => {
+    $(document).on('click', `input[type="submit"].${this.confirmClass}`, (e) => {
       const $el = $(e.target);
       e.preventDefault();
 
-      if (window.confirm(self.getConfirmMessage($el))) {
+      if (window.confirm(this.getConfirmMessage($el))) {
         $el.closest('form').submit();
       }
     });

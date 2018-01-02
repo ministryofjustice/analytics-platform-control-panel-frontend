@@ -7,72 +7,63 @@ moj.Modules.repoDescription = {
   descriptionInputName: 'description',
 
   init() {
-    const self = this;
+    this.$repoSlugSelect = $(`#${this.repoSlugSelectName}`);
+    this.$orgSelect = $(`#${this.orgSelectName}`);
+    this.$repoUrlHiddenInput = $(`#${this.repoUrlHiddenInputName}`);
 
-    self.$repoSlugSelect = $(`#${self.repoSlugSelectName}`);
-    self.$orgSelect = $(`#${self.orgSelectName}`);
-    self.$repoUrlHiddenInput = $(`#${self.repoUrlHiddenInputName}`);
-
-    if (self.$repoSlugSelect.length) {
-      self.bindEvents();
-      self.showOrgRepos();
+    if (this.$repoSlugSelect.length) {
+      this.bindEvents();
+      this.showOrgRepos();
     }
   },
 
   bindEvents() {
-    const self = this;
-
-    self.$repoSlugSelect.on('change', () => {
-      if (self.$repoSlugSelect.val()) {
-        self.getRepoDescription();
+    this.$repoSlugSelect.on('change', () => {
+      if (this.$repoSlugSelect.val()) {
+        this.getRepoDescription();
       } else {
-        self.updateDescription('');
+        this.updateDescription('');
         $('#repo-results').addClass('js-hidden');
       }
     });
-    self.$orgSelect.on('change', () => {
-      self.showOrgRepos();
+    this.$orgSelect.on('change', () => {
+      this.showOrgRepos();
     });
   },
 
   showOrgRepos() {
-    const self = this;
-    const currentOrg = self.$orgSelect.val();
+    const currentOrg = this.$orgSelect.val();
 
     $('optgroup.org-repos').hide();
     $(`optgroup[label="${currentOrg}"]`).show();
-    self.$repoSlugSelect.find('option').eq(0).prop('selected', true);
-    self.updateDescription('');
+    this.$repoSlugSelect.find('option').eq(0).prop('selected', true);
+    this.updateDescription('');
     $('#repo-results').addClass('js-hidden');
   },
 
   getRepoDescription() {
-    const self = this;
-    const repoUrl = self.concatUrl(self.repoPrefix);
-    const description = self.$repoSlugSelect.find('option:selected').data('description');
+    const repoUrl = this.concatUrl(this.repoPrefix);
+    const description = this.$repoSlugSelect.find('option:selected').data('description');
 
-    self.updateDescription(description);
-    self.$repoUrlHiddenInput.val(repoUrl);
+    this.updateDescription(description);
+    this.$repoUrlHiddenInput.val(repoUrl);
     $('#repo-results').removeClass('js-hidden');
   },
 
   concatUrl(prefix) {
-    const self = this;
-    const org = self.$orgSelect.val();
-    const slug = self.$repoSlugSelect.val();
+    const org = this.$orgSelect.val();
+    const slug = this.$repoSlugSelect.val();
 
     return [prefix, org, slug].join('/');
   },
 
   updateDescription(description) {
-    const self = this;
-
     if (description) {
-      $(`#${self.descriptionInputName}`).val(description);
-      $(`#repo-${self.descriptionInputName}`).text(description);
+      $(`#${this.descriptionInputName}`).val(description);
+      $(`#repo-${this.descriptionInputName}`).text(description);
     } else {
-      $(`#repo-${self.descriptionInputName}`).text('None provided');
-      $(`#${self.descriptionInputName}`).val('');
+      $(`#repo-${this.descriptionInputName}`).text('None provided');
+      $(`#${this.descriptionInputName}`).val('');
     }
   },
 };

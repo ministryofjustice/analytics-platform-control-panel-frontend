@@ -6,9 +6,7 @@ moj.Modules.flashMessage = {
   },
 
   bindEvents() {
-    const self = this;
-
-    $(document).on('click', `.${self.messageClass}`, (e) => {
+    $(document).on('click', `.${this.messageClass}`, (e) => {
       $(e.target).fadeOut();
     });
   },

@@ -6,9 +6,7 @@ const github = require('../api_clients/github');
 
 exports.new = (req, res, next) => {
   github.api.authenticate(req.user)
-    .then(() => {
-      return Promise.all([Repo.list(), Bucket.list()]);
-    })
+    .then(() => Promise.all([Repo.list(), Bucket.list()]))
     .then(([repos, buckets]) => {
       res.render('apps/new.html', {
         repo_prefix: config.github.web_host,
@@ -31,7 +29,7 @@ exports.create = (req, res, next) => {
   const create_bucket = new Promise((resolve, reject) => {
     if (req.body['new-app-datasource'] === 'create') {
       resolve(new Bucket({
-        name: req.body['new-datasource-name']
+        name: req.body['new-datasource-name'],
       }).create());
     } else {
       resolve(null);
@@ -49,7 +47,7 @@ exports.create = (req, res, next) => {
       }
       grant_access
         .then(() => {
-          created_app.grant_user_access(req.user.auth0_id, 'readwrite', true)
+          created_app.grant_user_access(req.user.auth0_id, 'readwrite', true);
         })
         .then(() => {
           const { url_for } = require('../routes'); // eslint-disable-line global-require

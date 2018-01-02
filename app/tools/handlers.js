@@ -9,15 +9,15 @@ exports.restart = (req, res, next) => {
     })
     .then(() => {
       const { url_for } = require('../routes'); // eslint-disable-line global-require
+      const tools_url = `${url_for('base.home')}#${encodeURIComponent('Analytical tools')}`;
 
-      const tools_url = url_for('base.home') + '#' + encodeURIComponent('Analytical tools');
       res.redirect(tools_url);
     })
     .catch(next);
 };
 
 
-exports.deploy = (req, res, next) => {
+exports.deploy = (req, res) => {
   const { url_for } = require('../routes'); // eslint-disable-line global-require
 
   new ToolDeployment({ tool_name: req.params.name }).create();

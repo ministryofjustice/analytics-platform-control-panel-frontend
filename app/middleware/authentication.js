@@ -8,19 +8,18 @@ module.exports = (app, conf, log) => {
 
   passport.use(new Auth0Strategy(
     conf.auth0,
-    (req, iss, aud, profile, accessToken, refreshToken, params, cb) => {
-      return cb(null, new User({
-        'auth0_id': profile._json.sub,
-        'email': profile._json.email,
-        'access_token': accessToken,
-        'id_token': params.id_token,
-        'refresh_token': refreshToken,
-        'is_superuser': false,
-        'name': profile._json.name,
-        'username': profile._json.nickname,
-        'email_verified': false,
-      }));
-    }));
+    (req, iss, aud, profile, accessToken, refreshToken, params, cb) => cb(null, new User({
+      auth0_id: profile._json.sub,
+      email: profile._json.email,
+      access_token: accessToken,
+      id_token: params.id_token,
+      refresh_token: refreshToken,
+      is_superuser: false,
+      name: profile._json.name,
+      username: profile._json.nickname,
+      email_verified: false,
+    })),
+  ));
 
   passport.serializeUser((user, done) => {
     done(null, user.data);
@@ -32,6 +31,6 @@ module.exports = (app, conf, log) => {
 
   return [
     passport.initialize(),
-    passport.session()
+    passport.session(),
   ];
 };

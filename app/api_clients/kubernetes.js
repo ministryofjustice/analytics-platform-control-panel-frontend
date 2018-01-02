@@ -27,15 +27,15 @@ class KubernetesAPIClient extends APIClient {
   }
 
   endpoint_url(endpoint, namespace = undefined) {
-    let ns = namespace || this.namespace || 'default';
+    const ns = namespace || this.namespace || 'default';
 
     if (!endpoint) {
       throw new Error('Missing endpoint');
     }
 
     const api = {
-      'deployments': 'apis/apps/v1beta2',
-      'pods': 'api/v1',
+      deployments: 'apis/apps/v1beta2',
+      pods: 'api/v1',
     }[endpoint.split('/')[0]];
 
     return url.resolve(this.conf.base_url, `k8s/${api}/namespaces/${ns}/${endpoint}`);

@@ -1,76 +1,64 @@
-'use strict';
-
 moj.Modules.tabs = {
   listSelector: 'ul.tabs',
   panelSelector: 'section.tab-panel',
   activeClass: 'active',
 
-  init: function() {
-    var self = this;
+  init() {
+    this.$list = $(this.listSelector);
 
-    self.$list = $(self.listSelector);
+    if (this.$list.length) {
+      this.$tabs = this.$list.find('li');
+      this.$panels = $(this.panelSelector);
 
-    if(self.$list.length) {
-      self.$tabs = self.$list.find('li');
-      self.$panels = $(self.panelSelector);
-
-      self.storeSlugs();
-      self.showInitialTab();
-      self.bindEvents();
+      this.storeSlugs();
+      this.showInitialTab();
+      this.bindEvents();
     }
   },
 
-  bindEvents: function() {
-    var self = this;
-
-    self.$list.on('click', function(e) {
-      self.selectTab($(e.target));
+  bindEvents() {
+    this.$list.on('click', (e) => {
+      this.selectTab($(e.target));
     });
   },
 
-  showInitialTab: function() {
-    var self = this;
-    var docHash = document.location.hash;
-    var tabIndex = 0;
+  showInitialTab() {
+    const docHash = document.location.hash;
+    let tabIndex = 0;
 
-    if(docHash.length) {
-      var checkSlug = docHash.slice(1);
-      var slugIndex = self.slugs.indexOf(checkSlug);
+    if (docHash.length) {
+      const checkSlug = docHash.slice(1);
+      const slugIndex = this.slugs.indexOf(checkSlug);
 
       if (slugIndex > 0) {
         tabIndex = slugIndex;
       }
     }
 
-    self.showTab(tabIndex);
+    this.showTab(tabIndex);
   },
 
-  storeSlugs: function() {
-    var self = this;
+  storeSlugs() {
+    this.slugs = [];
+    this.$tabs.each((x, tab) => {
+      const tabSlug = encodeURIComponent($(tab).text());
 
-    self.slugs = [];
-    self.$tabs.each(function(x, tab) {
-      var tabSlug = encodeURIComponent($(tab).text());
-
-      self.slugs.push(tabSlug);
+      this.slugs.push(tabSlug);
     });
   },
 
-  selectTab: function($tab) {
-    var self = this;
-    var index = self.$tabs.index($tab);
+  selectTab($tab) {
+    const index = this.$tabs.index($tab);
 
-    self.showTab(index);
+    this.showTab(index);
   },
 
-  showTab: function(index) {
-    var self = this;
+  showTab(index) {
+    this.$tabs.removeClass(this.activeClass);
+    this.$panels.removeClass(this.activeClass);
+    this.$tabs.eq(index).addClass(this.activeClass);
+    this.$panels.eq(index).addClass(this.activeClass);
 
-    self.$tabs.removeClass(self.activeClass);
-    self.$panels.removeClass(self.activeClass);
-    self.$tabs.eq(index).addClass(self.activeClass);
-    self.$panels.eq(index).addClass(self.activeClass);
-
-    document.location.hash = self.slugs[index];
-  }
+    document.location.hash = this.slugs[index];
+  },
 };

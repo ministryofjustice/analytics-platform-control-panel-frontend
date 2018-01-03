@@ -1,39 +1,34 @@
-'use strict';
+const moj = {
 
-(function() {
-  var moj = {
+  Modules: {},
 
-    Modules: {},
+  Helpers: {},
 
-    Helpers: {},
+  Events: $({}),
 
-    Events: $({}),
-
-    init: function() {
-      var x;
-
-      for (x in moj.Modules) {
-        if (typeof moj.Modules[x].init === 'function') {
-          moj.Modules[x].init();
-        }
+  init() {
+    Object.keys(moj.Modules).forEach((key) => {
+      if (typeof moj.Modules[key].init === 'function') {
+        moj.Modules[key].init();
       }
-      // trigger initial render event
-      moj.Events.trigger('render');
-    },
+    });
 
-    // safe logging
-    log: function(msg) {
-      if (window && window.console) {
-        window.console.log(msg);
-      }
-    },
-    dir: function(obj) {
-      if (window && window.console) {
-        window.console.dir(obj);
-      }
+    moj.Events.trigger('render');
+  },
+
+  // safe logging
+  log(msg) {
+    if (window && window.console) {
+      window.console.log(msg);
     }
+  },
 
-  };
+  dir(obj) {
+    if (window && window.console) {
+      window.console.dir(obj);
+    }
+  },
 
-  window.moj = moj;
-}());
+};
+
+window.moj = moj;

@@ -5,18 +5,10 @@ jobs:
       - image: circleci/node:8.9.4
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - npm-cache-{{ checksum "package.json" }}
-            - npm-cache-
-      - run: npm install
-      - save_cache:
-          key: npm-cache-{{ checksum "package.json" }}
-          paths:
-            node_modules/
+      - run: yarn install
       - run: mkdir -p static/stylesheets
-      - run: npm run-script collect-static
-      - run: npm test
+      - run: yarn run collect-static
+      - run: yarn run test
       - persist_to_workspace:
           root: .
           paths:

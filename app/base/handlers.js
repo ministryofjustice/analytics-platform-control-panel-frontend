@@ -12,9 +12,14 @@ exports.home = (req, res, next) => {
   const rstudio_is_deploying = req.session.rstudio_is_deploying;
   req.session.rstudio_is_deploying = false;
 
-  Tool.list()
-    .then((tools) => {
-      res.render('base/home.html', { tools, get_tool_url, rstudio_is_deploying });
+  Promise.all([Tool.list(), User.get(req.user.auth0_id)])
+    .then(([tools, user]) => {
+      res.render('base/home.html', {
+        tools,
+        get_tool_url,
+        rstudio_is_deploying,
+        user,
+      });
     })
     .catch(next);
 };

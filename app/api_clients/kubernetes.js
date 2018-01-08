@@ -21,6 +21,11 @@ exports.get_namespace = get_namespace;
 
 
 class KubernetesAPIClient extends APIClient {
+  authenticate(user) {
+    super.authenticate(user);
+    this.namespace = user.kubernetes_namespace;
+  }
+
   endpoint_url(endpoint, namespace = undefined) {
     let ns = namespace || this.namespace || 'default';
 

@@ -58,7 +58,7 @@ function transpile_js() {
   log.info(
     `transpiling ${relative(inFile)} -> ${relative(outFile)}`);
 
-  babel.transformFile(inFile, { "presets": ["es2015"] }, function(err, result) {
+  babel.transformFile(inFile, config.babel, function(err, result) {
     if(err) { console.error(err); process.exit(1); }
 
     fs.writeFile(outFile, result.code);

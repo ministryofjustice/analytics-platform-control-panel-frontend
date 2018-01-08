@@ -38,6 +38,10 @@ config.auth0 = {
   passReqToCallback: true,
 };
 
+config.babel = {
+  presets: ['es2015'],
+};
+
 config.ensure_login = {
   exclude: [
     /^\/callback/,

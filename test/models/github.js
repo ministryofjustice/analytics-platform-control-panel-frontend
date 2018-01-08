@@ -1,8 +1,7 @@
 const { assert } = require('chai');
 const { config } = require('../conftest');
 const nock = require('nock');
-const { ModelSet } = require('../../app/models/base');
-const { Repo } = require('../../app/models/github');
+const { ModelSet, Repo } = require('../../app/models');
 
 
 describe('Github model', () => {

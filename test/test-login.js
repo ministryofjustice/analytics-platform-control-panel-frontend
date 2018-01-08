@@ -10,27 +10,28 @@ describe('Logging in', () => {
   describe('an authenticated user', () => {
 
     it('fetches the API user details', () => {
-      const id_token = 'test-token'
       const auth0_id = 'github|12345';
-      const next_url = url_for('users.verify_email', { id: auth0_id });
+      const id_token = 'test-token'
+      const returnTo = url_for('users.verify_email', { id: auth0_id });
+      const username = 'test';
 
       const user = {
-        'auth0_id': auth0_id,
-        'url': 'http://localhost:8000/users/github%7C12345/',
-        'username': 'test',
-        'name': 'Test User',
-        'email': 'test@example.com',
-        'groups': [],
-        'userapps': [],
-        'users3buckets': []
+        auth0_id,
+        username,
+        name: 'Test User',
+        email: 'test@example.com',
+        url: 'http://localhost:8000/users/github%7C12345/',
+        groups: [],
+        userapps: [],
+        users3buckets: []
       };
 
       const request = new Promise((resolve, reject) => {
         const req = {
-          user: new User({ id_token, auth0_id }),
-          session: {returnTo: next_url}
+          user: new User({ id_token, auth0_id, username }),
+          session: { returnTo }
         };
-        const res = {redirect: resolve};
+        const res = { redirect: resolve };
         handlers.auth_callback[1](req, res, reject);
       });
 
@@ -41,7 +42,7 @@ describe('Logging in', () => {
 
       return request
         .then((redirect_url) => {
-          assert.equal(redirect_url, next_url);
+          assert.equal(redirect_url, returnTo);
           assert(user_details_request.isDone(), 'API call expected');
         });
     });

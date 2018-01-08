@@ -1,7 +1,7 @@
 "use strict";
 const { assert } = require('chai');
 const { mock_api } = require('../conftest');
-const { App, DoesNotExist } = require('../../app/models/control_panel_api');
+const { App, DoesNotExist } = require('../../app/models');
 const apps_response = require('../fixtures/apps');
 
 

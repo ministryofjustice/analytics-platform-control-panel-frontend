@@ -1,20 +1,21 @@
-const { api } = require('../api_clients/kubernetes');
+const { api } = require('../api_clients/control_panel_api');
+const kubernetes = require('../api_clients/kubernetes');
 const base = require('./base');
 
 
 class Model extends base.Model {
   static list(params = {}) {
-    return api.get(this.endpoint, params)
+    return kubernetes.api.get(this.endpoint, params)
       .then(result => new base.ModelSet(this.prototype.constructor, result.items));
   }
 
   static get(name) {
-    return api.get(`${this.endpoint}/${name}`)
+    return kubernetes.api.get(`${this.endpoint}/${name}`)
       .then(data => new this.prototype.constructor(data));
   }
 
   static delete_all(params = {}) {
-    return api.delete(this.endpoint, params);
+    return kubernetes.api.delete(this.endpoint, params);
   }
 }
 
@@ -39,13 +40,12 @@ class Deployment extends Model {
   }
 
   get_status() {
-    for (let condition of this.status.conditions) {
+    for (const condition of this.status.conditions) {
       if (condition.type === 'Available') {
         if (condition.status === 'True') {
           return 'Available';
-        } else {
-          return 'Unavailable';
         }
+        return 'Unavailable';
       }
     }
     return 'Unknown';
@@ -61,20 +61,17 @@ class Pod extends Model {
   }
 
   get display_status() {
-    // based on
-    // https://github.com/kubernetes/dashboard/blob/91c54261c6a3d7f601c67a2ccfbbe79f3b6a89f9/src/app/frontend/pod/list/card_component.js#L98
-
-    let containerStatus = this.data.status.containerStatuses;
+    const containerStatus = this.data.status.containerStatuses;
 
     if (containerStatus) {
-      let state = containerStatus[0].state;
+      const { state } = containerStatus[0];
 
       if (state.waiting) {
         return `Waiting: ${state.waiting.reason}`;
       }
 
       if (state.terminated) {
-        let reason = state.terminated.reason;
+        let { reason } = state.terminated;
 
         if (!reason) {
           if (state.terminated.signal) {
@@ -93,3 +90,47 @@ class Pod extends Model {
 }
 
 exports.Pod = Pod;
+
+
+class Tool {
+  static list() {
+    return Promise
+      .all([Deployment.list(), Pod.list()])
+      .then(([tools, pods]) => {
+        const tools_lookup = {};
+
+        tools.forEach((tool) => {
+          tools_lookup[tool.metadata.labels.app] = tool;
+          tool.pods = [];
+        });
+
+        pods.forEach((pod) => {
+          const tool = tools_lookup[pod.metadata.labels.app];
+          if (tool) {
+            tool.pods.push(pod);
+          }
+        });
+
+        return tools;
+      });
+  }
+}
+
+exports.Tool = Tool;
+
+
+class ToolDeployment {
+  constructor(data) {
+    this.tool_name = data.tool_name;
+  }
+
+  create() {
+    return api.post(this.endpoint, {});
+  }
+
+  get endpoint() {
+    return `tools/${this.tool_name}/deployments`;
+  }
+}
+
+exports.ToolDeployment = ToolDeployment;

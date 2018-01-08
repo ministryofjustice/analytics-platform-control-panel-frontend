@@ -1,10 +1,11 @@
-const { assert } = require('chai');
-const { mock_api, url_for } = require('./conftest');
-const { api } = require('../app/k8s-api-client');
+"use strict";
+const { assert, spy } = require('chai').use(require('chai-spies'));
+const { config, mock_api, url_for } = require('./conftest');
+const { api } = require('../app/api_clients/kubernetes');
 const handlers = require('../app/tools/handlers');
 
 
-describe('tools handler', () => {
+describe('Tools handler', () => {
   describe('restart', () => {
     const deployments_response = require('./fixtures/deployments');
 
@@ -40,10 +41,10 @@ describe('tools handler', () => {
     });
   });
 
-  describe('deploy', () => {
-    it('deploy the specified tool for the user', (done) => {
+  describe('deploy', (done) => {
+    it('deploy the specified tool for the user', () => {
       const tool_name = 'rstudio';
-      const expected_redirect_url = url_for('base.home') + '#' + encodeURIComponent('Analytical tools');
+      const expected_redirect_url = `${url_for('base.home')}#${escape('Analytical tools')}`;
       let redirected_to = 'NOT REDIRECTED';
 
       const req = {

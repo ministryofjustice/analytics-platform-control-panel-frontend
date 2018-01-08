@@ -2,6 +2,8 @@ const { api } = require('../api_clients/control_panel_api');
 const kubernetes = require('../api_clients/kubernetes');
 const { User } = require('../models');
 const config = require('../config');
+const passport = require('passport');
+const raven = require('raven');
 const { get_tool_url } = require('../tools/helpers');
 
 

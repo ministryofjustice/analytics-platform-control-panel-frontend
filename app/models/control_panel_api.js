@@ -37,8 +37,9 @@ class Model extends base.Model {
       .then(result => new ModelSet(this.prototype.constructor, result.results));
   }
 
-  static create(data) {
-    return api.post(this.endpoint, data)
+  static create(data, options = {}) {
+    const endpoint = options.endpoint || this.endpoint;
+    return api.post(endpoint, data)
       .then(response => new this.prototype.constructor(response));
   }
 
@@ -67,8 +68,11 @@ class Model extends base.Model {
     return this.constructor.delete(this[this.constructor.pk]);
   }
 
-  create() {
-    return this.constructor.create(this.data);
+  create(options = {}) {
+    if (this.endpoint) {
+      options.endpoint = this.endpoint;
+    }
+    return this.constructor.create(this.data, options);
   }
 
   update() {

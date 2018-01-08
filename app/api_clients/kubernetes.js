@@ -40,6 +40,22 @@ class KubernetesAPIClient extends APIClient {
 
     return url.resolve(this.conf.base_url, `k8s/${api}/namespaces/${ns}/${endpoint}`);
   }
+
+  in_namespace(namespace) {
+    return new Proxy(this, {
+      get: (target, property) => {
+        if (property === 'endpoint_url') {
+          return new Proxy(target[property], {
+            apply: (target, thisArg, args) => {
+              let [endpoint, ...rest] = args;
+              return target.apply(thisArg, [endpoint, namespace]);
+            },
+          });
+        }
+        return target[property];
+      },
+    });
+  }
 }
 
 

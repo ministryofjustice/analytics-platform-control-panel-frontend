@@ -28,14 +28,14 @@ The docker container mounts the `app/` and `test/` directories from the host, an
 
 ### Running the tests
 ```sh
-docker-compose exec frontend npm test
+docker-compose exec frontend yarn run test
 ```
 
 ## Running directly
 
 ### Install dependencies
 ```sh
-npm install
+yarn install
 ```
 
 ### <a name="env"></a>Environment variables
@@ -64,7 +64,7 @@ redis-server --requirepass $REDIS_PASSWORD
 
 ### Run the webapp
 ```sh
-npm start
+yarn run start
 ```
 
 ### View the app
@@ -72,5 +72,5 @@ Browse to http://localhost:3000/
 
 ### Running the tests
 ```sh
-npm test
+yarn run test
 ```

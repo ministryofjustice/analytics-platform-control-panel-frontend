@@ -15,10 +15,6 @@ config.app = {
   asset_path: '/static/',
 };
 
-config.cluster = {
-  tools_domain: process.env.TOOLS_DOMAIN,
-};
-
 config.apps = [
   'base',
   'apps',
@@ -40,6 +36,10 @@ config.auth0 = {
 
 config.babel = {
   presets: ['es2015'],
+};
+
+config.cluster = {
+  tools_domain: process.env.TOOLS_DOMAIN,
 };
 
 config.ensure_login = {

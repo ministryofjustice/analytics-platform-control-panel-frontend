@@ -1,30 +1,9 @@
-const config = require('./config');
+const config = require('../config');
 const request = require('request-promise');
 const url = require('url');
 
 
 const log = require('bole')('api-client');
-
-
-class JWTAuth {
-  constructor(token) {
-    this.token = token || 'invalid token';
-  }
-
-  set_token(token) {
-    this.token = token;
-  }
-
-  unset_token() {
-    this.token = 'invalid token';
-  }
-
-  get header() {
-    return `JWT ${this.token}`;
-  }
-}
-
-exports.JWTAuth = JWTAuth;
 
 
 class APIError extends Error {
@@ -46,15 +25,24 @@ exports.APIError = APIError;
 class APIForbidden extends APIError {
   constructor(error) {
     super(error);
-    this.message = `${error.response.request.method} ${error.response.request.path} was not permitted: ${error.error.detail}`;
+    this.message = `${error.response.request.method} ${error.response.request.path} was not permitted`;
+    if (error.error && error.error.detail) {
+      this.message += `: ${error.error.detail}`;
+    }
   }
 }
+
+exports.APIForbidden = APIForbidden;
 
 
 class APIClient {
   constructor(conf) {
-    this.base_url = conf.base_url;
+    this.conf = conf;
     this.auth = null;
+  }
+
+  authenticate(options) {
+    throw new Error('Authentication not supported');
   }
 
   request(endpoint, { method='GET', body=null, params={} } = {}) {
@@ -106,10 +94,6 @@ class APIClient {
     return this.request(endpoint, { method: 'PATCH', body});
   }
 
-  put(endpoint, body = '') {
-    return this.request(endpoint, { method: 'PUT', body});
-  }
-
   endpoint_url(endpoint) {
     if (!endpoint) {
       throw new Error('Missing endpoint');
@@ -120,13 +104,8 @@ class APIClient {
       suffix = '/';
     }
 
-    return url.resolve(this.base_url, endpoint + suffix);
+    return url.resolve(this.conf.base_url, endpoint + suffix);
   }
 }
 
 exports.APIClient = APIClient;
-
-const api = new APIClient(config.api);
-api.auth = new JWTAuth();
-
-exports.api = api;

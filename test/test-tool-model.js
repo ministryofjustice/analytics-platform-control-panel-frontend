@@ -1,8 +1,7 @@
 const { assert } = require('chai');
 const { mock_api } = require('./conftest');
-const { api } = require('../app/k8s-api-client');
-const { ModelSet } = require('../app/base-model');
-const { Deployment, Pod, Tool } = require('../app/models');
+const { api } = require('../app/api_clients/kubernetes.js');
+const { Deployment, ModelSet, Pod, Tool } = require('../app/models');
 
 
 describe('Tool model', () => {

@@ -1,7 +1,6 @@
 "use strict";
 const { assert } = require('chai');
-const { ModelSet } = require('../app/base-model');
-const { User } = require('../app/models');
+const { ModelSet, User } = require('../app/models');
 const { config, mock_api } = require('./conftest');
 
 

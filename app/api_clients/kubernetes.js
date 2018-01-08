@@ -1,5 +1,5 @@
-const config = require('./config');
-const { APIClient, JWTAuth } = require('./api-client');
+const config = require('../config');
+const { APIClient } = require('./control_panel_api');
 const url = require('url');
 
 
@@ -21,6 +21,11 @@ exports.get_namespace = get_namespace;
 
 
 class KubernetesAPIClient extends APIClient {
+  authenticate(user) {
+    super.authenticate(user);
+    this.namespace = user.kubernetes_namespace;
+  }
+
   endpoint_url(endpoint, namespace = undefined) {
     let ns = namespace || this.namespace || 'default';
 
@@ -33,7 +38,23 @@ class KubernetesAPIClient extends APIClient {
       'pods': 'api/v1',
     }[endpoint.split('/')[0]];
 
-    return url.resolve(this.base_url, `k8s/${api}/namespaces/${ns}/${endpoint}`);
+    return url.resolve(this.conf.base_url, `k8s/${api}/namespaces/${ns}/${endpoint}`);
+  }
+
+  in_namespace(namespace) {
+    return new Proxy(this, {
+      get: (target, property) => {
+        if (property === 'endpoint_url') {
+          return new Proxy(target[property], {
+            apply: (target, thisArg, args) => {
+              let [endpoint, ...rest] = args;
+              return target.apply(thisArg, [endpoint, namespace]);
+            },
+          });
+        }
+        return target[property];
+      },
+    });
   }
 }
 
@@ -41,6 +62,5 @@ class KubernetesAPIClient extends APIClient {
 exports.KubernetesAPIClient = KubernetesAPIClient;
 
 const api = new KubernetesAPIClient(config.api);
-api.auth = new JWTAuth();
 
 exports.api = api;

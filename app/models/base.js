@@ -16,7 +16,8 @@ const model_proxy = {
     if (Reflect.has(model, property)) {
       return Reflect.set(model, property, value);
     }
-    return model.data[property] = value;
+    model.data[property] = value;
+    return true;
   }
 };
 

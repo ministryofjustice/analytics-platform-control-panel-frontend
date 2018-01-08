@@ -27,10 +27,8 @@ class GithubAPIClient extends GithubAPI {
 
       return management.getUser({ id: user.auth0_id })
         .then((profile) => {
-          const updated_user = new User(Object.assign(user.data, {
-            github_access_token: profile.identities[0].access_token
-          }));
-          return updated_user.github_access_token;
+          user.github_access_token = profile.identities[0].access_token;
+          return user.github_access_token;
         });
     }
 

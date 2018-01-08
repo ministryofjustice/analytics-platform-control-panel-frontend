@@ -39,21 +39,10 @@ class APIClient {
   constructor(conf) {
     this.conf = conf;
     this.auth = null;
-    this.supported_auth_types = [];
   }
 
   authenticate(options) {
-    const { type } = options;
-
-    if (!type || !this.supported_auth_types.includes(type)) {
-      if (this.supported_auth_types.length) {
-        const types = this.supported_auth_types.join(', ');
-        throw new Error(
-          `Invalid authentication type "${type}". Must be one of ${types}`
-        );
-      }
-      throw new Error('Authentication not supported');
-    }
+    throw new Error('Authentication not supported');
   }
 
   request(endpoint, { method='GET', body=null, params={} } = {}) {

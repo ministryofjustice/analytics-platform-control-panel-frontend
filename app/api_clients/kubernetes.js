@@ -47,7 +47,7 @@ class KubernetesAPIClient extends APIClient {
         if (property === 'endpoint_url') {
           return new Proxy(target[property], {
             apply: (target, thisArg, args) => {
-              let [endpoint, ...rest] = args;
+              const [endpoint, ...rest] = args;
               return target.apply(thisArg, [endpoint, namespace]);
             },
           });

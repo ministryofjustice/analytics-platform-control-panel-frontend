@@ -45,7 +45,7 @@ class APIClient {
     throw new Error('Authentication not supported');
   }
 
-  request(endpoint, { method='GET', body=null, params={} } = {}) {
+  request(endpoint, { method = 'GET', body = null, params = {} } = {}) {
     const headers = {};
 
     if (this.auth) {

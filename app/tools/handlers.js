@@ -25,5 +25,5 @@ exports.deploy = (req, res) => {
   req.session.rstudio_is_deploying = true;
   req.session.flash_messages.push(`Deploying '${req.params.name}'...this may take up to 5 minutes`);
 
-  res.redirect( `${url_for('base.home')}#${escape('Analytical tools')}`);
+  res.redirect(`${url_for('base.home')}#${escape('Analytical tools')}`);
 };

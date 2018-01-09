@@ -5,9 +5,6 @@
 <table class="form-group list">
   <thead>
     <tr>
-      {% if current_user.is_superuser %}
-        </s><th>Namespace</th>
-      {% endif %}
       <th>Name</th>
       <th>Status</th>
       <th><span class="visuallyhidden">Actions</span></th>
@@ -21,9 +18,6 @@
       {%- set tool_url = get_tool_url(tool_name, current_user.username) -%}
 
       <tr>
-        {% if current_user.is_superuser %}
-        <td>{{ tool.metadata.namespace }}</td>
-        {% endif %}
         <td>{{ tool_name }}</td>
         <td>{% for pod in tool.pods %}{{ loop.index }}. {{ pod.display_status }}<br>{% endfor %}</td>
         <td class="align-right no-wrap">
@@ -33,9 +27,6 @@
       </tr>
       {% endfor %}
     {% else %}
-      {% if current_user.is_superuser %}
-        <td>user-{{ current_user.username }}</td>
-      {% endif %}
       <td>RStudio</td>
       <td>
         {% if rstudio_is_deploying %}

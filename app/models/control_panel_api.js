@@ -1,5 +1,6 @@
 const { APIError } = require('../api_clients/base');
 const { api } = require('../api_clients/control_panel_api');
+const { get_namespace } = require('../api_clients/kubernetes');
 const base = require('./base');
 
 
@@ -203,6 +204,10 @@ class User extends Model {
 
   get users3buckets() {
     return new ModelSet(UserS3Bucket, this.data.users3buckets);
+  }
+
+  get kubernetes_namespace() {
+    return get_namespace(this.data.username);
   }
 }
 

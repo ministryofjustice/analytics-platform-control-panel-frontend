@@ -19,7 +19,6 @@ exports.update = (req, res, next) => {
   new UserApp({
     id: req.params.id,
     access_level,
-    is_admin,
   })
     .update()
     .then(() => {

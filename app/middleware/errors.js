@@ -19,5 +19,7 @@ module.exports = (app, conf, log) => {
 
     res.status(500);
     res.render('errors/internal-error.html', { error: err });
+
+    return true;
   };
 };

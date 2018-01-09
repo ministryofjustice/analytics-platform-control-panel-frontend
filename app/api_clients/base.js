@@ -1,4 +1,3 @@
-const config = require('../config');
 const request = require('request-promise');
 const url = require('url');
 
@@ -39,10 +38,6 @@ class APIClient {
   constructor(conf) {
     this.conf = conf;
     this.auth = null;
-  }
-
-  authenticate(options) {
-    throw new Error('Authentication not supported');
   }
 
   request(endpoint, { method = 'GET', body = null, params = {} } = {}) {

@@ -40,7 +40,8 @@ class Deployment extends Model {
   }
 
   get_status() {
-    for (const condition of this.status.conditions) {
+    for (let i = 0; i < this.status.conditions.length; i += 1) {
+      const condition = this.status.conditions[i];
       if (condition.type === 'Available') {
         if (condition.status === 'True') {
           return 'Available';

@@ -66,7 +66,7 @@ exports.login = (req, res) => {
 exports.logout = (req, res) => {
   req.logout();
   api.auth = null;
-  req.session.destroy((err) => {
+  req.session.destroy(() => {
     res.clearCookie(config.session.name);
     res.redirect('/');
   });

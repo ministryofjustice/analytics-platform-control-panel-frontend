@@ -26,7 +26,7 @@ exports.create = (req, res, next) => {
     repo_url: req.body.repo_url,
     userapps: [],
   });
-  const create_bucket = new Promise((resolve, reject) => {
+  const create_bucket = new Promise((resolve) => {
     if (req.body['new-app-datasource'] === 'create') {
       resolve(new Bucket({
         name: req.body['new-datasource-name'],

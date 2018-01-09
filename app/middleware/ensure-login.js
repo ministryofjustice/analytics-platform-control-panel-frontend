@@ -5,11 +5,7 @@ module.exports = (app, conf, log) => {
   const { exclude } = require('../config').ensure_login; // eslint-disable-line global-require
 
   return (req, res, next) => {
-    for (const i in exclude) {
-      if (req.url.match(exclude[i])) {
-        return next();
-      }
-    }
+    if (exclude.find(url => req.url.match(url))) { return next(); }
 
     return ensureLoggedIn('/login')(req, res, next);
   };

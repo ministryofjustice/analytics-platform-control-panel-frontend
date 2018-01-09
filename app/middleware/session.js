@@ -29,7 +29,7 @@ module.exports = (app, conf, log) => {
         return next(new Error('session lookup failed'));
       }
 
-      session_middleware(req, res, lookup_session);
+      return session_middleware(req, res, lookup_session);
     }
 
     lookup_session();

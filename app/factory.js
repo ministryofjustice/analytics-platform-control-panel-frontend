@@ -24,7 +24,7 @@ function init_middleware(app, conf) {
 }
 
 
-exports.create_app = function (config_override) {
+exports.create_app = (config_override) => {
   const app = express();
 
   const conf = Object.assign(config, config_override);

@@ -1,13 +1,12 @@
 const config = require('../config');
 const GithubAPI = require('github');
 const { ManagementClient } = require('auth0');
-const { User } = require('../models');
 
 
 class GithubAPIClient extends GithubAPI {
-  constructor(config) {
-    super(config.github);
-    this.auth0_config = config.auth0;
+  constructor(conf) {
+    super(conf.github);
+    this.auth0_config = conf.auth0;
   }
 
   authenticate(user) {

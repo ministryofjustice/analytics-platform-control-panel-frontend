@@ -23,7 +23,7 @@ function transpile_js() {
 
   babel.transformFile(inFile, config.babel, (err, result) => {
     if (err) {
-      console.error(err);
+      log.error(err);
       process.exit(1);
     }
 

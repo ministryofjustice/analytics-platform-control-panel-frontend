@@ -23,6 +23,7 @@ class Repo extends Model {
     if (delimiter_pos > 0) {
       return name.slice(0, delimiter_pos);
     }
+    return null;
   }
 }
 

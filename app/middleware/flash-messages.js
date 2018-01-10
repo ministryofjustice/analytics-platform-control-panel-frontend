@@ -10,4 +10,4 @@ module.exports = (app, conf, log) => {
     }
     return next();
   };
-}
+};

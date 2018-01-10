@@ -5,21 +5,16 @@ const github = require('../api_clients/github');
 
 class Repo extends Model {
   static list(params = {}) {
-    return Promise.all(
-      config.github.orgs.map((org) => {
-        return github.api.repos.getForOrg({
-          org,
-          type: 'all',
-          page: params.page || 1,
-          per_page: params.per_page || 500
-        });
-      }))
-      .then((results) => {
-        return new ModelSet(
-          this.prototype.constructor,
-          [].concat(...results.map(result => result.data))
-        );
-      });
+    return Promise.all(config.github.orgs.map(org => github.api.repos.getForOrg({
+      org,
+      type: 'all',
+      page: params.page || 1,
+      per_page: params.per_page || 500,
+    })))
+      .then(results => new ModelSet(
+        this.prototype.constructor,
+        [].concat(...results.map(result => result.data)),
+      ));
   }
 
   get org() {
@@ -28,6 +23,7 @@ class Repo extends Model {
     if (delimiter_pos > 0) {
       return name.slice(0, delimiter_pos);
     }
+    return null;
   }
 }
 

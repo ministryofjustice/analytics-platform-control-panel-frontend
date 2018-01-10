@@ -55,7 +55,7 @@ exports.delete = (req, res, next) => {
     })
     .then(() => {
       const { url_for } = require('../routes'); // eslint-disable-line global-require
-      let redirect_to = req.body.redirect || url_for('base.home');
+      const redirect_to = req.body.redirect || url_for('base.home');
       req.session.flash_messages.push(`Bucket "${bucket_name}" deleted`);
       res.redirect(redirect_to);
     })

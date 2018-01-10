@@ -6,12 +6,11 @@ Examples:
  - yes_no(is_admin, true, '(Admin)', '') // => '(Admin)' / ''
  - yes_no(access, 'readwrite', 'Revoke', 'Grant') // => 'Revoke' / 'Grant'
 */
-function yes_no(value, true_value=true, yes_str='Yes', no_str='No') {
+function yes_no(value, true_value = true, yes_str = 'Yes', no_str = 'No') {
   if (value === true_value) {
     return yes_str;
-  } else {
-    return no_str;
   }
+  return no_str;
 }
 
 module.exports = (app, conf, log) => {

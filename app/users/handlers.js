@@ -41,19 +41,19 @@ exports.user_edit = (req, res, next) => {
 exports.verify_email = (req, res, next) => {
   User.get(req.params.id)
     .then((user) => {
-      if (req.method == 'POST') {
-        user.email = req.body['email'];
+      if (req.method === 'POST') {
+        user.email = req.body.email;
         user.email_verified = true;
 
         return user.update()
           .then(() => {
-            req.session.flash_messages.push("Updated email address");
+            req.session.flash_messages.push('Updated email address');
             res.redirect(req.session.returnTo || '/');
           })
           .catch(next);
       }
 
-      res.render('users/verify_email.html', { user });
+      return res.render('users/verify_email.html', { user });
     })
     .catch(next);
 };

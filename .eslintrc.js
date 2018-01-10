@@ -5,13 +5,16 @@ module.exports = {
   },
   "globals": {
     "$": false,
-    "document": false,
     "moj": true,
     "Auth0Lock": true,
   },
   "rules": {
     "camelcase": ["off"],
+    "no-alert": ["off"],
+    "import/no-dynamic-require": ["off"],
     "no-use-before-define": ["error", { "classes": false }],
-    "no-alert": 0,
-  },
+    "object-curly-newline": ["error", { "consistent": true }],
+    "no-param-reassign": ["error", { "props": false }],
+    "no-underscore-dangle": ["error", { "allow": ["_json"] }],
+  }
 };

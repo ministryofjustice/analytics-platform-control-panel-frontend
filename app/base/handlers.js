@@ -8,7 +8,7 @@ const { get_tool_url } = require('../tools/helpers');
 
 
 exports.home = (req, res, next) => {
-  const rstudio_is_deploying = req.session.rstudio_is_deploying;
+  const { rstudio_is_deploying } = req.session;
   req.session.rstudio_is_deploying = false;
 
   Promise.all([Tool.list(), User.get(req.user.auth0_id)])
@@ -36,7 +36,7 @@ exports.error_test = (req, res, next) => {
 exports.auth_callback = [
   passport.authenticate('auth0-oidc'),
   (req, res, next) => {
-    raven.setContext({user: req.user});
+    raven.setContext({ user: req.user });
 
     api.authenticate(req.user);
     kubernetes.api.authenticate(req.user);
@@ -46,27 +46,27 @@ exports.auth_callback = [
         req.user.data = Object.assign(req.user.data, user.data);
 
         if (!user.email_verified) {
-          const { url_for } = require('../routes');
+          const { url_for } = require('../routes'); // eslint-disable-line global-require
           res.redirect(url_for('users.verify_email', { id: user.auth0_id }));
         } else {
           res.redirect(req.session.returnTo || '/');
         }
       })
       .catch(next);
-  }
+  },
 ];
 
 exports.login = (req, res) => {
   res.render('login.html', {
     env: process.env,
-    session: req.session
+    session: req.session,
   });
 };
 
 exports.logout = (req, res) => {
   req.logout();
   api.auth = null;
-  req.session.destroy((err) => {
+  req.session.destroy(() => {
     res.clearCookie(config.session.name);
     res.redirect('/');
   });

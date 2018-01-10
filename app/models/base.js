@@ -15,7 +15,7 @@ const model_proxy = {
     }
     model.data[property] = value;
     return true;
-  }
+  },
 };
 
 
@@ -36,7 +36,7 @@ class ModelSet extends Array {
       configurable: false,
       enumerable: false,
       writable: false,
-      value: ModelConstructor
+      value: ModelConstructor,
     });
   }
 }

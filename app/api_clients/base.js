@@ -1,4 +1,3 @@
-const config = require('../config');
 const request = require('request-promise');
 const url = require('url');
 
@@ -14,7 +13,7 @@ class APIError extends Error {
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, this.constructor);
     } else {
-      this.stack = (new Error(message)).stack;
+      this.stack = (new Error(error.message)).stack;
     }
   }
 }
@@ -41,11 +40,7 @@ class APIClient {
     this.auth = null;
   }
 
-  authenticate(options) {
-    throw new Error('Authentication not supported');
-  }
-
-  request(endpoint, { method='GET', body=null, params={} } = {}) {
+  request(endpoint, { method = 'GET', body = null, params = {} } = {}) {
     const headers = {};
 
     if (this.auth) {
@@ -63,10 +58,9 @@ class APIClient {
       };
       log.debug(`${method} ${options.uri}`);
       return request(options)
-        .then((result) => {
+        .then(result =>
           // console.dir(result);
-          return result;
-        })
+          result)
         .catch((error) => {
           if (error.statusCode && error.statusCode === 403) {
             throw new APIForbidden(error);
@@ -91,7 +85,7 @@ class APIClient {
   }
 
   patch(endpoint, body = '') {
-    return this.request(endpoint, { method: 'PATCH', body});
+    return this.request(endpoint, { method: 'PATCH', body });
   }
 
   endpoint_url(endpoint) {

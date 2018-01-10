@@ -10,39 +10,35 @@ const config = require('./config');
 const log = require('bole')('assets');
 
 
+function relative(filepath) {
+  return path.relative(path.dirname(__dirname), filepath);
+}
 
-exports.compile_sass = () => {
 
-  config.sass.sources.forEach((options) => {
+function transpile_js() {
+  const inFile = path.join(config.js.outDir, config.js.filename);
+  const outFile = path.join(config.js.outDir, `transpiled_${config.js.filename}`);
 
-    glob(options.files).then((files) => {
+  log.info(`transpiling ${relative(inFile)} -> ${relative(outFile)}`);
 
-      mkdirp(options.outDir)
-        .then(compile_all(files, options));
-    });
+  babel.transformFile(inFile, config.babel, (err, result) => {
+    if (err) {
+      log.error(err);
+      process.exit(1);
+    }
+
+    fs.writeFile(outFile, result.code);
   });
 }
 
 
-exports.compile_js = () => {
-
-    glob(config.js.sourceFiles, {'ignore': config.js.ignorePaths})
-      .then((files) => {
-
-        mkdirp(config.js.outDir)
-          .then(concat_js(files));
-    });
-};
-
-
 function concat_js(files) {
-  let outFile = path.join(config.js.outDir, config.js.filename);
+  const outFile = path.join(config.js.outDir, config.js.filename);
 
-  log.info(
-    `compiling ${relative(config.js.sourceFiles)} -> ${relative(outFile)}`);
+  log.info(`compiling ${relative(config.js.sourceFiles)} -> ${relative(outFile)}`);
 
-  concatfiles(files, outFile, function(err) {
-    if(err) {
+  concatfiles(files, outFile, (err) => {
+    if (err) {
       throw err;
     }
 
@@ -51,59 +47,19 @@ function concat_js(files) {
 }
 
 
-function transpile_js() {
-  let inFile = path.join(config.js.outDir, config.js.filename);
-  let outFile = path.join(config.js.outDir, 'transpiled_' + config.js.filename);
-
-  log.info(
-    `transpiling ${relative(inFile)} -> ${relative(outFile)}`);
-
-  babel.transformFile(inFile, config.babel, function(err, result) {
-    if(err) { console.error(err); process.exit(1); }
-
-    fs.writeFile(outFile, result.code);
-  });
-}
-
-
-function relative(filepath) {
-  return path.relative(path.dirname(__dirname), filepath);
-}
-
-
 function mkdirp(dir) {
-
   return new Promise((resolve, reject) => {
-
     fs.mkdirAsync(dir)
       .then(resolve)
       .catch((error) => {
-
-        if (error.code == 'ENOENT') {
+        if (error.code === 'ENOENT') {
           mkdirp(path.dirname(dir))
-            .then((parent) => {
-              mkdirp(dir).then(resolve); })
+            .then(() => {
+              mkdirp(dir).then(resolve);
+            })
             .catch(reject);
         }
       });
-  });
-}
-
-
-function compile_all(files, base_options) {
-
-  files.forEach((filename) => {
-    let options = base_options || {};
-    let outFile = path.relative(path.dirname(options.files), filename).replace(/.scss$/, '.css');
-
-    options.file = filename;
-    options.outFile = path.join(options.outDir, outFile);
-
-    log.info(`compiling ${relative(filename)} -> ${relative(options.outFile)}`);
-
-    render(options)
-      .then(write_css(options.outFile))
-      .then(write_sourcemap(options));
   });
 }
 
@@ -119,8 +75,44 @@ function write_css(filename) {
 function write_sourcemap(options) {
   return (result) => {
     if (options.sourceMap) {
-      log.debug(`writing sourcemap: ${relative(options.outFile + '.map')}`);
-      fs.writeFileAsync(options.outFile + '.map', result.map);
+      log.debug(`writing sourcemap: ${relative(options.outFile)}.map`);
+      fs.writeFileAsync(`${options.outFile}.map`, result.map);
     }
   };
 }
+
+
+function compile_all(files, base_options) {
+  files.forEach((filename) => {
+    const options = base_options || {};
+    const outFile = path.relative(path.dirname(options.files), filename).replace(/.scss$/, '.css');
+
+    options.file = filename;
+    options.outFile = path.join(options.outDir, outFile);
+
+    log.info(`compiling ${relative(filename)} -> ${relative(options.outFile)}`);
+
+    render(options)
+      .then(write_css(options.outFile))
+      .then(write_sourcemap(options));
+  });
+}
+
+
+exports.compile_sass = () => {
+  config.sass.sources.forEach((options) => {
+    glob(options.files).then((files) => {
+      mkdirp(options.outDir)
+        .then(compile_all(files, options));
+    });
+  });
+};
+
+
+exports.compile_js = () => {
+  glob(config.js.sourceFiles, { ignore: config.js.ignorePaths })
+    .then((files) => {
+      mkdirp(config.js.outDir)
+        .then(concat_js(files));
+    });
+};

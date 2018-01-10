@@ -14,7 +14,6 @@ if (process.env.ENV !== 'prod') {
 }
 
 app.listen(config.port, config.host, (error) => {
-
   if (error) {
     log.error('Unable to listen for connections', error);
     process.exit(10);

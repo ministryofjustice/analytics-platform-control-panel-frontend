@@ -1,8 +1,8 @@
 module.exports = (app, conf, log) => {
   log.info('adding errors');
 
-  const sentry = require('raven');
-  const errlog = require('bole')('error-handler');
+  const sentry = require('raven'); // eslint-disable-line global-require
+  const errlog = require('bole')('error-handler'); // eslint-disable-line global-require
 
   process.on('unhandledRejection', (error) => {
     errlog.error(error.message);
@@ -18,6 +18,8 @@ module.exports = (app, conf, log) => {
     }
 
     res.status(500);
-    res.render('errors/internal-error.html', {'error': err});
+    res.render('errors/internal-error.html', { error: err });
+
+    return true;
   };
 };

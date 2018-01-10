@@ -1,9 +1,14 @@
 const { api } = require('../api_clients/control_panel_api');
 const kubernetes = require('../api_clients/kubernetes');
 const base = require('./base');
+const { DoesNotExist } = require('./control_panel_api');
 
 
 class Model extends base.Model {
+  static get pk() {
+    return 'name';
+  }
+
   static list(params = {}) {
     return kubernetes.api.get(this.endpoint, params)
       .then(result => new base.ModelSet(this.prototype.constructor, result.items));
@@ -11,7 +16,13 @@ class Model extends base.Model {
 
   static get(name) {
     return kubernetes.api.get(`${this.endpoint}/${name}`)
-      .then(data => new this.prototype.constructor(data));
+      .then(data => new this.prototype.constructor(data))
+      .catch((error) => {
+        if (error.statusCode && error.statusCode === 404) {
+          throw new DoesNotExist(error, this.prototype.constructor, name);
+        }
+        throw error;
+      });
   }
 
   static delete_all(params = {}) {

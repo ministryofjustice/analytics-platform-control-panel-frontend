@@ -151,6 +151,7 @@ config.static = {
       join(node_modules, 'govuk_template_jinja/assets'),
       join(node_modules, 'govuk_frontend_toolkit'),
       join(node_modules, 'jquery/dist'),
+      join(node_modules, 'jquery-typeahead/dist'),
     ],
     '/static/images/icons': [
       join(node_modules, 'govuk_frontend_toolkit/images'),

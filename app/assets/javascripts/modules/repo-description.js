@@ -1,15 +1,17 @@
 moj.Modules.repoDescription = {
   repoPrefix: 'https://github.com',
-  apiUrlPrefix: 'https://api.github.com/repos',
   orgSelectName: 'repo_org',
   repoSlugSelectName: 'name',
+  repoSlugTypeaheadName: 'repo_typeahead',
   repoUrlHiddenInputName: 'repo_url',
   descriptionInputName: 'description',
+  repoSelected: null,
 
   init() {
     this.$repoSlugSelect = $(`#${this.repoSlugSelectName}`);
     this.$orgSelect = $(`#${this.orgSelectName}`);
     this.$repoUrlHiddenInput = $(`#${this.repoUrlHiddenInputName}`);
+    this.$repoSlugTypeahead = $(`#${this.repoSlugTypeaheadName}`);
 
     if (this.$repoSlugSelect.length) {
       this.bindEvents();
@@ -18,14 +20,6 @@ moj.Modules.repoDescription = {
   },
 
   bindEvents() {
-    this.$repoSlugSelect.on('change', () => {
-      if (this.$repoSlugSelect.val()) {
-        this.getRepoDescription();
-      } else {
-        this.updateDescription('');
-        $('#repo-results').addClass('js-hidden');
-      }
-    });
     this.$orgSelect.on('change', () => {
       this.showOrgRepos();
     });
@@ -33,17 +27,51 @@ moj.Modules.repoDescription = {
 
   showOrgRepos() {
     const currentOrg = this.$orgSelect.val();
+    const repoOptions = Array.from($(`optgroup[label="${currentOrg}"] option`));
+    const repos = repoOptions.map(opt => opt.text);
+    const descriptions = repoOptions.map(opt => opt.dataset.description);
 
-    $('optgroup.org-repos').hide();
-    $(`optgroup[label="${currentOrg}"]`).show();
-    this.$repoSlugSelect.find('option').eq(0).prop('selected', true);
+    // reset potentially pre-existing typeahead
+    this.repoSelected = false;
+    this.$repoSlugSelect.hide();
+    this.$repoSlugTypeahead.val('');
+    $('.typeahead__result, .typeahead__cancel-button').remove();
+    $('.typeahead__container').removeClass('cancel');
+
+    // initialise repo-typeahead for selected org
+    this.$repoSlugTypeahead.typeahead({
+      order: 'asc',
+      maxItem: 0,
+      source: {
+        data: repos,
+      },
+      callback: {
+        onClickAfter: (node) => {
+          const index = repos.indexOf(node[0].value);
+
+          this.getRepoDescription(descriptions[index]);
+          this.repoSelected = true;
+        },
+        onCancel: () => {
+          this.updateDescription('');
+          $('#repo-results').addClass('js-hidden');
+          this.repoSelected = false;
+        },
+        onSubmit: () => {
+          if (!this.repoSelected) {
+            return false;
+          }
+          return true;
+        },
+      },
+    });
+
     this.updateDescription('');
     $('#repo-results').addClass('js-hidden');
   },
 
-  getRepoDescription() {
+  getRepoDescription(description) {
     const repoUrl = this.concatUrl(this.repoPrefix);
-    const description = this.$repoSlugSelect.find('option:selected').data('description');
 
     this.updateDescription(description);
     this.$repoUrlHiddenInput.val(repoUrl);
@@ -52,7 +80,7 @@ moj.Modules.repoDescription = {
 
   concatUrl(prefix) {
     const org = this.$orgSelect.val();
-    const slug = this.$repoSlugSelect.val();
+    const slug = this.$repoSlugTypeahead.val();
 
     return [prefix, org, slug].join('/');
   },

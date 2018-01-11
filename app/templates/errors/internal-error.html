@@ -15,6 +15,12 @@
   <summary>Debug</summary>
 
   <div class="panel">
+    <h2 class="heading-medium">Request</h2>
+    <pre>{{ req.headers | default({}) | dump(2) | safe }}</pre>
+    <pre>{{ req.body | dump(2) | safe }}</pre>
+  </div>
+
+  <div class="panel">
     <h2 class="heading-medium">Session</h2>
     <pre>{{ req.session | default({}) | dump(2) | safe }}</pre>
   </div>

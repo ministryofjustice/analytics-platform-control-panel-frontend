@@ -5,7 +5,7 @@ module.exports = (app, conf, log) => {
   const errlog = require('bole')('error-handler'); // eslint-disable-line global-require
 
   process.on('unhandledRejection', (error) => {
-    errlog.error(error.message);
+    errlog.error(error);
     sentry.captureException(error);
   });
 

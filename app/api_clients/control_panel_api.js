@@ -1,5 +1,8 @@
-const { APIClient, APIError } = require('./base');
+const { APIClient, APIError, APIForbidden } = require('./base');
 const config = require('../config');
+const log = require('bole')('control_panel_api');
+const passport = require('passport');
+const request = require('request-promise');
 
 
 class ControlPanelAPIClient extends APIClient {
@@ -7,6 +10,7 @@ class ControlPanelAPIClient extends APIClient {
     if (!user.id_token) {
       throw new Error('User has no id_token');
     }
+    this.user = user;
     this.auth = {
       header: `JWT ${user.id_token || 'invalid token'}`,
     };
@@ -17,6 +21,16 @@ class ControlPanelAPIClient extends APIClient {
       .catch((error) => {
         if (DjangoError.match(error)) {
           throw new DjangoError(error);
+        }
+        if (ExpiredToken.match(error)) {
+          log.info('token expired, refreshing');
+          return ExpiredToken.refresh(this.user)
+            .then((tokenset) => {
+              this.user.id_token = tokenset.id_token;
+              this.user.access_token = tokenset.access_token;
+              this.authenticate(this.user);
+              return this.request(endpoint, { method, body, params })
+            });
         }
         throw error;
       });
@@ -63,3 +77,18 @@ class DjangoError extends APIError {
 }
 
 exports.DjangoError = DjangoError;
+
+
+class ExpiredToken extends APIError {
+  static match(error) {
+    return error.message && error.message.indexOf('Signature has expired') >= 0;
+  }
+
+  static refresh(user) {
+    // XXX this depends on a private API and should be improved
+    const client = passport._strategy('oidc')._client;
+    return client.refresh(user.refresh_token);
+  }
+}
+
+exports.ExpiredToken = ExpiredToken;

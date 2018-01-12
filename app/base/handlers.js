@@ -34,7 +34,7 @@ exports.error_test = (req, res, next) => {
 
 
 exports.auth_callback = [
-  passport.authenticate('auth0-oidc'),
+  passport.authenticate('oidc'),
   (req, res, next) => {
     raven.setContext({ user: req.user });
 

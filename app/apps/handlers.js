@@ -21,7 +21,7 @@ exports.new = (req, res, next) => {
 
 exports.create = (req, res, next) => {
   const app = new App({
-    name: req.body.name,
+    name: req.body.repo_typeahead,
     description: req.body.description,
     repo_url: req.body.repo_url,
     userapps: [],

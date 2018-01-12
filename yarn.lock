@@ -2373,7 +2373,14 @@ isstream@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
 
-jquery@^3.2.1:
+jquery-typeahead@^2.10.4:
+  version "2.10.4"
+  resolved "https://registry.yarnpkg.com/jquery-typeahead/-/jquery-typeahead-2.10.4.tgz#9a46d74fda419b0724ae0ff3663f800d280bc6ce"
+  dependencies:
+    jquery ">=1.7.2"
+    lz-string "^1.4.4"
+
+jquery@>=1.7.2, jquery@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
 
@@ -2640,6 +2647,10 @@ lru-memoizer@^1.11.1:
 lsmod@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/lsmod/-/lsmod-1.0.0.tgz#9a00f76dca36eb23fa05350afe1b585d4299e64b"
+
+lz-string@^1.4.4:
+  version "1.4.4"
+  resolved "https://registry.yarnpkg.com/lz-string/-/lz-string-1.4.4.tgz#c0d8eaf36059f705796e1e344811cf4c498d3a26"
 
 make-dir@^1.0.0:
   version "1.1.0"

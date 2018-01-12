@@ -5,7 +5,7 @@ moj.Modules.repoDescription = {
   repoSlugTypeaheadName: 'repo_typeahead',
   repoUrlHiddenInputName: 'repo_url',
   descriptionInputName: 'description',
-  repoSelected: null,
+  repoSelected: false,
 
   init() {
     this.$repoSlugSelect = $(`#${this.repoSlugSelectName}`);
@@ -31,14 +31,8 @@ moj.Modules.repoDescription = {
     const repos = repoOptions.map(opt => opt.text);
     const descriptions = repoOptions.map(opt => opt.dataset.description);
 
-    // reset potentially pre-existing typeahead
-    this.repoSelected = false;
-    this.$repoSlugSelect.hide();
-    this.$repoSlugTypeahead.val('');
-    $('.typeahead__result, .typeahead__cancel-button').remove();
-    $('.typeahead__container').removeClass('cancel');
+    this.resetTypeahead();
 
-    // initialise repo-typeahead for selected org
     this.$repoSlugTypeahead.typeahead({
       order: 'asc',
       maxItem: 0,
@@ -53,20 +47,20 @@ moj.Modules.repoDescription = {
           this.repoSelected = true;
         },
         onCancel: () => {
-          this.updateDescription('');
-          $('#repo-results').addClass('js-hidden');
-          this.repoSelected = false;
+          this.resetTypeahead();
         },
-        onSubmit: () => {
-          if (!this.repoSelected) {
-            return false;
-          }
-          return true;
-        },
+        onSubmit: () => this.repoSelected,
       },
     });
+  },
 
+  resetTypeahead() {
+    this.repoSelected = false;
+    this.$repoSlugSelect.hide();
+    this.$repoSlugTypeahead.val('');
     this.updateDescription('');
+    $('.typeahead__result, .typeahead__cancel-button').remove();
+    $('.typeahead__container').removeClass('cancel');
     $('#repo-results').addClass('js-hidden');
   },
 

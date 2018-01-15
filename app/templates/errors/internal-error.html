@@ -4,15 +4,34 @@
 
 {% block main_column %}
 
-<p class="error">{{ error.message }}</p>
+<p class="error">{{ error.message | safe }}</p>
 
 {% if env.ENV == 'dev' %}
+
+  {% if error.python_traceback %}
+  <p><strong>Python traceback:</strong></p>
+  <ul>
+    {% for line in error.python_traceback %}
+    <li>
+      File "{{ line.file }}" in <code>{{ line.func }}</code>:<br>
+      <pre><span>{{ line.line_no }}.</span> {{ line.code }}</pre><br>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
 <pre>
 {{ error.stack | safe }}
 </pre>
 
 <details class="debug">
   <summary>Debug</summary>
+
+  <div class="panel">
+    <h2 class="heading-medium">Request</h2>
+    <pre>{{ req.headers | default({}) | dump(2) | safe }}</pre>
+    <pre>{{ req.body | dump(2) | safe }}</pre>
+  </div>
 
   <div class="panel">
     <h2 class="heading-medium">Session</h2>

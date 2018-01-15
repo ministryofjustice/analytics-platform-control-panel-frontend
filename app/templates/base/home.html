@@ -1,4 +1,5 @@
 {% extends "layouts/one-column.html" %}
+{% from "includes/yesno.html" import yes_no %}
 
 {% set page_title = "Hello " + ( current_user.name if current_user ) %}
 {% set heading_prefix = "Your" %}

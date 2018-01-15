@@ -12,18 +12,36 @@ moj.Modules.auth0lock = {
     const clientId = $el.data('auth0-clientid');
     const domain = $el.data('auth0-domain');
     const callbackurl = $el.data('auth0-callbackurl');
-    const lock = new Auth0Lock(clientId, domain);
-
-    lock.show({
-      callbackURL: callbackurl,
-      responseType: 'code',
-      authParams: {
-        connection_scopes: {
+    const lockOptions = {
+      allowedConnections: ['github'],
+      auth: {
+        connectionScopes: {
           github: ['read:org', 'read:user', 'repo'],
         },
-        scope: 'openid profile offline_access',
+        params: {
+          scope: 'openid profile offline_access',
+        },
+        responseType: 'code',
+        redirectUrl: callbackurl,
       },
       container: this.containerId,
-    });
+      theme: {
+        logo: '/static/images/gov.uk_logotype_crown.svg',
+        primaryColor: '#000000',
+        authButtons: {
+          github: {
+            primaryColor: '#efefef',
+            foregroundColor: '#000000',
+          },
+        },
+      },
+      languageDictionary: {
+        title: 'Log in',
+      },
+      rememberLastLogin: true,
+    };
+    const lock = new Auth0Lock(clientId, domain, lockOptions);
+
+    lock.show();
   },
 };

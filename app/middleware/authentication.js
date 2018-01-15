@@ -10,8 +10,8 @@ let client = null;
 Issuer.useRequest();
 
 Issuer.defaultHttpOptions = {
-  timeout: 5000,
-  retries: 2,
+  timeout: config.auth0.timeout,
+  retries: config.auth0.retries,
 };
 
 Issuer.discover(`https://${config.auth0.domain}`)
@@ -20,6 +20,7 @@ Issuer.discover(`https://${config.auth0.domain}`)
       client_id: config.auth0.clientID,
       client_secret: config.auth0.clientSecret,
     });
+    client.CLOCK_TOLERANCE = config.auth0.clockTolerance;
 
     const params = {
       redirect_uri: config.auth0.callbackURL,

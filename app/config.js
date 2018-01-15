@@ -32,6 +32,9 @@ config.auth0 = {
   clientSecret: process.env.AUTH0_CLIENT_SECRET,
   callbackURL: process.env.AUTH0_CALLBACK_URL || 'http://localhost:3000/callback',
   passReqToCallback: true,
+  clockTolerance: 10,
+  timeout: 5000,
+  retries: 2,
 };
 
 config.babel = {

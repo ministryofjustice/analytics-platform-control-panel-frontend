@@ -1,33 +1,67 @@
+const config = require('../config');
 const passport = require('passport');
-const Auth0Strategy = require('passport-auth0-openidconnect').Strategy;
 const { User } = require('../models');
+const { Issuer, Strategy } = require('openid-client');
+const auth_log = require('bole')('authentication middleware');
+
+
+let client = null;
+
+Issuer.useRequest();
+
+Issuer.defaultHttpOptions = {
+  timeout: config.auth0.timeout,
+  retries: config.auth0.retries,
+};
+
+Issuer.discover(`https://${config.auth0.domain}`)
+  .then((issuer) => {
+    client = new issuer.Client({
+      client_id: config.auth0.clientID,
+      client_secret: config.auth0.clientSecret,
+    });
+    client.CLOCK_TOLERANCE = config.auth0.clockTolerance;
+
+    const params = {
+      redirect_uri: config.auth0.callbackURL,
+    };
+
+    const strategy = new Strategy(
+      {
+        client,
+        params,
+        passReqToCallback: config.auth0.passReqToCallback,
+      },
+      (req, tokenset, userinfo, done) => {
+        done(null, new User({
+          auth0_id: tokenset.claims.sub,
+          access_token: tokenset.access_token,
+          id_token: tokenset.id_token,
+          refresh_token: tokenset.refresh_token,
+          is_superuser: false,
+          name: userinfo.name,
+          username: userinfo.nickname,
+        }));
+      }
+    );
+
+    passport.use('oidc', strategy);
+  })
+  .catch((error) => {
+    auth_log.error(error);
+  });
+
+passport.serializeUser((user, done) => {
+  done(null, user.data);
+});
+
+passport.deserializeUser((obj, done) => {
+  done(null, new User(obj));
+});
 
 
 module.exports = (app, conf, log) => {
   log.info('adding authentication');
-
-  passport.use(new Auth0Strategy(
-    conf.auth0,
-    (req, iss, aud, profile, accessToken, refreshToken, params, cb) => cb(null, new User({
-      auth0_id: profile._json.sub,
-      email: profile._json.email,
-      access_token: accessToken,
-      id_token: params.id_token,
-      refresh_token: refreshToken,
-      is_superuser: false,
-      name: profile._json.name,
-      username: profile._json.nickname,
-      email_verified: false,
-    })),
-  ));
-
-  passport.serializeUser((user, done) => {
-    done(null, user.data);
-  });
-
-  passport.deserializeUser((obj, done) => {
-    done(null, new User(obj));
-  });
 
   return [
     passport.initialize(),

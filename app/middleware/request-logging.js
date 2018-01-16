@@ -1,7 +1,10 @@
+const morgan = require('morgan');
+
+
 module.exports = (app, conf, log) => {
   if (conf.log.requests) {
     log.info('adding request-logging');
-    return require('morgan')('combined', { // eslint-disable-line global-require
+    return morgan('combined', {
       skip: req => req.query.healthz !== undefined,
     });
   }

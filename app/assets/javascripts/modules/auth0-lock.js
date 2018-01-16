@@ -1,5 +1,31 @@
 moj.Modules.auth0lock = {
   containerId: 'js-login-container',
+  config: {
+    allowedConnections: ['github'],
+    auth: {
+      connectionScopes: {
+        github: ['read:org', 'read:user', 'repo'],
+      },
+      params: {
+        scope: 'openid profile offline_access',
+      },
+      responseType: 'code',
+    },
+    theme: {
+      logo: '/static/images/gov.uk_logotype_crown.svg',
+      primaryColor: '#000000',
+      authButtons: {
+        github: {
+          primaryColor: '#efefef',
+          foregroundColor: '#000000',
+        },
+      },
+    },
+    languageDictionary: {
+      title: 'Log in',
+    },
+    rememberLastLogin: true,
+  },
 
   init() {
     if ($(`#${this.containerId}`).length) {
@@ -8,39 +34,13 @@ moj.Modules.auth0lock = {
   },
 
   showLock() {
+    const lockConfig = this.config;
     const $el = $(`#${this.containerId}`);
     const clientId = $el.data('auth0-clientid');
     const domain = $el.data('auth0-domain');
-    const callbackurl = $el.data('auth0-callbackurl');
-    const lockOptions = {
-      allowedConnections: ['github'],
-      auth: {
-        connectionScopes: {
-          github: ['read:org', 'read:user', 'repo'],
-        },
-        params: {
-          scope: 'openid profile offline_access',
-        },
-        responseType: 'code',
-        redirectUrl: callbackurl,
-      },
-      container: this.containerId,
-      theme: {
-        logo: '/static/images/gov.uk_logotype_crown.svg',
-        primaryColor: '#000000',
-        authButtons: {
-          github: {
-            primaryColor: '#efefef',
-            foregroundColor: '#000000',
-          },
-        },
-      },
-      languageDictionary: {
-        title: 'Log in',
-      },
-      rememberLastLogin: true,
-    };
-    const lock = new Auth0Lock(clientId, domain, lockOptions);
+    lockConfig.container = this.containerId;
+    lockConfig.auth.redirectUrl = $el.data('auth0-callbackurl');
+    const lock = new Auth0Lock(clientId, domain, lockConfig);
 
     lock.show();
   },

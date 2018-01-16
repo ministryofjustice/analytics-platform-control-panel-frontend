@@ -1,4 +1,5 @@
 const { Deployment } = require('../models');
+const { url_for } = require('../routes');
 
 
 exports.restart = (req, res, next) => {
@@ -8,7 +9,6 @@ exports.restart = (req, res, next) => {
       return tool.restart();
     })
     .then(() => {
-      const { url_for } = require('../routes'); // eslint-disable-line global-require
       const tools_url = `${url_for('base.home')}#${encodeURIComponent('Analytical tools')}`;
 
       res.redirect(tools_url);
@@ -18,8 +18,6 @@ exports.restart = (req, res, next) => {
 
 
 exports.deploy = (req, res) => {
-  const { url_for } = require('../routes'); // eslint-disable-line global-require
-
   Deployment.create({ tool_name: req.params.name });
 
   req.session.rstudio_is_deploying = true;

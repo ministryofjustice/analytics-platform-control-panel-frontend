@@ -1,4 +1,5 @@
 const { UserS3Bucket } = require('../models');
+const { url_for } = require('../routes');
 
 
 exports.create = (req, res, next) => {
@@ -12,7 +13,6 @@ exports.create = (req, res, next) => {
   })
     .create()
     .then(() => {
-      const { url_for } = require('../routes'); // eslint-disable-line global-require
       res.redirect(url_for('buckets.details', { id: bucket_id }));
     })
     .catch(next);

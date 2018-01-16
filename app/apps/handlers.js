@@ -2,6 +2,7 @@ const { App, Bucket, User } = require('../models');
 const { Repo } = require('../models/github');
 const config = require('../config');
 const github = require('../api_clients/github');
+const { url_for } = require('../routes');
 
 
 exports.new = (req, res, next) => {
@@ -50,7 +51,6 @@ exports.create = (req, res, next) => {
           created_app.grant_user_access(req.user.auth0_id, 'readwrite', true);
         })
         .then(() => {
-          const { url_for } = require('../routes'); // eslint-disable-line global-require
           res.redirect(url_for('apps.details', { id: created_app.id }));
         });
     })
@@ -94,7 +94,6 @@ exports.details = (req, res, next) => {
 exports.delete = (req, res, next) => {
   App.delete(req.params.id)
     .then(() => {
-      const { url_for } = require('../routes'); // eslint-disable-line global-require
       let redirect_to = 'base.home';
       if (req.user.is_superuser) {
         redirect_to = 'apps.list';

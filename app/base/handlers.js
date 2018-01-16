@@ -4,6 +4,7 @@ const { Deployment, User } = require('../models');
 const config = require('../config');
 const passport = require('passport');
 const raven = require('raven');
+const { url_for } = require('../routes');
 const uuid = require('uuid');
 
 
@@ -45,7 +46,6 @@ exports.auth_callback = [
         req.user.data = Object.assign(req.user.data, user.data);
 
         if (!user.email_verified) {
-          const { url_for } = require('../routes'); // eslint-disable-line global-require
           res.redirect(url_for('users.verify_email', { id: user.auth0_id }));
         } else {
           res.redirect(req.session.returnTo || '/');

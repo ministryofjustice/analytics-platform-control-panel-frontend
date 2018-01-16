@@ -1,4 +1,5 @@
 const { App, Bucket, User } = require('../models');
+const { url_for } = require('../routes');
 
 
 exports.list_buckets = (req, res, next) => {
@@ -22,7 +23,6 @@ exports.create_bucket = (req, res) => {
   })
     .create()
     .then((bucket) => {
-      const { url_for } = require('../routes'); // eslint-disable-line global-require
       res.redirect(url_for('buckets.details', { id: bucket.id }));
     })
     .catch((error) => {
@@ -54,7 +54,6 @@ exports.delete = (req, res, next) => {
       return Bucket.delete(bucket.id);
     })
     .then(() => {
-      const { url_for } = require('../routes'); // eslint-disable-line global-require
       const redirect_to = req.body.redirect || url_for('base.home');
       req.session.flash_messages.push(`Bucket "${bucket_name}" deleted`);
       res.redirect(redirect_to);

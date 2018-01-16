@@ -44,23 +44,25 @@ class Deployment extends Model {
     return 'deployments';
   }
 
+  get_pods() {
+    if (!this.pods.length) {
+      return Pod.list({ labelSelector: `app=${this.app_label}` }).
+        then((pods) => {
+          this._pods = pods;
+          return pods;
+        });
+    }
+    return Promise.resolve(this.pods);
+  }
+
   static list() {
     return Promise.all([super.list(), Pod.list()])
       .then(([deployments, pods]) => {
-        const pod_groups = {};
-
-        pods.forEach((pod) => {
-          const app_label = pod.metadata.labels.app;
-
-          if (!pod_groups[app_label]) {
-            pod_groups[app_label] = [];
-          }
-
-          pod_groups[app_label].push(pod);
-        });
+        const app_label = x => x.metadata.labels.app;
+        const pod_groups = group_by(pods, app_label);
 
         return deployments.map((deployment) => {
-          deployment.pods = new base.ModelSet(Pod, pod_groups[deployment.metadata.labels.app]);
+          deployment.pods = new base.ModelSet(Pod, pod_groups[app_label(deployment)]);
           return deployment;
         });
       });
@@ -136,3 +138,17 @@ class Pod extends Model {
 }
 
 exports.Pod = Pod;
+
+function group_by(items, key) {
+  return items.reduce((groups, item) => {
+    const name = key(item);
+
+    if (!groups[name]) {
+      groups[name] = [];
+    }
+
+    groups[name].push(item);
+
+    return groups;
+  }, {});
+}

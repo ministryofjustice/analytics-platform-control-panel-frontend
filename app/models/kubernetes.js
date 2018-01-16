@@ -1,4 +1,5 @@
 const { api } = require('../api_clients/control_panel_api');
+const { cluster } = require('../config');
 const kubernetes = require('../api_clients/kubernetes');
 const base = require('./base');
 const { DoesNotExist } = require('./control_panel_api');
@@ -34,33 +35,60 @@ exports.Model = Model;
 
 
 class Deployment extends Model {
+  constructor(data) {
+    super(data);
+    this.pods = new base.ModelSet(Pod, []);
+  }
+
   static get endpoint() {
     return 'deployments';
   }
 
-  static restart(label) {
-    return Pod.delete_all({ labelSelector: `app=${label}` });
+  static list() {
+    return Promise.all([super.list(), Pod.list()])
+      .then(([deployments, pods]) => {
+        const pod_groups = {};
+
+        pods.forEach((pod) => {
+          const app_label = pod.metadata.labels.app;
+
+          if (!pod_groups[app_label]) {
+            pod_groups[app_label] = [];
+          }
+
+          pod_groups[app_label].push(pod);
+        });
+
+        return deployments.map((deployment) => {
+          deployment.pods = new base.ModelSet(Pod, pod_groups[deployment.metadata.labels.app]);
+          return deployment;
+        });
+      });
   }
 
-  get_pods() {
-    return Pod.list({ labelSelector: `app=${this.data.metadata.labels.app}` });
+  static create(data) {
+    return api.post(`tools/${data.tool_name}/deployments`, {});
   }
 
   restart() {
     return Pod.delete_all({ labelSelector: `app=${this.data.metadata.labels.app}` });
   }
 
-  get_status() {
-    for (let i = 0; i < this.status.conditions.length; i += 1) {
-      const condition = this.status.conditions[i];
-      if (condition.type === 'Available') {
-        if (condition.status === 'True') {
-          return 'Available';
-        }
-        return 'Unavailable';
-      }
-    }
-    return 'Unknown';
+  get available() {
+    return this.data.pods.some(pod => pod.status.phase === 'Running');
+  }
+
+  get app_label() {
+    return this.data.metadata.labels.app;
+  }
+
+  get username() {
+    // might get a truncated username
+    return this.data.metadata.namespace.split('user-').join('');
+  }
+
+  get url() {
+    return `https://${this.username}-${this.app_label}.${cluster.tools_domain}`;
   }
 }
 
@@ -72,14 +100,14 @@ class Pod extends Model {
     return 'pods';
   }
 
-  get display_status() {
+  get status() {
     const containerStatus = this.data.status.containerStatuses;
 
     if (containerStatus) {
       const { state } = containerStatus[0];
 
       if (state.waiting) {
-        return `Waiting: ${state.waiting.reason}`;
+        return { phase: 'waiting', reason: state.waiting.reason };
       }
 
       if (state.terminated) {
@@ -93,56 +121,18 @@ class Pod extends Model {
           }
         }
 
-        return `Terminated: ${reason}`;
+        return { phase: 'terminated', reason };
       }
     }
 
-    return this.data.status.phase;
+    return { phase: this.data.status.phase };
+  }
+
+  get display_status() {
+    const status = this.status;
+    const reason = status.reason ? `: ${status.reason}` : '';
+    return `${status.phase}${reason}`;
   }
 }
 
 exports.Pod = Pod;
-
-
-class Tool {
-  static list() {
-    return Promise
-      .all([Deployment.list(), Pod.list()])
-      .then(([tools, pods]) => {
-        const tools_lookup = {};
-
-        tools.forEach((tool) => {
-          tools_lookup[tool.metadata.labels.app] = tool;
-          tool.pods = [];
-        });
-
-        pods.forEach((pod) => {
-          const tool = tools_lookup[pod.metadata.labels.app];
-          if (tool) {
-            tool.pods.push(pod);
-          }
-        });
-
-        return tools;
-      });
-  }
-}
-
-exports.Tool = Tool;
-
-
-class ToolDeployment {
-  constructor(data) {
-    this.tool_name = data.tool_name;
-  }
-
-  create() {
-    return api.post(this.endpoint, {});
-  }
-
-  get endpoint() {
-    return `tools/${this.tool_name}/deployments`;
-  }
-}
-
-exports.ToolDeployment = ToolDeployment;

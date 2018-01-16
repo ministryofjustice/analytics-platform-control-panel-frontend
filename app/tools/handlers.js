@@ -1,4 +1,4 @@
-const { Deployment, ToolDeployment } = require('../models');
+const { Deployment } = require('../models');
 
 
 exports.restart = (req, res, next) => {
@@ -20,7 +20,7 @@ exports.restart = (req, res, next) => {
 exports.deploy = (req, res) => {
   const { url_for } = require('../routes'); // eslint-disable-line global-require
 
-  new ToolDeployment({ tool_name: req.params.name }).create();
+  Deployment.create({ tool_name: req.params.name });
 
   req.session.rstudio_is_deploying = true;
   req.session.flash_messages.push(`Deploying '${req.params.name}'...this may take up to 5 minutes`);

@@ -35,6 +35,7 @@ config.auth0 = {
   clockTolerance: 10,
   timeout: 5000,
   retries: 2,
+  sessionKey: `oidc:${process.env.AUTH0_DOMAIN}`,
 };
 
 config.babel = {

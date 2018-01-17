@@ -24,6 +24,7 @@ Issuer.discover(`https://${config.auth0.domain}`)
 
     const params = {
       redirect_uri: config.auth0.callbackURL,
+      sessionKey: config.auth0.sessionKey,
     };
 
     const strategy = new Strategy(

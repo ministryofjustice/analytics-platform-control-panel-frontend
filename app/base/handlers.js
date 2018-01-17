@@ -5,6 +5,7 @@ const config = require('../config');
 const passport = require('passport');
 const raven = require('raven');
 const { get_tool_url } = require('../tools/helpers');
+const uuid = require('uuid');
 
 
 exports.home = (req, res, next) => {
@@ -57,9 +58,12 @@ exports.auth_callback = [
 ];
 
 exports.login = (req, res) => {
+  const state = uuid();
+  req.session[config.auth0.sessionKey] = { state };
   res.render('login.html', {
     env: process.env,
     session: req.session,
+    state,
   });
 };
 

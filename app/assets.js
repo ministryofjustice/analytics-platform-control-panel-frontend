@@ -27,9 +27,9 @@ function transpile_js() {
       process.exit(1);
     }
 
-    fs.writeFile(outFile, result.code, (err) => {
-      if (err) {
-        log.error(err);
+    fs.writeFile(outFile, result.code, (error) => {
+      if (error) {
+        log.error(error);
         process.exit(1);
       }
     });

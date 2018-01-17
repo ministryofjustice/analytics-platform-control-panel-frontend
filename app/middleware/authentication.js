@@ -41,6 +41,7 @@ Issuer.discover(`https://${config.auth0.domain}`)
           refresh_token: tokenset.refresh_token,
           is_superuser: false,
           name: userinfo.name,
+          email: userinfo.email,
           username: userinfo.nickname,
         }));
       }

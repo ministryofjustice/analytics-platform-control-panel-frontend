@@ -7,7 +7,7 @@ moj.Modules.auth0lock = {
         github: ['read:org', 'read:user', 'repo'],
       },
       params: {
-        scope: 'openid profile offline_access',
+        scope: 'openid email profile offline_access',
       },
       responseType: 'code',
     },

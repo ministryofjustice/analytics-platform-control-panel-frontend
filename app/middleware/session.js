@@ -1,12 +1,14 @@
+const session = require('express-session');
+const RedisStore = require('connect-redis')(session);
+const redislog = require('bole')('redis');
+
+
 module.exports = (app, conf, log) => {
   log.info('adding session');
-  const session = require('express-session'); // eslint-disable-line global-require
-  const RedisStore = require('connect-redis')(session); // eslint-disable-line global-require
   const session_config = Object.assign(
     { store: new RedisStore(conf.session_store) },
     conf.session,
   );
-  const redislog = require('bole')('redis'); // eslint-disable-line global-require
   redislog.debug(`connecting to ${conf.session_store.host}:${conf.session_store.port}`);
   session_config.store.logErrors = redislog.error;
   const session_middleware = session(session_config);

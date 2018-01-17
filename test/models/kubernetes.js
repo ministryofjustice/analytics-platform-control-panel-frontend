@@ -2,7 +2,7 @@
 const { assert } = require('chai');
 const { mock_api } = require('../conftest');
 const kubernetes = require('../../app/api_clients/kubernetes');
-const { Deployment, DoesNotExist, ModelSet, Pod, Tool, User } = require('../../app/models');
+const { Deployment, DoesNotExist, ModelSet, Pod, User } = require('../../app/models');
 const deployments_response = require('../fixtures/deployments');
 const pods_response = require('../fixtures/deployment-pods');
 
@@ -94,9 +94,7 @@ describe('Kubernetes Model', () => {
           assert(delete_pods.isDone());
         });
     });
-  });
 
-  describe('Tool', () => {
     it('lists tools with associated pods', () => {
       const get_deployments = mock_api()
         .get(`/k8s/apis/apps/v1beta2/namespaces/${ns}/deployments`)
@@ -106,7 +104,7 @@ describe('Kubernetes Model', () => {
         .get(`/k8s/api/v1/namespaces/${ns}/pods`)
         .reply(200, pods_response);
 
-      Tool.list()
+      Deployment.list()
         .then((tools) => {
           assert(get_deployments.isDone());
           assert(get_pods.isDone());

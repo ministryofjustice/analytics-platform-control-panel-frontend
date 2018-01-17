@@ -1,4 +1,5 @@
 const { App, AppS3Bucket } = require('../models');
+const { url_for } = require('../routes');
 
 
 exports.create = (req, res, next) => {
@@ -7,7 +8,6 @@ exports.create = (req, res, next) => {
   App.get(app_id)
     .then(app => app.grant_bucket_access(bucket_id, 'readonly'))
     .then(() => {
-      const { url_for } = require('../routes'); // eslint-disable-line global-require
       res.redirect(url_for('apps.details', { id: app_id }));
     })
     .catch(next);

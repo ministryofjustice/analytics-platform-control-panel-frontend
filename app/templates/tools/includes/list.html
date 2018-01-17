@@ -14,14 +14,17 @@
     {% if tools.length %}
       {% for tool in tools %}
 
-      {%- set tool_name = tool.metadata.labels.app -%}
-      {%- set tool_url = get_tool_url(tool_name, current_user.username) -%}
-
       <tr>
-        <td>{{ tool_name }}</td>
-        <td>{% for pod in tool.pods %}{{ loop.index }}. {{ pod.display_status }}<br>{% endfor %}</td>
+        <td>{{ tool.app_label }}</td>
+        <td>
+          {% for pod in tool.pods -%}
+            {{ loop.index }}. {{ pod.display_status }}<br>
+          {%- endfor %}
+        </td>
         <td class="align-right no-wrap">
-          <a class="button button-secondary" target="_blank" href="{{ tool_url }}">Open</a>
+          {% if tool.available -%}
+            <a class="button button-secondary" target="_blank" href="{{ tool.url }}">Open</a>
+          {%- endif %}
           <a class="button button-secondary" href="{{ url_for('tools.restart', { name: tool.metadata.name }) }}">Restart</a>
         </td>
       </tr>

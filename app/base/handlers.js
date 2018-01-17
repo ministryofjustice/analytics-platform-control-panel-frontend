@@ -1,10 +1,10 @@
 const { api } = require('../api_clients/control_panel_api');
 const kubernetes = require('../api_clients/kubernetes');
-const { Tool, User } = require('../models');
+const { Deployment, User } = require('../models');
 const config = require('../config');
 const passport = require('passport');
 const raven = require('raven');
-const { get_tool_url } = require('../tools/helpers');
+const { url_for } = require('../routes');
 const uuid = require('uuid');
 
 
@@ -12,11 +12,10 @@ exports.home = (req, res, next) => {
   const { rstudio_is_deploying } = req.session;
   req.session.rstudio_is_deploying = false;
 
-  Promise.all([Tool.list(), User.get(req.user.auth0_id)])
+  Promise.all([Deployment.list(), User.get(req.user.auth0_id)])
     .then(([tools, user]) => {
       res.render('base/home.html', {
         tools,
-        get_tool_url,
         rstudio_is_deploying,
         user,
       });
@@ -47,7 +46,6 @@ exports.auth_callback = [
         req.user.data = Object.assign(req.user.data, user.data);
 
         if (!user.email_verified) {
-          const { url_for } = require('../routes'); // eslint-disable-line global-require
           res.redirect(url_for('users.verify_email', { id: user.auth0_id }));
         } else {
           res.redirect(req.session.returnTo || '/');

@@ -1,7 +1,9 @@
+const express = require('express');
+
+
 module.exports = (app, conf, log) => {
   log.info('adding static');
 
-  const express = require('express'); // eslint-disable-line global-require
   const router = new express.Router();
 
   Object.keys(conf.static.paths).forEach((pattern) => {

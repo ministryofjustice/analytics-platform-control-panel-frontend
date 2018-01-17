@@ -44,7 +44,7 @@ Issuer.discover(`https://${config.auth0.domain}`)
           email: userinfo.email,
           username: userinfo.nickname,
         }));
-      }
+      },
     );
 
     passport.use('oidc', strategy);

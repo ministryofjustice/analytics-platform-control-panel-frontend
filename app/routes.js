@@ -52,15 +52,17 @@ exports.url_for = (route_name, args = {}) => {
   }
 };
 
-config.apps.forEach((app_name) => {
-  const app_routes = require(`${__dirname}/${app_name}/routes`); // eslint-disable-line global-require
+exports.load_routes = () => {
+  config.apps.forEach((app_name) => {
+    const app_routes = require(`${__dirname}/${app_name}/routes`); // eslint-disable-line global-require
 
-  app_routes.forEach((route) => {
-    route.name = `${app_name}.${route.name}`;
-    route.method = (route.method || 'GET').toLowerCase();
+    app_routes.forEach((route) => {
+      route.name = `${app_name}.${route.name}`;
+      route.method = (route.method || 'GET').toLowerCase();
 
-    add_route(route, exports.router);
+      add_route(route, exports.router);
 
-    routes[route.name] = route;
+      routes[route.name] = route;
+    });
   });
-});
+};

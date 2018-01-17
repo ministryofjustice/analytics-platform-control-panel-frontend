@@ -27,7 +27,12 @@ function transpile_js() {
       process.exit(1);
     }
 
-    fs.writeFile(outFile, result.code);
+    fs.writeFile(outFile, result.code, (err) => {
+      if (err) {
+        log.error(err);
+        process.exit(1);
+      }
+    });
   });
 }
 

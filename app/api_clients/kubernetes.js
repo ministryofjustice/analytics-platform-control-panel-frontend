@@ -23,6 +23,7 @@ exports.get_namespace = get_namespace;
 class KubernetesAPIClient extends APIClient {
   authenticate(user) {
     super.authenticate(user);
+    this.user = user;
     this.namespace = user.kubernetes_namespace;
   }
 

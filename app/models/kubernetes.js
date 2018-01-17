@@ -85,8 +85,7 @@ class Deployment extends Model {
   }
 
   get username() {
-    // might get a truncated username
-    return this.data.metadata.namespace.split('user-').join('');
+    return kubernetes.api.user.username.toLowerCase();
   }
 
   get url() {

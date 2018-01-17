@@ -1,8 +1,7 @@
-const { APIClient, APIError, APIForbidden } = require('./base');
+const { APIClient, APIError } = require('./base');
 const config = require('../config');
 const log = require('bole')('control_panel_api');
 const passport = require('passport');
-const request = require('request-promise');
 
 
 class ControlPanelAPIClient extends APIClient {
@@ -29,7 +28,7 @@ class ControlPanelAPIClient extends APIClient {
               this.user.id_token = tokenset.id_token;
               this.user.access_token = tokenset.access_token;
               this.authenticate(this.user);
-              return this.request(endpoint, { method, body, params })
+              return this.request(endpoint, { method, body, params });
             });
         }
         throw error;
@@ -55,16 +54,16 @@ class DjangoError extends APIError {
   }
 
   get python_traceback() {
-    const pattern = /\\nTraceback:  \\n\\n(.*)\\n\\nException Type/;
+    let pattern = /\\nTraceback:\s+\\n\\n(.*)\\n\\nException Type/;
     const match = this.original_message.match(pattern);
     const traceback = match[1]
-      .replace(/\\n/g, "\n")
+      .replace(/\\n/g, '\n')
       .replace(/\\"/g, '"')
       .split(/\n\n/);
 
     return traceback.map((line) => {
-      const pattern = /^File "([^"]+)" in ([^\n]+)[^0-9]+([0-9]+). ([^\n]+)/;
-      const [ _, file, func, line_no, code ] = line.match(pattern);
+      pattern = /^File "([^"]+)" in ([^\n]+)[^0-9]+([0-9]+). ([^\n]+)/;
+      const [file, func, line_no, code] = line.match(pattern).slice(1);
       return { file, func, line_no, code };
     });
   }
@@ -86,7 +85,7 @@ class ExpiredToken extends APIError {
 
   static refresh(user) {
     // XXX this depends on a private API and should be improved
-    const client = passport._strategy('oidc')._client;
+    const client = passport._strategy('oidc')._client; // eslint-disable-line no-underscore-dangle
     return client.refresh(user.refresh_token);
   }
 }

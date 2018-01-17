@@ -43,7 +43,7 @@ Issuer.discover(`https://${config.auth0.domain}`)
           name: userinfo.name,
           username: userinfo.nickname,
         }));
-      }
+      },
     );
 
     passport.use('oidc', strategy);

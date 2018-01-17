@@ -40,6 +40,7 @@ moj.Modules.auth0lock = {
     const domain = $el.data('auth0-domain');
     lockConfig.container = this.containerId;
     lockConfig.auth.redirectUrl = $el.data('auth0-callbackurl');
+    lockConfig.auth.state = $el.data('auth0-state');
     const lock = new Auth0Lock(clientId, domain, lockConfig);
 
     lock.show();

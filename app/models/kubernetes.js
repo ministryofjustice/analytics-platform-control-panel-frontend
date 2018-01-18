@@ -34,6 +34,21 @@ class Model extends base.Model {
 exports.Model = Model;
 
 
+function group_by(items, key) {
+  return items.reduce((groups, item) => {
+    const name = key(item);
+
+    if (!groups[name]) {
+      groups[name] = [];
+    }
+
+    groups[name].push(item);
+
+    return groups;
+  }, {});
+}
+
+
 class Deployment extends Model {
   constructor(data) {
     super(data);
@@ -46,9 +61,9 @@ class Deployment extends Model {
 
   get_pods() {
     if (!this.pods.length) {
-      return Pod.list({ labelSelector: `app=${this.app_label}` }).
-        then((pods) => {
-          this._pods = pods;
+      return Pod.list({ labelSelector: `app=${this.app_label}` })
+        .then((pods) => {
+          this._pods = pods; // eslint-disable-line no-underscore-dangle
           return pods;
         });
     }
@@ -84,9 +99,8 @@ class Deployment extends Model {
     return this.data.metadata.labels.app;
   }
 
-  get username() {
-    // might get a truncated username
-    return this.data.metadata.namespace.split('user-').join('');
+  get username() { // eslint-disable-line class-methods-use-this
+    return kubernetes.api.user.username.toLowerCase();
   }
 
   get url() {
@@ -131,24 +145,10 @@ class Pod extends Model {
   }
 
   get display_status() {
-    const status = this.status;
+    const { status } = this;
     const reason = status.reason ? `: ${status.reason}` : '';
     return `${status.phase}${reason}`;
   }
 }
 
 exports.Pod = Pod;
-
-function group_by(items, key) {
-  return items.reduce((groups, item) => {
-    const name = key(item);
-
-    if (!groups[name]) {
-      groups[name] = [];
-    }
-
-    groups[name].push(item);
-
-    return groups;
-  }, {});
-}

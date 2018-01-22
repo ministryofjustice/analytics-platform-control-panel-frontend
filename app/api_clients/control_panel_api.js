@@ -36,11 +36,7 @@ class ControlPanelAPIClient extends APIClient {
   }
 }
 
-exports.APIClient = ControlPanelAPIClient;
-
-const api = new ControlPanelAPIClient(config.api);
-
-exports.api = api;
+exports.ControlPanelAPIClient = ControlPanelAPIClient;
 
 
 class DjangoError extends APIError {

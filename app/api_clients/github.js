@@ -36,7 +36,3 @@ class GithubAPIClient extends GithubAPI {
 }
 
 exports.GithubAPIClient = GithubAPIClient;
-
-const api = new GithubAPIClient(config);
-
-exports.api = api;

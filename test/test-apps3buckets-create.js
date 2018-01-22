@@ -1,15 +1,12 @@
 const { assert } = require('chai');
 
-const { config, mock_api, url_for } = require('./conftest');
+const { config, mock_api, url_for, withAPI } = require('./conftest');
 const handlers = require('../app/apps3buckets/handlers');
 
 
 describe('Edit bucket form', () => {
-
   describe('when granting access to user', () => {
-
-    it('make request to API', () => {
-
+    it('make request to API', withAPI(() => {
       const bucket_id = 42;
       const app_id = 1;
 
@@ -46,6 +43,6 @@ describe('Edit bucket form', () => {
           const expected_redirect_url = url_for('apps.details', { id: app_id });
           assert.equal(redirect_url, expected_redirect_url);
         });
-    });
+    }));
   });
 });

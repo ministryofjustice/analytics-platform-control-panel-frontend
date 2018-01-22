@@ -1,17 +1,15 @@
 const { assert } = require('chai');
-const nock = require('nock');
-
-const config = require('../app/config');
+const { config, mock_api, withAPI } = require('./conftest');
 const handlers = require('../app/users3buckets/handlers');
 
 
 describe('Edit bucket form', () => {
   describe('when revoking access to user', () => {
-    it('make request to API', () => {
+    it('make request to API', withAPI(() => {
       const users3bucket_id = 42;
       const redirect_to = 'users/github|123';
 
-      const delete_users3buckets = nock(config.api.base_url)
+      const delete_users3buckets = mock_api()
         .delete(`/users3buckets/${users3bucket_id}/`)
         .reply(204);
 
@@ -34,6 +32,6 @@ describe('Edit bucket form', () => {
           assert(delete_users3buckets.isDone(), `Did't make DELETE request to API endpoint to /users3buckets/${users3bucket_id}/`);
           assert.equal(redirect_url, redirect_to);
         });
-    });
+    }));
   });
 });

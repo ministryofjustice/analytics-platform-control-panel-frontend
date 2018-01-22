@@ -1,18 +1,16 @@
 "use strict";
 const { assert } = require('chai');
-const { mock_api, url_for } = require('./conftest');
+const { mock_api, url_for, withAPI } = require('./conftest');
 const { User } = require('../app/models');
 const handlers = require('../app/base/handlers');
 
 
 describe('Logging in', () => {
-
   describe('an authenticated user', () => {
-
-    it('fetches the API user details', () => {
+    it('fetches the API user details', withAPI(() => {
       const auth0_id = 'github|12345';
       const id_token = 'test-token'
-      const returnTo = url_for('users.verify_email', { id: auth0_id });
+      const returnTo = url_for('users.verify_email');
       const username = 'test';
 
       const user = {
@@ -35,18 +33,16 @@ describe('Logging in', () => {
         handlers.auth_callback[1](req, res, reject);
       });
 
-      const user_details_request = mock_api()
-        .get(`/users/${escape(user.auth0_id)}/`)
-        .matchHeader('Authorization', `JWT ${id_token}`)
-        .reply(200, user);
+      //const user_details_request = mock_api()
+        //.get(`/users/${escape(user.auth0_id)}/`)
+        //.matchHeader('Authorization', `JWT ${id_token}`)
+        //.reply(200, user);
 
       return request
         .then((redirect_url) => {
           assert.equal(redirect_url, returnTo);
-          assert(user_details_request.isDone(), 'API call expected');
+          //assert(user_details_request.isDone(), 'API call expected');
         });
-    });
-
+    }));
   });
-
 });

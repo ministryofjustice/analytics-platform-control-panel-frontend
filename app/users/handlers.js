@@ -39,8 +39,10 @@ exports.user_edit = (req, res, next) => {
 
 
 exports.verify_email = (req, res, next) => {
-  User.get(req.params.id)
+  User.get(req.user.auth0_id)
     .then((user) => {
+      req.user.data = Object.assign(req.user.data, user.data);
+
       if (req.method === 'POST') {
         user.email = req.body.email;
         user.email_verified = true;
@@ -51,6 +53,10 @@ exports.verify_email = (req, res, next) => {
             res.redirect(req.session.returnTo || '/');
           })
           .catch(next);
+      }
+
+      if (user.email_verified) {
+        return res.redirect(req.session.returnTo || '/');
       }
 
       return res.render('users/verify_email.html', { user });

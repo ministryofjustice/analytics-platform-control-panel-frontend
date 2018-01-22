@@ -1,15 +1,11 @@
 const { assert } = require('chai');
-
-const { config, mock_api } = require('./conftest');
+const { config, mock_api, withAPI } = require('./conftest');
 const handlers = require('../app/apps3buckets/handlers');
 
 
 describe('Edit bucket form', () => {
-
   describe('when updating user access', () => {
-
-    it('make request to API', () => {
-
+    it('make request to API', withAPI(() => {
       const apps3bucket_id = 42;
       const access_level = 'readonly';
       const redirect_to = 'apps/123';
@@ -41,6 +37,6 @@ describe('Edit bucket form', () => {
 
           assert.equal(redirect_url, redirect_to);
         });
-    });
+    }));
   });
 });

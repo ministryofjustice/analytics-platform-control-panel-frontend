@@ -1,15 +1,12 @@
 "use strict";
 const { assert } = require('chai');
-
-const { config, mock_api, url_for } = require('./conftest');
+const { config, mock_api, url_for, withAPI } = require('./conftest');
 const handlers = require('../app/buckets/handlers');
 
 
 describe('buckets view', () => {
-
   describe('add bucket', () => {
-
-    it('creates a new bucket and redirects', () => {
+    it('creates a new bucket and redirects', withAPI(() => {
       const bucket_data = {
         'new-datasource-name': 'dev-test-bucket'
       };
@@ -46,8 +43,6 @@ describe('buckets view', () => {
         .then((redirect_url) => {
           assert.equal(redirect_url, url_for('buckets.details', { id: created_bucket.id }));
         });
-    });
-
+    }));
   });
-
 });

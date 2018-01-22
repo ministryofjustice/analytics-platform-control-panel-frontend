@@ -2,12 +2,12 @@
 const { assert } = require('chai');
 const { config, mock_api } = require('../conftest');
 
-const { APIClient } = require('../../app/api_clients/control_panel_api');
+const { ControlPanelAPIClient } = require('../../app/api_clients/control_panel_api');
 const { App, ModelSet } = require('../../app/models');
 
 
 describe('Control Panel API Client', () => {
-  const client = new APIClient(config.api);
+  const client = new ControlPanelAPIClient(config.api);
 
   it('rejects an invalid auth token', () => {
     const reason = {

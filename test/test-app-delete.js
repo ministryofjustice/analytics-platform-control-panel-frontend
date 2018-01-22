@@ -1,15 +1,11 @@
 const { assert } = require('chai');
-
-const { config, mock_api, url_for } = require('./conftest');
+const { config, mock_api, ns, url_for, withAPI } = require('./conftest');
 const handlers = require('../app/apps/handlers');
 
 
 describe('Delete app', () => {
-
   describe('when deleting an app', () => {
-
-    it('makes a DELETE request to the API', () => {
-
+    it('makes a DELETE request to the API', withAPI(() => {
       const app_id = 2;
       const redirect_to = '/';
       const user = require('./fixtures/user');
@@ -38,6 +34,6 @@ describe('Delete app', () => {
           assert(delete_app.isDone(), `Didn't make DELETE request to API endpoint to /apps/${app_id}/`);
           assert.equal(redirect_url, redirect_to);
         });
-    });
+    }));
   });
 });

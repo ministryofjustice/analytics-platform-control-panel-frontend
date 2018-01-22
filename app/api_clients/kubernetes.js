@@ -1,5 +1,5 @@
 const config = require('../config');
-const { APIClient } = require('./control_panel_api');
+const { ControlPanelAPIClient } = require('./control_panel_api');
 const url = require('url');
 
 
@@ -20,7 +20,7 @@ function get_namespace(username) {
 exports.get_namespace = get_namespace;
 
 
-class KubernetesAPIClient extends APIClient {
+class KubernetesAPIClient extends ControlPanelAPIClient {
   authenticate(user) {
     super.authenticate(user);
     this.user = user;
@@ -58,7 +58,3 @@ class KubernetesAPIClient extends APIClient {
 
 
 exports.KubernetesAPIClient = KubernetesAPIClient;
-
-const api = new KubernetesAPIClient(config.api);
-
-exports.api = api;

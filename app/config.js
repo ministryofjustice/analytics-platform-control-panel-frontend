@@ -78,7 +78,7 @@ config.js = {
 config.log = {
   requests: process.env.ENABLE_ACCESS_LOGS !== 'false',
   stream: process.stdout,
-  level: 'debug',
+  level: process.env.LOG_LEVEL || 'debug',
 };
 
 // order is important!

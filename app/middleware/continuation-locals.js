@@ -11,7 +11,6 @@ module.exports = (app, conf, log) => {
     ns.bindEmitter(res);
 
     ns.run(() => {
-      ns.set('test', 'foo');
       next();
     });
   };

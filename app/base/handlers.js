@@ -55,14 +55,18 @@ exports.auth_callback = [
   },
 ];
 
-exports.login = (req, res) => {
-  const state = uuid();
-  req.session[config.auth0.sessionKey] = { state };
-  res.render('login.html', {
-    env: process.env,
-    session: req.session,
-    state,
-  });
+exports.login = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    if (/^http/.test(req.session.returnTo)) {
+      res.send(400, 'URL must be relative');
+    } else {
+      res.redirect(req.session.returnTo);
+    }
+  } else {
+    passport.authenticate('oidc', {
+      state: uuid(),
+    })(req, res, next);
+  }
 };
 
 exports.logout = (req, res) => {

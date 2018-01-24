@@ -36,6 +36,7 @@ config.auth0 = {
   timeout: 5000,
   retries: 2,
   sessionKey: `oidc:${process.env.AUTH0_DOMAIN}`,
+  scope: 'openid email profile offline_access',
 };
 
 config.babel = {

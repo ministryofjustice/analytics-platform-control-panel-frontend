@@ -6,7 +6,6 @@ module.exports = {
   "globals": {
     "$": false,
     "moj": true,
-    "Auth0Lock": true,
   },
   "rules": {
     "camelcase": ["off"],

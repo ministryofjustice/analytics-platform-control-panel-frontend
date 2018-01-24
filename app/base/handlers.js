@@ -58,7 +58,7 @@ exports.auth_callback = [
 exports.login = (req, res, next) => {
   if (req.isAuthenticated()) {
     if (/^http/.test(req.session.returnTo)) {
-      res.send(400, 'URL must be relative');
+      throw new Error('URL must be relative');
     } else {
       res.redirect(req.session.returnTo);
     }

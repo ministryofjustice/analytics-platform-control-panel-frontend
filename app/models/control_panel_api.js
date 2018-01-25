@@ -1,7 +1,8 @@
 const { APIError } = require('../api_clients/base');
-const { api } = require('../api_clients/control_panel_api');
-const { get_namespace } = require('../api_clients/kubernetes');
 const base = require('./base');
+const cls = require('continuation-local-storage');
+const config = require('../config');
+const { get_namespace } = require('../api_clients/kubernetes');
 
 
 class DoesNotExist extends APIError {
@@ -29,23 +30,32 @@ class ModelSet extends base.ModelSet {
 
 
 class Model extends base.Model {
+  static get cpanel() {
+    const ns = cls.getNamespace(config.continuation_locals.namespace);
+    return ns.get('cpanel');
+  }
+
+  get cpanel() {
+    return this.constructor.cpanel;
+  }
+
   static get pk() {
     return 'id';
   }
 
   static list() {
-    return api.get(this.endpoint)
+    return this.cpanel.get(this.endpoint)
       .then(result => new ModelSet(this.prototype.constructor, result.results));
   }
 
   static create(data, options = {}) {
     const endpoint = options.endpoint || this.endpoint;
-    return api.post(endpoint, data)
+    return this.cpanel.post(endpoint, data)
       .then(response => new this.prototype.constructor(response));
   }
 
   static get(id) {
-    return api.get(`${this.endpoint}/${id}`)
+    return this.cpanel.get(`${this.endpoint}/${id}`)
       .then(data => new this.prototype.constructor(data))
       .catch((error) => {
         if (error.statusCode && error.statusCode === 404) {
@@ -56,7 +66,7 @@ class Model extends base.Model {
   }
 
   static delete(id) {
-    return api.delete(`${this.endpoint}/${id}`)
+    return this.cpanel.delete(`${this.endpoint}/${id}`)
       .catch((error) => {
         if (error.statusCode && error.statusCode === 404) {
           throw new DoesNotExist(error, this.prototype.constructor, id);
@@ -81,7 +91,7 @@ class Model extends base.Model {
     const pk = this.data[pk_name];
 
     if (pk !== undefined) {
-      return api.patch(`${this.constructor.endpoint}/${pk}`, this.data)
+      return this.cpanel.patch(`${this.constructor.endpoint}/${pk}`, this.data)
         .then(data => new this.constructor(data));
     }
 

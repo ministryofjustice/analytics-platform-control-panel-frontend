@@ -1,5 +1,4 @@
 const { APIClient, APIError } = require('./base');
-const config = require('../config');
 const log = require('bole')('control_panel_api');
 const passport = require('passport');
 
@@ -36,11 +35,7 @@ class ControlPanelAPIClient extends APIClient {
   }
 }
 
-exports.APIClient = ControlPanelAPIClient;
-
-const api = new ControlPanelAPIClient(config.api);
-
-exports.api = api;
+exports.ControlPanelAPIClient = ControlPanelAPIClient;
 
 
 class DjangoError extends APIError {

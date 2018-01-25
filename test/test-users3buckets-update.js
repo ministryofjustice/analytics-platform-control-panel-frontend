@@ -1,18 +1,16 @@
 const { assert } = require('chai');
-const nock = require('nock');
-
-const config = require('../app/config');
+const { mock_api, withAPI } = require('./conftest');
 const handlers = require('../app/users3buckets/handlers');
 
 
 describe('Edit bucket form', () => {
   describe('when updating user access', () => {
-    it('make request to API', () => {
+    it('make request to API', withAPI(() => {
       const users3bucket_id = 42;
       const access_level = 'readonly';
       const redirect_to = 'buckets/123';
 
-      const patch_users3buckets = nock(config.api.base_url)
+      const patch_users3buckets = mock_api()
         .patch(`/users3buckets/${users3bucket_id}/`, {
           id: users3bucket_id,
           access_level: access_level,
@@ -39,6 +37,6 @@ describe('Edit bucket form', () => {
 
           assert.equal(redirect_url, redirect_to);
         });
-    });
+    }));
   });
 });

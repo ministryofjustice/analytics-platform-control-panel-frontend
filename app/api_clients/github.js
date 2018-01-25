@@ -1,4 +1,3 @@
-const config = require('../config');
 const GithubAPI = require('github');
 const { ManagementClient } = require('auth0');
 
@@ -36,7 +35,3 @@ class GithubAPIClient extends GithubAPI {
 }
 
 exports.GithubAPIClient = GithubAPIClient;
-
-const api = new GithubAPIClient(config);
-
-exports.api = api;

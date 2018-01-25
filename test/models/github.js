@@ -1,12 +1,12 @@
 const { assert } = require('chai');
-const { config } = require('../conftest');
+const { config, withAPI } = require('../conftest');
 const nock = require('nock');
 const { ModelSet, Repo } = require('../../app/models');
 
 
 describe('Github model', () => {
   describe('Repo', () => {
-    it('list method returns a ModelSet of Repo objects', () => {
+    it('list method returns a ModelSet of Repo objects', withAPI(() => {
       const repos_response = require('../fixtures/repos');
 
       config.github.orgs = [
@@ -29,6 +29,6 @@ describe('Github model', () => {
         .then((repos) => {
           assert.deepEqual(repos, expected);
         });
-    });
+    }));
   });
 });

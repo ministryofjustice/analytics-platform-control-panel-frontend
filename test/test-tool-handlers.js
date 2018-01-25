@@ -1,22 +1,20 @@
 "use strict";
 const { assert, spy } = require('chai').use(require('chai-spies'));
-const { config, mock_api, url_for } = require('./conftest');
-const { api } = require('../app/api_clients/kubernetes');
+const { config, mock_api, url_for, user, withAPI } = require('./conftest');
 const handlers = require('../app/tools/handlers');
+const deployments_response = require('./fixtures/deployments');
 
 
 describe('Tools handler', () => {
-  describe('restart', () => {
-    const deployments_response = require('./fixtures/deployments');
+  const k8s_ns = user.kubernetes_namespace;
 
-    it('restarts the specified tool', () => {
-      const namespace = 'user-andyhd';
-      api.namespace = namespace;
+  describe('restart', () => {
+    it('restarts the specified tool', withAPI(() => {
       const tool = deployments_response.items[0];
-      const url = `/k8s/api/v1/namespaces/${namespace}/pods?labelSelector=app%3Drstudio`;
+      const url = `/k8s/api/v1/namespaces/${k8s_ns}/pods?labelSelector=app%3Drstudio`;
 
       const get_deployment = mock_api()
-        .get(`/k8s/apis/apps/v1beta2/namespaces/${namespace}/deployments/${tool.metadata.name}`)
+        .get(`/k8s/apis/apps/v1beta2/namespaces/${k8s_ns}/deployments/${tool.metadata.name}`)
         .reply(200, tool);
       const delete_pods = mock_api()
         .delete(url)
@@ -38,11 +36,11 @@ describe('Tools handler', () => {
           assert(get_deployment.isDone());
           assert(delete_pods.isDone());
         });
-    });
+    }));
   });
 
   describe('deploy', (done) => {
-    it('deploy the specified tool for the user', () => {
+    it('deploy the specified tool for the user', withAPI(() => {
       const tool_name = 'rstudio';
       const expected_redirect_url = `${url_for('base.home')}#${escape('Analytical tools')}`;
       let redirected_to = 'NOT REDIRECTED';
@@ -66,6 +64,6 @@ describe('Tools handler', () => {
         });
 
       handlers.deploy(req, res);
-    });
+    }));
   });
 });

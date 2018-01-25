@@ -1,11 +1,20 @@
+const cls = require('continuation-local-storage');
 const config = require('../config');
 const { Model, ModelSet } = require('./base');
-const github = require('../api_clients/github');
 
 
 class Repo extends Model {
+  static get github() {
+    const ns = cls.getNamespace(config.continuation_locals.namespace);
+    return ns.get('github');
+  }
+
+  get github() {
+    return this.constructor.github;
+  }
+
   static list(params = {}) {
-    return Promise.all(config.github.orgs.map(org => github.api.repos.getForOrg({
+    return Promise.all(config.github.orgs.map(org => this.github.repos.getForOrg({
       org,
       type: 'all',
       page: params.page || 1,

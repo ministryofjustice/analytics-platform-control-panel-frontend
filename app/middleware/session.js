@@ -1,3 +1,4 @@
+const cls = require('continuation-local-storage');
 const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
 const redislog = require('bole')('redis');
@@ -13,27 +14,31 @@ module.exports = (app, conf, log) => {
   session_config.store.logErrors = redislog.error;
   const session_middleware = session(session_config);
 
-  return (req, res, next) => {
-    let tries = 3;
+  return [
+    (req, res, next) => {
+      const ns = cls.getNamespace(conf.continuation_locals.namespace);
+      const resume = ns.bind(next);
+      let tries = 3;
 
-    function lookup_session(error) {
-      if (error) {
-        return next(error);
+      function lookup_session(error) {
+        if (error) {
+          return resume(error);
+        }
+
+        tries -= 1;
+
+        if (req.session !== undefined) {
+          return resume();
+        }
+
+        if (tries < 0) {
+          return resume(new Error('session lookup failed'));
+        }
+
+        return session_middleware(req, res, lookup_session);
       }
 
-      tries -= 1;
-
-      if (req.session !== undefined) {
-        return next();
-      }
-
-      if (tries < 0) {
-        return next(new Error('session lookup failed'));
-      }
-
-      return session_middleware(req, res, lookup_session);
-    }
-
-    lookup_session();
-  };
+      lookup_session();
+    },
+  ];
 };

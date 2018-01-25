@@ -1,12 +1,16 @@
 const { App, Bucket, User } = require('../models');
 const { Repo } = require('../models/github');
+const cls = require('continuation-local-storage');
 const config = require('../config');
-const github = require('../api_clients/github');
+const { GithubAPIClient } = require('../api_clients/github');
 const { url_for } = require('../routes');
 
 
 exports.new = (req, res, next) => {
-  github.api.authenticate(req.user)
+  const github_api = new GithubAPIClient(config);
+  const ns = cls.getNamespace(config.continuation_locals.namespace);
+  ns.set('github', github_api);
+  github_api.authenticate(req.user)
     .then(() => Promise.all([Repo.list(), Bucket.list()]))
     .then(([repos, buckets]) => {
       res.render('apps/new.html', {

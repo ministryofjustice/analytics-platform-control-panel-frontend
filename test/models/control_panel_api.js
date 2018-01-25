@@ -1,11 +1,12 @@
 "use strict";
 const { assert } = require('chai');
-const { mock_api } = require('../conftest');
+const { config, mock_api, ns, withAPI } = require('../conftest');
+const { ControlPanelAPIClient } = require('../../app/api_clients/control_panel_api');
 const { App, DoesNotExist } = require('../../app/models');
 const apps_response = require('../fixtures/apps');
 
 
-describe('Control Panel API Model', () => {
+describe('Control Panel API Model', function () {
   it('has a primary key', () => {
     assert.equal(App.pk, 'id');
   });
@@ -14,7 +15,7 @@ describe('Control Panel API Model', () => {
     assert.equal(App.endpoint, 'apps');
   });
 
-  it('lists all instances', () => {
+  it('lists all instances', withAPI(() => {
     mock_api()
       .get('/apps/')
       .reply(200, apps_response);
@@ -24,10 +25,10 @@ describe('Control Panel API Model', () => {
         assert.equal(apps.length, apps_response.results.length);
         assert.instanceOf(apps[0], App);
         assert.instanceOf(apps[1], App);
-      });
-  });
+    });
+  }));
 
-  it('can Create an instance', () => {
+  it('can Create an instance', withAPI(() => {
     const app_data = {
       name: 'test-app',
     };
@@ -43,10 +44,10 @@ describe('Control Panel API Model', () => {
       .then((new_app) => {
         assert.exists(new_app[App.pk]);
         assert.equal(new_app.name, expected.name);
-      });
-  });
+    });
+  }));
 
-  it('Retrieves an instance by primary key', () => {
+  it('Retrieves an instance by primary key', withAPI(() => {
     mock_api()
       .get('/apps/1/')
       .reply(200, apps_response.results[0]);
@@ -55,9 +56,9 @@ describe('Control Panel API Model', () => {
       .then((app) => {
         assert.equal(app[App.pk], 1);
       });
-  });
+  }));
 
-  it('throws an exception if no instance found', () => {
+  it('throws an exception if no instance found', withAPI(() => {
     mock_api()
       .get('/apps/0/')
       .reply(404, 'Not Found');
@@ -69,18 +70,18 @@ describe('Control Panel API Model', () => {
       .catch((error) => {
         assert.instanceOf(error, DoesNotExist);
       });
-  });
+  }));
 
-  it('Deletes an instance by primary key', () => {
+  it('Deletes an instance by primary key', withAPI(() => {
     mock_api()
       .delete('/apps/1/')
       .reply(204);
 
     return App.delete(1);
-  });
+  }));
 
   describe('instance', () => {
-    it('can be Created', () => {
+    it('can be Created', withAPI(() => {
       const app_data = {
         name: 'test-app',
       };
@@ -97,9 +98,9 @@ describe('Control Panel API Model', () => {
           assert.exists(new_app[App.pk]);
           assert.equal(new_app.name, expected.name);
         });
-    });
+    }));
 
-    it('can be Updated', () => {
+    it('can be Updated', withAPI(() => {
       const app_data = {
         name: 'test-app',
       };
@@ -120,9 +121,9 @@ describe('Control Panel API Model', () => {
         .then((updated_app) => {
           assert.equal(updated_app.name, app_data.name);
         });
-    });
+    }));
 
-    it('can be Deleted', () => {
+    it('can be Deleted', withAPI(() => {
       const existing_app = new App({ id: 1 });
 
       mock_api()
@@ -130,6 +131,6 @@ describe('Control Panel API Model', () => {
         .reply(204);
 
       return existing_app.delete();
-    });
+    }));
   });
 });

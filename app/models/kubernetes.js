@@ -1,22 +1,39 @@
-const { api } = require('../api_clients/control_panel_api');
-const { cluster } = require('../config');
-const kubernetes = require('../api_clients/kubernetes');
 const base = require('./base');
+const config = require('../config');
 const { DoesNotExist } = require('./control_panel_api');
+const cls = require('continuation-local-storage');
 
 
 class Model extends base.Model {
+  static get kubernetes() {
+    const ns = cls.getNamespace(config.continuation_locals.namespace);
+    return ns.get('kubernetes');
+  }
+
+  get kubernetes() {
+    return this.constructor.kubernetes;
+  }
+
+  static get cpanel() {
+    const ns = cls.getNamespace(config.continuation_locals.namespace);
+    return ns.get('cpanel');
+  }
+
+  get cpanel() {
+    return this.constructor.cpanel;
+  }
+
   static get pk() {
     return 'name';
   }
 
   static list(params = {}) {
-    return kubernetes.api.get(this.endpoint, params)
+    return this.kubernetes.get(this.endpoint, params)
       .then(result => new base.ModelSet(this.prototype.constructor, result.items));
   }
 
   static get(name) {
-    return kubernetes.api.get(`${this.endpoint}/${name}`)
+    return this.kubernetes.get(`${this.endpoint}/${name}`)
       .then(data => new this.prototype.constructor(data))
       .catch((error) => {
         if (error.statusCode && error.statusCode === 404) {
@@ -27,7 +44,7 @@ class Model extends base.Model {
   }
 
   static delete_all(params = {}) {
-    return kubernetes.api.delete(this.endpoint, params);
+    return this.kubernetes.delete(this.endpoint, params);
   }
 }
 
@@ -84,7 +101,7 @@ class Deployment extends Model {
   }
 
   static create(data) {
-    return api.post(`tools/${data.tool_name}/deployments`, {});
+    return this.cpanel.post(`tools/${data.tool_name}/deployments`, {});
   }
 
   restart() {
@@ -100,11 +117,11 @@ class Deployment extends Model {
   }
 
   get username() { // eslint-disable-line class-methods-use-this
-    return kubernetes.api.user.username.toLowerCase();
+    return this.kubernetes.user.username.toLowerCase();
   }
 
   get url() {
-    return `https://${this.username}-${this.app_label}.${cluster.tools_domain}`;
+    return `https://${this.username}-${this.app_label}.${config.cluster.tools_domain}`;
   }
 }
 

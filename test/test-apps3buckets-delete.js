@@ -1,15 +1,11 @@
 const { assert } = require('chai');
-
-const { config, mock_api } = require('./conftest');
+const { config, mock_api, withAPI } = require('./conftest');
 const handlers = require('../app/apps3buckets/handlers');
 
 
 describe('Edit bucket form', () => {
-
   describe('when revoking access to user', () => {
-
-    it('make request to API', () => {
-
+    it('make request to API', withAPI(() => {
       const apps3bucket_id = 42;
       const redirect_to = 'apps/123';
 
@@ -36,6 +32,6 @@ describe('Edit bucket form', () => {
           assert(delete_apps3buckets.isDone(), `Did't make DELETE request to API endpoint to /apps3buckets/${apps3bucket_id}/`);
           assert.equal(redirect_url, redirect_to);
         });
-    });
+    }));
   });
 });

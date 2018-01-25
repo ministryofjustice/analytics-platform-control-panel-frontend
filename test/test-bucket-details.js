@@ -2,16 +2,13 @@
 
 const { assert } = require('chai');
 const { App, Bucket, ModelSet, User } = require('../app/models');
-const { config, mock_api } = require('./conftest');
+const { config, mock_api, withAPI } = require('./conftest');
 const handlers = require('../app/buckets/handlers');
 
 
 describe('Edit bucket form', () => {
-
   describe('when rendered', () => {
-
-    it('loads bucket, apps and users from API', () => {
-
+    it('loads bucket, apps and users from API', withAPI(() => {
       const bucket = require('./fixtures/bucket');
       const apps = require('./fixtures/apps');
       const users = require('./fixtures/users');
@@ -59,8 +56,6 @@ describe('Edit bucket form', () => {
           assert.deepEqual(args.context.apps_options, expected.apps);
           assert.deepEqual(args.context.users_options, expected.users);
         });
-    });
-
+    }));
   });
-
 });

@@ -47,6 +47,10 @@ config.cluster = {
   tools_domain: process.env.TOOLS_DOMAIN,
 };
 
+config.continuation_locals = {
+  namespace: 'cpfrontend',
+};
+
 config.ensure_login = {
   exclude: [
     /^\/callback/,
@@ -79,6 +83,7 @@ config.log = {
 
 // order is important!
 config.middleware = [
+  'continuation-locals',
   'raven-request-handler',
   'request-logging',
   'static',

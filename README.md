@@ -1,4 +1,4 @@
-# Analytics Platform Control Panel
+# Analytical Platform Control Panel
 
 ## Running with Docker
 

@@ -1,7 +1,7 @@
 {
   "name": "cpfrontend",
   "version": "0.1.0",
-  "description": "Analytics Platform Control Panel frontend",
+  "description": "Analytical Platform Control Panel frontend",
   "main": "./app/server.js",
   "scripts": {
     "start": "$([ \"x$NODE_RESTART\" == \"x0\" ] && echo node || echo nodemon ) ./app/server.js | bistre",

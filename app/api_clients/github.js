@@ -1,4 +1,3 @@
-const config = require('../config');
 const GithubAPI = require('github');
 const { ManagementClient } = require('auth0');
 

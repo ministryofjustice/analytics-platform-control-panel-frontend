@@ -1,5 +1,4 @@
 const { APIClient, APIError } = require('./base');
-const config = require('../config');
 const log = require('bole')('control_panel_api');
 const passport = require('passport');
 

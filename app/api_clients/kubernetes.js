@@ -1,4 +1,3 @@
-const config = require('../config');
 const { ControlPanelAPIClient } = require('./control_panel_api');
 const url = require('url');
 

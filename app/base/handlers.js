@@ -2,7 +2,6 @@ const { Deployment, User } = require('../models');
 const config = require('../config');
 const cls = require('continuation-local-storage');
 const passport = require('passport');
-const raven = require('raven');
 const { url_for } = require('../routes');
 const uuid = require('uuid');
 
@@ -38,9 +37,9 @@ exports.error_test = (req, res, next) => {
 
 exports.auth_callback = [
   passport.authenticate('oidc'),
-  (req, res, next) => {
+  (req, res) => {
     res.redirect(url_for('users.verify_email'));
-  }
+  },
 ];
 
 exports.login = (req, res, next) => {

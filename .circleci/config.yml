@@ -9,6 +9,7 @@ jobs:
       - run: mkdir -p static/stylesheets
       - run: yarn run collect-static
       - run: yarn run test
+      - run: yarn run lint
       - persist_to_workspace:
           root: .
           paths:

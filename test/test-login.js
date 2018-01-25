@@ -33,15 +33,9 @@ describe('Logging in', () => {
         handlers.auth_callback[1](req, res, reject);
       });
 
-      //const user_details_request = mock_api()
-        //.get(`/users/${escape(user.auth0_id)}/`)
-        //.matchHeader('Authorization', `JWT ${id_token}`)
-        //.reply(200, user);
-
       return request
         .then((redirect_url) => {
           assert.equal(redirect_url, returnTo);
-          //assert(user_details_request.isDone(), 'API call expected');
         });
     }));
   });

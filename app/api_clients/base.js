@@ -62,6 +62,7 @@ class APIClient {
           // console.dir(result);
           result)
         .catch((error) => {
+          log.error(`${method} ${endpoint} ${error.statusCode || 'errored'}`);
           if (error.statusCode && error.statusCode === 403) {
             throw new APIForbidden(error);
           }

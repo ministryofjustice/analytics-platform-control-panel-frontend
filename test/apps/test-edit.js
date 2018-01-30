@@ -1,5 +1,5 @@
 const { assert } = require('chai');
-const { dispatch, mock_api, url_for } = require('../conftest');
+const { dispatch, mock_api } = require('../conftest');
 const handlers = require('../../app/apps/handlers');
 const { App, Bucket, ModelSet, User } = require('../../app/models');
 

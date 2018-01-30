@@ -1,8 +1,5 @@
-
-
 const { assert } = require('chai');
-const { config, mock_api, ns, withAPI } = require('../conftest');
-const { ControlPanelAPIClient } = require('../../app/api_clients/control_panel_api');
+const { mock_api, withAPI } = require('../conftest');
 const { App, DoesNotExist } = require('../../app/models');
 const apps_response = require('../fixtures/apps');
 
@@ -65,7 +62,7 @@ describe('Control Panel API Model', () => {
       .reply(404, 'Not Found');
 
     return App.get(0)
-      .then((app) => {
+      .then(() => {
         assert.fail('Expected failure');
       })
       .catch((error) => {

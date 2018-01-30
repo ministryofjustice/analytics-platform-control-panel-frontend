@@ -1,9 +1,6 @@
-
-
 const { assert } = require('chai');
-const { config, mock_api, ns, user, withAPI } = require('../conftest');
-const { KubernetesAPIClient } = require('../../app/api_clients/kubernetes');
-const { Deployment, DoesNotExist, ModelSet, Pod, User } = require('../../app/models');
+const { mock_api, user, withAPI } = require('../conftest');
+const { Deployment, DoesNotExist, ModelSet, Pod } = require('../../app/models');
 const deployments_response = require('../fixtures/deployments');
 const pods_response = require('../fixtures/deployment-pods');
 
@@ -42,7 +39,7 @@ describe('Kubernetes Model', () => {
       .reply(404, 'Not Found');
 
     return Pod.get('non-existent')
-      .then((pod) => {
+      .then(() => {
         assert.fail('Expected failure');
       })
       .catch((error) => {

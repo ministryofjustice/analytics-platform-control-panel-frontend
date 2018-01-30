@@ -1,5 +1,3 @@
-
-
 const { assert } = require('chai');
 const { dispatch, mock_api, url_for } = require('../conftest');
 const handlers = require('../../app/users3buckets/handlers');

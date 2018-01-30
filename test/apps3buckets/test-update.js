@@ -19,8 +19,7 @@ describe('apps3buckets.update', () => {
     const params = { id: apps3bucket_id };
     const body = { access_level, redirect_to };
 
-    return dispatch(handlers.update, { params, body });
-    return request
+    return dispatch(handlers.update, { params, body })
       .then(({ redirect_url }) => {
         assert(patch_apps3buckets.isDone());
         assert.equal(redirect_url, redirect_to);

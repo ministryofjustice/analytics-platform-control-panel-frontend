@@ -1,7 +1,5 @@
-
-
-const { assert, spy } = require('chai').use(require('chai-spies'));
-const { config, dispatch, mock_api, url_for, user } = require('../conftest');
+const { assert } = require('chai');
+const { dispatch, mock_api, user } = require('../conftest');
 const handlers = require('../../app/tools/handlers');
 
 const deployments = require('../fixtures/deployments');

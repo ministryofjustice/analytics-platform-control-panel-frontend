@@ -1,10 +1,7 @@
-
-
 const { assert } = require('chai');
 const { config, mock_api } = require('../conftest');
 
 const { ControlPanelAPIClient } = require('../../app/api_clients/control_panel_api');
-const { App, ModelSet } = require('../../app/models');
 
 
 describe('Control Panel API Client', () => {
@@ -23,7 +20,7 @@ describe('Control Panel API Client', () => {
     client.authenticate({ id_token });
 
     return client.get('apps')
-      .then((response) => {
+      .then(() => {
         throw new Error('expected failure');
       })
       .catch((error) => {
@@ -49,7 +46,7 @@ describe('Control Panel API Client', () => {
       results: [],
     };
 
-    const request = mock_api()
+    mock_api()
       .get('/apps/')
       .matchHeader('Authorization', `JWT ${id_token}`)
       .reply(200, apps_response);

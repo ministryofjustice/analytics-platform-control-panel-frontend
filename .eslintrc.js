@@ -2,6 +2,7 @@ module.exports = {
   "extends": "airbnb-base",
   "env": {
     "browser": true,
+    "mocha": true,
   },
   "globals": {
     "$": false,

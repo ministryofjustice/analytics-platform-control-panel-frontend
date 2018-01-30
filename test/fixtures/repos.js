@@ -73,14 +73,14 @@ function fake_repo(name, description, isPrivate = false) {
     open_issues: 0,
     watchers: 0,
     default_branch: 'master',
-    permissions: {}
+    permissions: {},
   };
 }
 
 module.exports = [
-  fake_repo('frozen-sledgehammer', "radical B2B platform that mobilizes innovative interest graphs", true),
-  fake_repo('eternal-torpedo', "agile marketing automation platform that synchronizes messaging using transparent engagement methods", true),
-  fake_repo('rebel-tiger', "B2B ecosystem that leverages gamification along innovative minimum viable products"),
+  fake_repo('frozen-sledgehammer', 'radical B2B platform that mobilizes innovative interest graphs', true),
+  fake_repo('eternal-torpedo', 'agile marketing automation platform that synchronizes messaging using transparent engagement methods', true),
+  fake_repo('rebel-tiger', 'B2B ecosystem that leverages gamification along innovative minimum viable products'),
   fake_repo('dirty-serpent', 'cloud-based toolbox that scales 3D motion sensing through state-of-the-art non-profits'),
   fake_repo('confidential-albatross', 'personalized e-commerce platform that maximizes content distribution through customizable online advertising', true),
 ];

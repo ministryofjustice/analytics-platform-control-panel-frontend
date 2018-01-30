@@ -1,17 +1,14 @@
-"use strict";
 const { assert } = require('chai');
 const { config, mock_api } = require('../conftest');
 
 const { ControlPanelAPIClient } = require('../../app/api_clients/control_panel_api');
-const { App, ModelSet } = require('../../app/models');
 
 
 describe('Control Panel API Client', () => {
   const client = new ControlPanelAPIClient(config.api);
 
   it('rejects an invalid auth token', () => {
-    const reason = {
-      'detail': 'Authentication credentials were not provided.'};
+    const reason = { detail: 'Authentication credentials were not provided.' };
     const expected = 'GET /apps/ was not permitted: Authentication credentials were not provided.';
     const id_token = 'invalid token';
 
@@ -23,7 +20,7 @@ describe('Control Panel API Client', () => {
     client.authenticate({ id_token });
 
     return client.get('apps')
-      .then((response) => {
+      .then(() => {
         throw new Error('expected failure');
       })
       .catch((error) => {
@@ -36,20 +33,20 @@ describe('Control Panel API Client', () => {
     assert.throws(
       () => { client.authenticate({ id_token: undefined }); },
       Error,
-      'User has no id_token'
+      'User has no id_token',
     );
   });
 
   it('accepts a valid auth token', () => {
     const id_token = 'valid JWT';
     const apps_response = {
-      'count': 0,
-      'next': null,
-      'previous': null,
-      'results': []
+      count: 0,
+      next: null,
+      previous: null,
+      results: [],
     };
 
-    const request = mock_api()
+    mock_api()
       .get('/apps/')
       .matchHeader('Authorization', `JWT ${id_token}`)
       .reply(200, apps_response);

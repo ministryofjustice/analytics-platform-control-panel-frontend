@@ -4,13 +4,13 @@ const { config } = require('../conftest');
 const nock = require('nock');
 const { User } = require('../../app/models');
 
+const auth0_user_response = require('../fixtures/auth0_user');
+const repos_response = require('../fixtures/repos');
+
 
 describe('Github API client', () => {
-
   it('requests an access token if not set', () => {
     const auth0_id = 'github|12345';
-    const auth0_user_response = require('../fixtures/auth0_user');
-    const repos_response = require('../fixtures/repos');
 
     config.auth0 = {
       domain: 'test.eu.auth0.com',
@@ -23,19 +23,19 @@ describe('Github API client', () => {
 
     const api = new GithubAPIClient(config);
 
-    const client_credentials_grant = nock(`https://${config.auth0.domain}`)
-      .post(`/oauth/token`)
+    nock(`https://${config.auth0.domain}`)
+      .post('/oauth/token')
       .reply(200, {
-        'access_token': 'test-access-token',
-        'token_type': 'Bearer',
-        'expires_in': 86400
+        access_token: 'test-access-token',
+        token_type: 'Bearer',
+        expires_in: 86400,
       });
 
     const get_auth0_user = nock(`https://${config.auth0.domain}`)
       .get(`/api/v2/users/${escape(auth0_id)}`)
       .reply(200, auth0_user_response);
 
-    const get_repos = nock(`https://${config.github.host}`)
+    nock(`https://${config.github.host}`)
       .get('/user/repos')
       .reply(200, repos_response);
 

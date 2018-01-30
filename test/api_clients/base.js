@@ -1,4 +1,3 @@
-"use strict";
 const { assert } = require('chai');
 const { config, mock_api } = require('../conftest');
 
@@ -17,7 +16,7 @@ describe('Base API Client', () => {
       .reply(200);
 
     return client.get('apps', { param1: 1, param2: 'foo' })
-      .then((response) => {
+      .then(() => {
         assert(request.isDone());
       });
   });
@@ -35,7 +34,7 @@ describe('Base API Client', () => {
       .reply(200);
 
     return client.post('apps', expected.body)
-      .then((response) => {
+      .then(() => {
         assert(request.isDone());
       });
   });
@@ -49,7 +48,7 @@ describe('Base API Client', () => {
       .reply(204);
 
     return client.delete('apps/1')
-      .then((response) => {
+      .then(() => {
         assert(request.isDone());
       });
   });
@@ -66,7 +65,7 @@ describe('Base API Client', () => {
       .reply(200);
 
     return client.patch('apps/1', expected.body)
-      .then((response) => {
+      .then(() => {
         assert(request.isDone());
       });
   });

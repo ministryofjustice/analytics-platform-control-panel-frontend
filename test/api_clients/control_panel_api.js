@@ -1,4 +1,5 @@
-"use strict";
+
+
 const { assert } = require('chai');
 const { config, mock_api } = require('../conftest');
 
@@ -10,8 +11,7 @@ describe('Control Panel API Client', () => {
   const client = new ControlPanelAPIClient(config.api);
 
   it('rejects an invalid auth token', () => {
-    const reason = {
-      'detail': 'Authentication credentials were not provided.'};
+    const reason = { detail: 'Authentication credentials were not provided.' };
     const expected = 'GET /apps/ was not permitted: Authentication credentials were not provided.';
     const id_token = 'invalid token';
 
@@ -36,17 +36,17 @@ describe('Control Panel API Client', () => {
     assert.throws(
       () => { client.authenticate({ id_token: undefined }); },
       Error,
-      'User has no id_token'
+      'User has no id_token',
     );
   });
 
   it('accepts a valid auth token', () => {
     const id_token = 'valid JWT';
     const apps_response = {
-      'count': 0,
-      'next': null,
-      'previous': null,
-      'results': []
+      count: 0,
+      next: null,
+      previous: null,
+      results: [],
     };
 
     const request = mock_api()

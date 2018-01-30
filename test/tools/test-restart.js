@@ -1,4 +1,5 @@
-"use strict";
+
+
 const { assert, spy } = require('chai').use(require('chai-spies'));
 const { config, dispatch, mock_api, url_for, user } = require('../conftest');
 const handlers = require('../../app/tools/handlers');
@@ -42,7 +43,7 @@ describe('tools', () => {
 
       return Promise.all([
         dispatch(handlers.deploy, { params: { name } }),
-        deploy_request
+        deploy_request,
       ])
         .then(([{ redirect_url, req }, deploy_request_done]) => {
           assert.equal(expected_redirect_url, redirect_url);

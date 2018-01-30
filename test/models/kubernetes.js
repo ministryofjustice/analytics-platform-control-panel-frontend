@@ -1,4 +1,5 @@
-"use strict";
+
+
 const { assert } = require('chai');
 const { config, mock_api, ns, user, withAPI } = require('../conftest');
 const { KubernetesAPIClient } = require('../../app/api_clients/kubernetes');
@@ -82,9 +83,9 @@ describe('Kubernetes Model', () => {
       const delete_pods = mock_api()
         .delete(`/k8s/api/v1/namespaces/${k8s_ns}/pods?labelSelector=app%3Drstudio`)
         .reply(200, {
-          'apiVersion': 'v1',
-          'kind': 'Status',
-          'status': 'Success'
+          apiVersion: 'v1',
+          kind: 'Status',
+          status: 'Success',
         });
 
       rstudio.restart()

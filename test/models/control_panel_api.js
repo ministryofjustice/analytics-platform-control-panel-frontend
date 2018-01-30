@@ -1,4 +1,5 @@
-"use strict";
+
+
 const { assert } = require('chai');
 const { config, mock_api, ns, withAPI } = require('../conftest');
 const { ControlPanelAPIClient } = require('../../app/api_clients/control_panel_api');
@@ -6,7 +7,7 @@ const { App, DoesNotExist } = require('../../app/models');
 const apps_response = require('../fixtures/apps');
 
 
-describe('Control Panel API Model', function () {
+describe('Control Panel API Model', () => {
   it('has a primary key', () => {
     assert.equal(App.pk, 'id');
   });
@@ -25,7 +26,7 @@ describe('Control Panel API Model', function () {
         assert.equal(apps.length, apps_response.results.length);
         assert.instanceOf(apps[0], App);
         assert.instanceOf(apps[1], App);
-    });
+      });
   }));
 
   it('can Create an instance', withAPI(() => {
@@ -44,7 +45,7 @@ describe('Control Panel API Model', function () {
       .then((new_app) => {
         assert.exists(new_app[App.pk]);
         assert.equal(new_app.name, expected.name);
-    });
+      });
   }));
 
   it('Retrieves an instance by primary key', withAPI(() => {

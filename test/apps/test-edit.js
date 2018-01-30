@@ -11,14 +11,14 @@ const users = require('../fixtures/users');
 describe('apps/edit', () => {
   it('loads app, buckets and users and shows a form', () => {
     mock_api().get(`/apps/${app.id}/`).reply(200, app);
-    mock_api().get(`/s3buckets/`).reply(200, buckets);
-    mock_api().get(`/users/`).reply(200, users);
+    mock_api().get('/s3buckets/').reply(200, buckets);
+    mock_api().get('/users/').reply(200, users);
 
     const expected = {
-      'app': new App(app),
-      'buckets': new ModelSet(Bucket, buckets.results),
-      'users': new ModelSet(User, users.results),
-    }
+      app: new App(app),
+      buckets: new ModelSet(Bucket, buckets.results),
+      users: new ModelSet(User, users.results),
+    };
 
     return dispatch(handlers.details, { params: { id: app.id } })
       .then(({ template, context }) => {

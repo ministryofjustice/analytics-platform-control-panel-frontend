@@ -6,7 +6,6 @@ const { User } = require('../../app/models');
 
 
 describe('Github API client', () => {
-
   it('requests an access token if not set', () => {
     const auth0_id = 'github|12345';
     const auth0_user_response = require('../fixtures/auth0_user');
@@ -24,11 +23,11 @@ describe('Github API client', () => {
     const api = new GithubAPIClient(config);
 
     const client_credentials_grant = nock(`https://${config.auth0.domain}`)
-      .post(`/oauth/token`)
+      .post('/oauth/token')
       .reply(200, {
-        'access_token': 'test-access-token',
-        'token_type': 'Bearer',
-        'expires_in': 86400
+        access_token: 'test-access-token',
+        token_type: 'Bearer',
+        expires_in: 86400,
       });
 
     const get_auth0_user = nock(`https://${config.auth0.domain}`)

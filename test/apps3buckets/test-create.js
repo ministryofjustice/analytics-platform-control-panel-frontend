@@ -2,7 +2,7 @@ const { assert } = require('chai');
 const { dispatch, mock_api, url_for } = require('../conftest');
 const handlers = require('../../app/apps3buckets/handlers');
 
-const app = require('../fixtures/app')
+const app = require('../fixtures/app');
 
 
 describe('apps3buckets/create', () => {

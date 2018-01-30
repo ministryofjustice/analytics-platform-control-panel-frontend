@@ -12,7 +12,7 @@ describe('buckets/create', () => {
     const user = { auth0_id: 'github|12345', id_token: 'dummy-token' };
     const created_bucket = {
       id: 1,
-      url: config.api.base_url + '/s3buckets/1/',
+      url: `${config.api.base_url}/s3buckets/1/`,
       name: bucket_name,
       arn: `arn:aws:s3:::${bucket_name}`,
       apps3buckets: [],

@@ -12,7 +12,7 @@ describe('users3buckets.update', () => {
     const patch_users3buckets = mock_api()
       .patch(`/users3buckets/${users3bucket_id}/`, {
         id: users3bucket_id,
-        access_level: access_level,
+        access_level,
       })
       .reply(201);
 

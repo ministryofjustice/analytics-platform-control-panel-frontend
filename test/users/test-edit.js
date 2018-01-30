@@ -1,6 +1,7 @@
-"use strict";
+
+
 const { assert } = require('chai');
-const { config, dispatch,  mock_api } = require('../conftest');
+const { config, dispatch, mock_api } = require('../conftest');
 const handlers = require('../../app/users/handlers');
 const { App, Bucket, ModelSet, User } = require('../../app/models');
 
@@ -17,9 +18,9 @@ describe('users', () => {
       mock_api().get('/s3buckets/').reply(200, buckets);
 
       const expected = {
-        'user': new User(user),
-        'apps': new ModelSet(App, apps.results).slice(1),
-        'buckets': new ModelSet(Bucket, buckets.results).slice(1),
+        user: new User(user),
+        apps: new ModelSet(App, apps.results).slice(1),
+        buckets: new ModelSet(Bucket, buckets.results).slice(1),
       };
 
       return dispatch(handlers.user_edit, { params: { id: user.auth0_id } })

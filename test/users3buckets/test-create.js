@@ -1,4 +1,5 @@
-"use strict";
+
+
 const { assert } = require('chai');
 const { dispatch, mock_api, url_for } = require('../conftest');
 const handlers = require('../../app/users3buckets/handlers');
@@ -10,10 +11,10 @@ describe('users3buckets.create', () => {
     const user_id = 'github|123';
 
     const post_users3buckets = mock_api()
-      .post(`/users3buckets/`, {
+      .post('/users3buckets/', {
         user: user_id,
         s3bucket: bucket_id,
-        access_level: "readonly",
+        access_level: 'readonly',
         is_admin: false,
       })
       .reply(201);

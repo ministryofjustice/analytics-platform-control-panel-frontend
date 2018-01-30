@@ -1,4 +1,5 @@
-"use strict";
+
+
 const cls = require('continuation-local-storage');
 const config = require('../app/config');
 const { ControlPanelAPIClient } = require('../app/api_clients/control_panel_api');
@@ -21,18 +22,14 @@ function init_api_clients(ns) {
   ns.set('github', new GithubAPIClient(config));
   const kubernetes = new KubernetesAPIClient(config.api);
   kubernetes.authenticate(user);
-  ns.set('kubernetes', kubernetes)
+  ns.set('kubernetes', kubernetes);
 }
 
 
-exports.withAPI = (fn) => {
-  return () => {
-    return ns.run(() => {
-      init_api_clients(ns);
-      return fn();
-    });
-  };
-};
+exports.withAPI = fn => () => ns.run(() => {
+  init_api_clients(ns);
+  return fn();
+});
 
 
 function default_session() {
@@ -42,34 +39,32 @@ function default_session() {
 }
 
 
-exports.dispatch = (handler, { params = undefined, body = undefined, session = default_session(), user = default_user } = {}) => {
-  return new Promise((resolve, reject) => {
-    const req = {
-      params,
-      body,
-      session,
-      user,
-    };
-    const res = {
-      redirect: (redirect_url) => { resolve({ redirect_url, req }) },
-      render: (template, context) => { resolve({ template, context, req }) },
-    };
-    const next = (error) => {
-      if (error) {
-        reject(error);
-      }
-      resolve({ req });
-    };
+exports.dispatch = (handler, { params = undefined, body = undefined, session = default_session(), user = default_user } = {}) => new Promise((resolve, reject) => {
+  const req = {
+    params,
+    body,
+    session,
+    user,
+  };
+  const res = {
+    redirect: (redirect_url) => { resolve({ redirect_url, req }); },
+    render: (template, context) => { resolve({ template, context, req }); },
+  };
+  const next = (error) => {
+    if (error) {
+      reject(error);
+    }
+    resolve({ req });
+  };
 
-    return ns.run(() => {
-      init_api_clients(ns);
-      return handler(req, res, next);
-    });
+  return ns.run(() => {
+    init_api_clients(ns);
+    return handler(req, res, next);
   });
-};
+});
 
 load_routes();
 
 exports.config = config;
-exports.mock_api = () => { return nock(exports.config.api.base_url); };
+exports.mock_api = () => nock(exports.config.api.base_url);
 exports.url_for = url_for;

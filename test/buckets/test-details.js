@@ -18,9 +18,9 @@ describe('buckets/details', () => {
     mock_api().get('/users/').reply(200, users);
 
     const expected = {
-      'apps': new ModelSet(App, apps.results).slice(1),
-      'users': new ModelSet(User, users.results).slice(1),
-      'bucket': new Bucket(bucket),
+      apps: new ModelSet(App, apps.results).slice(1),
+      users: new ModelSet(User, users.results).slice(1),
+      bucket: new Bucket(bucket),
     };
 
     return dispatch(handlers.bucket_details, { params, user })

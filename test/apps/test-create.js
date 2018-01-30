@@ -24,7 +24,7 @@ describe('apps/create', () => {
         user: 'test-user',
         access_level: 'readwrite',
         is_admin: true,
-      })
+      });
 
     return dispatch(handlers.create, { body: form_data, user })
       .then(({ redirect_url }) => {

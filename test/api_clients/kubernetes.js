@@ -1,4 +1,5 @@
-"use strict";
+
+
 const { assert } = require('chai');
 const { config, mock_api } = require('../conftest');
 

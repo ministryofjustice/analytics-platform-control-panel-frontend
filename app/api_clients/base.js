@@ -63,7 +63,6 @@ class APIClient {
           result)
         .catch((error) => {
           log.error(`${method} ${options.uri} ${error.statusCode || 'errored'}`);
-          log.error(`Headers: ${JSON.stringify(headers, null, 2)}`);
           log.error(`Query: ${JSON.stringify(params, null, 2)}`);
           log.error(`Body: ${JSON.stringify(body, null, 2)}`);
           if (error.statusCode && error.statusCode === 403) {

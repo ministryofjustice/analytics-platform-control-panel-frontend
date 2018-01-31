@@ -19,56 +19,69 @@ exports.new = (req, res, next) => {
         repos,
         bucket_prefix: `${process.env.ENV}-`,
         buckets,
+        errors: req.form_errors,
       });
     })
     .catch(next);
 };
 
-exports.create = (req, res, next) => {
-  const app = new App({
-    name: req.body.repo_typeahead,
-    description: req.body.description,
-    repo_url: req.body.repo_url,
+
+function app_from_form(form_data) {
+  return new App({
+    name: form_data.repo_typeahead,
+    description: form_data.description,
+    repo_url: form_data.repo_url,
     userapps: [],
-  });
-  const create_bucket = new Promise((resolve) => {
-    if (req.body['new-app-datasource'] === 'create') {
-      resolve(new Bucket({
-        name: req.body['new-datasource-name'],
-      }).create());
-    } else {
-      resolve(null);
+  }).create();
+}
+
+
+function app_data_source(form_data) {
+  return new Promise((resolve) => {
+    switch (form_data['new-app-datasource']) {
+      case 'create':
+        new Bucket({ name: form_data['new-datasource-name'] })
+          .create()
+          .then(bucket => resolve(bucket.id));
+        break;
+
+      case 'select':
+        resolve(form_data['select-existing-datasource']);
+        break;
+
+      default:
+        resolve(null);
     }
   });
+}
 
-  Promise.all([app.create(), create_bucket])
-    .then(([created_app, created_bucket]) => {
-      let grant_access = Promise.resolve(null);
 
-      if (created_bucket) {
-        grant_access = created_app.grant_bucket_access(created_bucket.id, 'readonly');
-      } else if (req.body['new-app-datasource'] === 'select') {
-        grant_access = created_app.grant_bucket_access(req.body['select-existing-datasource'], 'readonly');
+exports.create = (req, res, next) => {
+  let app;
+
+  Promise.all([app_from_form(req.body), app_data_source(req.body)])
+    .then(([created_app, bucket_id]) => {
+      app = created_app;
+
+      if (bucket_id) {
+        return app.grant_bucket_access(bucket_id, 'readonly');
       }
-      grant_access
-        .then(() => {
-          created_app.grant_user_access(req.user.auth0_id, 'readwrite', true);
-        })
-        .then(() => {
-          res.redirect(url_for('apps.details', { id: created_app.id }));
-        });
+
+      return Promise.resolve(null);
     })
-    .catch((err) => {
-      if (err.statusCode === 400) {
-        res.render('apps/new.html', {
-          app,
-          errors: err.error,
-        });
-      } else {
-        next(err);
+    .then(() => app.grant_user_access(req.user.auth0_id, 'readwrite', true))
+    .then(() => {
+      res.redirect(url_for('apps.details', { id: app.id }));
+    })
+    .catch((error) => {
+      if (error.statusCode === 400) {
+        req.form_errors = error.error;
+        return exports.new(req, res, next);
       }
+      return next(error);
     });
 };
+
 
 exports.list = (req, res, next) => {
   App.list()

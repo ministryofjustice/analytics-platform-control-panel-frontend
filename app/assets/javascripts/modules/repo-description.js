@@ -47,6 +47,7 @@ moj.Modules.repoDescription = {
           this.repoSelected = true;
         },
         onCancel: () => {
+          this.$repoSlugTypeahead.val('');
           this.resetTypeahead();
         },
         onSubmit: () => this.repoSelected,
@@ -57,7 +58,6 @@ moj.Modules.repoDescription = {
   resetTypeahead() {
     this.repoSelected = false;
     this.$repoSlugSelect.hide();
-    this.$repoSlugTypeahead.val('');
     this.updateDescription('');
     $('.typeahead__result, .typeahead__cancel-button').remove();
     $('.typeahead__container').removeClass('cancel');

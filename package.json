@@ -5,7 +5,7 @@
   "main": "./app/server.js",
   "scripts": {
     "start": "$([ \"x$NODE_RESTART\" == \"x0\" ] && echo node || echo nodemon ) ./app/server.js | bistre",
-    "test": "mocha -C -R list --recursive --use_strict",
+    "test": "mocha -C -R list --recursive",
     "collect-static": "node ./bin/collect-static.js | bistre",
     "lint": "node node_modules/eslint/bin/eslint.js app || exit 0"
   },

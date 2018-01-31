@@ -80,8 +80,8 @@
           </td>
           <td class="align-right">
             {% if users3bucket.is_admin %}
-              <a class="button button-secondary" href="{{ url_for('buckets.details', { id: users3bucket.id }) }}">Manage data source access</a>
-              <form action="{{ url_for('buckets.delete', { id: users3bucket.id }) }}" method="post" class="inline-form">
+              <a class="button button-secondary" href="{{ url_for('buckets.details', { id: users3bucket.s3bucket.id }) }}">Manage data source access</a>
+              <form action="{{ url_for('buckets.delete', { id: users3bucket.s3bucket.id }) }}" method="post" class="inline-form">
                 <input type="hidden" id="redirect" name="redirect" value="{{ url_for('base.home') }}">
                 <input type="submit" class="button button-secondary right js-confirm" value="Delete app data source" data-confirm-message="Are you sure you want to delete this app data source?">
               </form>

@@ -30,7 +30,7 @@
           <td class="align-right">
             {% if bucket.has_admin(current_user) or current_user.is_superuser %}
               <!-- Button to change access level -->
-              <form action="{{ url_for('users3buckets.update', { id: users3bucket.s3bucket.id }) }}" method="post" class="inline-form clearfix">
+              <form action="{{ url_for('users3buckets.update', { id: users3bucket.id }) }}" method="post" class="inline-form clearfix">
                 <input type="hidden" name="access_level" value="{{ yes_no(users3bucket.access_level, 'readwrite', 'readonly', 'readwrite') }}" />
 
                 <input type="hidden" name="redirect_to" value="{{ url_for('buckets.details', { id: bucket.id }) }}" />
@@ -39,7 +39,7 @@
               </form>
 
               <!-- Button to revoke access -->
-              <form action="{{ url_for('users3buckets.delete', { id: users3bucket.s3bucket.id }) }}" method="post" class="inline-form clearfix">
+              <form action="{{ url_for('users3buckets.delete', { id: users3bucket.id }) }}" method="post" class="inline-form clearfix">
                 <input type="hidden" name="redirect_to" value="{{ url_for('buckets.details', { id: bucket.id }) }}">
 
                 <input type="submit" class="js-confirm button button-secondary" value="Revoke admin access" />

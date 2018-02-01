@@ -67,7 +67,8 @@ exports.logout = (req, res) => {
     }
   });
   req.session.destroy(() => {
+    const encodedReturnTo = encodeURI(`${config.app.protocol}://${config.app.host}:${config.app.port}`);
     res.clearCookie(config.session.name);
-    res.redirect('/');
+    res.redirect(`https://${config.auth0.domain}/v2/logout?returnTo=${encodedReturnTo}&client_id=${config.auth0.clientID}`);
   });
 };

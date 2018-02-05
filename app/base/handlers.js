@@ -6,6 +6,11 @@ const { url_for } = require('../routes');
 const uuid = require('uuid');
 
 
+function sso_logout_url() {
+  const returnTo = encodeURI(`${config.app.protocol}://${config.app.host}:${config.app.port}`);
+  return `https://${config.auth0.domain}${config.auth0.sso_logout_url}?returnTo=${returnTo}&client_id=${config.auth0.clientID}`;
+}
+
 exports.home = (req, res, next) => {
   const { rstudio_is_deploying } = req.session;
   const ns = cls.getNamespace(config.continuation_locals.namespace);
@@ -68,6 +73,6 @@ exports.logout = (req, res) => {
   });
   req.session.destroy(() => {
     res.clearCookie(config.session.name);
-    res.redirect('/');
+    res.redirect(sso_logout_url());
   });
 };

@@ -13,6 +13,9 @@ config.api = {
 config.app = {
   env: process.env.ENV || 'dev',
   asset_path: '/static/',
+  protocol: process.env.APP_PROTOCOL || 'http',
+  host: process.env.APP_HOST || 'localhost',
+  port: process.env.APP_PORT || process.env.EXPRESS_PORT || 3000,
 };
 
 config.apps = [
@@ -37,6 +40,7 @@ config.auth0 = {
   retries: 2,
   sessionKey: `oidc:${process.env.AUTH0_DOMAIN}`,
   scope: 'openid email profile offline_access',
+  sso_logout_url: '/v2/logout',
 };
 
 config.babel = {

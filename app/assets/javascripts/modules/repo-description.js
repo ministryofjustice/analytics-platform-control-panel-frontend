@@ -32,6 +32,7 @@ moj.Modules.repoDescription = {
     const descriptions = repoOptions.map(opt => opt.dataset.description);
 
     this.resetTypeahead();
+    this.$repoSlugTypeahead.val('');
 
     this.$repoSlugTypeahead.typeahead({
       order: 'asc',
@@ -47,8 +48,7 @@ moj.Modules.repoDescription = {
           this.repoSelected = true;
         },
         onCancel: () => {
-          this.$repoSlugTypeahead.val('');
-          this.resetTypeahead();
+          this.showOrgRepos();
         },
         onSubmit: () => this.repoSelected,
       },
@@ -60,7 +60,7 @@ moj.Modules.repoDescription = {
     this.$repoSlugSelect.hide();
     this.updateDescription('');
     $('.typeahead__result, .typeahead__cancel-button').remove();
-    $('.typeahead__container').removeClass('cancel');
+    $('.typeahead__container').removeClass('cancel result');
     $('#repo-results').addClass('js-hidden');
   },
 

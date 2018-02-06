@@ -1,4 +1,4 @@
-moj.Modules.repoDescription = {
+moj.Modules.repoDetails = {
   formId: 'create_app',
   repoPrefix: 'https://github.com',
   orgSelectName: 'repo_org',

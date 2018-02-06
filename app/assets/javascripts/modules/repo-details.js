@@ -1,21 +1,26 @@
-moj.Modules.repoDescription = {
+moj.Modules.repoDetails = {
+  formId: 'create_app',
   repoPrefix: 'https://github.com',
   orgSelectName: 'repo_org',
   repoSlugSelectName: 'name',
   repoSlugTypeaheadName: 'repo_typeahead',
   repoUrlHiddenInputName: 'repo_url',
   descriptionInputName: 'description',
-  repoSelected: false,
+  repos: null,
+  descriptions: null,
 
   init() {
-    this.$repoSlugSelect = $(`#${this.repoSlugSelectName}`);
-    this.$orgSelect = $(`#${this.orgSelectName}`);
-    this.$repoUrlHiddenInput = $(`#${this.repoUrlHiddenInputName}`);
-    this.$repoSlugTypeahead = $(`#${this.repoSlugTypeaheadName}`);
+    if ($(`form#${this.formId}`).length) {
+      this.$form = $(`form#${this.formId}`);
+      this.$formSubmit = this.$form.find('input[type="submit"]');
+      this.$repoSlugSelect = this.$form.find(`#${this.repoSlugSelectName}`);
+      this.$orgSelect = this.$form.find(`#${this.orgSelectName}`);
+      this.$repoUrlHiddenInput = this.$form.find(`#${this.repoUrlHiddenInputName}`);
+      this.$repoSlugTypeahead = this.$form.find(`#${this.repoSlugTypeaheadName}`);
 
-    if (this.$repoSlugSelect.length) {
       this.bindEvents();
       this.showOrgRepos();
+      this.checkRepoValue();
     }
   },
 
@@ -23,40 +28,48 @@ moj.Modules.repoDescription = {
     this.$orgSelect.on('change', () => {
       this.showOrgRepos();
     });
+    this.$repoSlugTypeahead.on('change keyup', () => {
+      this.checkRepoValue();
+    });
+  },
+
+  checkRepoValue() {
+    this.updateRepoUrl();
+    if (this.$repoSlugTypeahead.val()) {
+      this.$formSubmit.prop('disabled', false);
+    } else {
+      this.$formSubmit.prop('disabled', true);
+    }
   },
 
   showOrgRepos() {
     const currentOrg = this.$orgSelect.val();
     const repoOptions = Array.from($(`optgroup[label="${currentOrg}"] option`));
-    const repos = repoOptions.map(opt => opt.text);
-    const descriptions = repoOptions.map(opt => opt.dataset.description);
 
+    this.repos = repoOptions.map(opt => opt.text);
+    this.descriptions = repoOptions.map(opt => opt.dataset.description);
     this.resetTypeahead();
-    this.$repoSlugTypeahead.val('');
 
     this.$repoSlugTypeahead.typeahead({
       order: 'asc',
       maxItem: 0,
       source: {
-        data: repos,
+        data: this.repos,
       },
       callback: {
-        onClickAfter: (node) => {
-          const index = repos.indexOf(node[0].value);
-
-          this.getRepoDescription(descriptions[index]);
-          this.repoSelected = true;
+        onClickAfter: () => {
+          this.checkRepoValue();
         },
         onCancel: () => {
           this.showOrgRepos();
         },
-        onSubmit: () => this.repoSelected,
       },
     });
   },
 
   resetTypeahead() {
-    this.repoSelected = false;
+    this.$repoSlugTypeahead.val('');
+    this.checkRepoValue();
     this.$repoSlugSelect.hide();
     this.updateDescription('');
     $('.typeahead__result, .typeahead__cancel-button').remove();
@@ -65,11 +78,25 @@ moj.Modules.repoDescription = {
   },
 
   getRepoDescription(description) {
-    const repoUrl = this.concatUrl(this.repoPrefix);
-
     this.updateDescription(description);
-    this.$repoUrlHiddenInput.val(repoUrl);
     $('#repo-results').removeClass('js-hidden');
+  },
+
+  updateRepoUrl() {
+    const repoUrl = this.concatUrl(this.repoPrefix);
+    this.$repoUrlHiddenInput.val(repoUrl);
+    this.checkForExistingRepo();
+  },
+
+  checkForExistingRepo() {
+    const index = this.repos.indexOf(this.$repoSlugTypeahead.val());
+    this.updateDescription(this.descriptions[index]);
+
+    if (index !== -1) {
+      $('#repo-results').removeClass('js-hidden');
+    } else {
+      $('#repo-results').addClass('js-hidden');
+    }
   },
 
   concatUrl(prefix) {

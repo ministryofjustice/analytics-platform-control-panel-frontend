@@ -20,13 +20,15 @@
   <tbody>
     {% for user in users %}
       <tr>
-        <td><a class="{% if current_user.auth0_id == user.auth0_id %}highlight-current{% endif %}"" href="{{ url_for('users.details', { id: user.auth0_id }) }}">{{ user.name | default(user.username, true) }}</a></td>
+        <td><a class="{% if current_user.auth0_id == user.auth0_id %}highlight-current{% endif %}" href="{{ url_for('users.details', { id: user.auth0_id }) }}">{{ user.name | default(user.username, true) }}</a></td>
         <td>{{ user.username }}</td>
         <td>{{ user.email }}</td>
         {% if current_user.is_superuser %}
           <td class="align-right">
             <a class="button button-secondary" href="{{ url_for('users.edit', { id: user.auth0_id }) }}">Edit</a>
-            <a class="button button-secondary js-confirm" href="#">Delete</a>
+            <form action="{{ url_for('users.delete', { id: user.auth0_id }) }}" method="post" class="inline-form" right clearfix">
+              <input type="submit" class="button button-warning right js-config" value="Delete" data-confirm-message="Are you sure you want to delete this user?">
+            </form>
           </td>
         {% endif %}
       </tr>

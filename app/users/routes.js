@@ -8,4 +8,5 @@ module.exports = [
   { name: 'edit', pattern: '/users/:id/edit', handler: handlers.user_edit },
   { name: 'verify_email', pattern: '/verify-email', handler: handlers.verify_email },
   { name: 'verify_email', method: 'POST', pattern: '/verify-email', handler: handlers.verify_email },
+  { name: 'delete', method: 'POST', pattern: '/users/:id/delete', handler: handlers.delete },
 ];

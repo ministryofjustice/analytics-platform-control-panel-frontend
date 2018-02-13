@@ -7,7 +7,7 @@ const uuid = require('uuid');
 
 
 function sso_logout_url() {
-  const returnTo = encodeURI(`${config.app.protocol}://${config.app.host}:${config.app.port}`);
+  const returnTo = encodeURI(`${config.app.protocol}://${config.app.host}`);
   return `https://${config.auth0.domain}${config.auth0.sso_logout_url}?returnTo=${returnTo}&client_id=${config.auth0.clientID}`;
 }
 

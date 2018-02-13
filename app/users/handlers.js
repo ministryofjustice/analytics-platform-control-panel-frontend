@@ -1,4 +1,5 @@
 const { App, Bucket, User } = require('../models');
+const { url_for } = require('../routes');
 
 
 exports.list_users = (req, res, next) => {
@@ -69,7 +70,7 @@ exports.delete = (req, res, next) => {
   User.delete(req.params.id)
     .then(() => {
       req.session.flash_messages.push('User deleted - may take a few seconds to complete deletion');
-      res.redirect(url_for('users.list_users'));
+      res.redirect(url_for('users.list'));
     })
     .catch(next);
 };

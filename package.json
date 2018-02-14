@@ -21,12 +21,14 @@
   "homepage": "https://github.com/ministryofjustice/analytics-platform-control-panel-frontend#readme",
   "dependencies": {
     "auth0": "^2.9.1",
+    "authenticator-cli": "^1.0.3",
     "babel-core": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
     "bole": "3.0.2",
     "cls-hooked": "^4.2.2",
+    "codeceptjs": "^1.1.4",
     "concat-files": "^0.1.1",
     "connect-ensure-login": "^0.1.1",
     "connect-redis": "^3.3.2",
@@ -52,7 +54,9 @@
     "request": "^2.82.0",
     "request-promise": "^4.2.1",
     "request-promise-core": "^1.1.1",
-    "uuid": "^3.1.0"
+    "selenium-standalone": "^6.12.0",
+    "uuid": "^3.1.0",
+    "webdriverio": "^4.10.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

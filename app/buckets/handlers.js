@@ -28,6 +28,7 @@ exports.create_bucket = (req, res) => {
     .catch((error) => {
       res.render('buckets/new.html', {
         bucket: { name: req.body['new-datasource-name'] },
+        bucket_prefix: `${process.env.ENV}-`,
         error,
       });
     });

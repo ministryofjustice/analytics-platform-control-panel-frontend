@@ -14,8 +14,7 @@ config.app = {
   env: process.env.ENV || 'dev',
   asset_path: '/static/',
   protocol: process.env.APP_PROTOCOL || 'http',
-  host: process.env.APP_HOST || 'localhost',
-  port: process.env.APP_PORT || process.env.EXPRESS_PORT || 3000,
+  host: process.env.APP_HOST || 'localhost:3000',
 };
 
 config.apps = [

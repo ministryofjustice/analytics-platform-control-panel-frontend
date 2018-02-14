@@ -28,4 +28,33 @@ describe('buckets/create', () => {
         assert.equal(redirect_url, url_for('buckets.details', { id: created_bucket.id }));
       });
   });
+
+  afterEach(() => {
+    delete process.env.ENV;
+  });
+
+  it('show an error if a bucket already exists with specified name', () => {
+    const form_data = {
+      'new-datasource-name': 'test-bucket',
+    };
+
+    const errors = {
+      name: 's3 bucket with this name already exists.',
+    };
+
+    process.env.ENV = 'test';
+
+    mock_api()
+      .post('/s3buckets/')
+      .reply(400, errors);
+
+    return dispatch(handlers.create_bucket, { body: form_data })
+      .then(({ redirect_url, template, context }) => {
+        assert.isUndefined(redirect_url);
+        assert.equal(template, 'buckets/new.html');
+        assert.deepEqual(context.error.error, errors);
+        assert.equal(context.bucket_prefix, 'test-');
+        assert.equal(context.bucket.name, 'test-bucket');
+      });
+  });
 });

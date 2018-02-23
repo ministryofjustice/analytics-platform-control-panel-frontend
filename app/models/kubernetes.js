@@ -1,7 +1,7 @@
 const base = require('./base');
 const config = require('../config');
 const { DoesNotExist } = require('./control_panel_api');
-const cls = require('continuation-local-storage');
+const cls = require('cls-hooked');
 
 
 class Model extends base.Model {

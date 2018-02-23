@@ -1,6 +1,6 @@
 const { App, Bucket, User } = require('../models');
 const { Repo } = require('../models/github');
-const cls = require('continuation-local-storage');
+const cls = require('cls-hooked');
 const config = require('../config');
 const { GithubAPIClient } = require('../api_clients/github');
 const { url_for } = require('../routes');

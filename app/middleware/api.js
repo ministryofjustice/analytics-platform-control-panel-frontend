@@ -1,6 +1,6 @@
 const { ControlPanelAPIClient } = require('../api_clients/control_panel_api');
 const { KubernetesAPIClient } = require('../api_clients/kubernetes');
-const cls = require('continuation-local-storage');
+const cls = require('cls-hooked');
 
 
 module.exports = (app, conf, log) => {

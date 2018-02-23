@@ -1,4 +1,4 @@
-const cls = require('continuation-local-storage');
+const cls = require('cls-hooked');
 const config = require('../config');
 const { Model, ModelSet } = require('./base');
 

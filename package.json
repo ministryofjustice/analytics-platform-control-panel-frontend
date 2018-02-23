@@ -26,6 +26,7 @@
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
     "bole": "3.0.2",
+    "cls-hooked": "^4.2.2",
     "concat-files": "^0.1.1",
     "connect-ensure-login": "^0.1.1",
     "connect-redis": "^3.3.2",

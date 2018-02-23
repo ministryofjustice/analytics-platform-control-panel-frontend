@@ -1,4 +1,4 @@
-const cls = require('continuation-local-storage');
+const cls = require('cls-hooked');
 const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
 const redislog = require('bole')('redis');

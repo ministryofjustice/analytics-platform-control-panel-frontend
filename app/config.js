@@ -54,6 +54,10 @@ config.continuation_locals = {
   namespace: 'cpfrontend',
 };
 
+config.cookie = {
+  secret: process.env.COOKIE_SECRET || 'shh-its-a-secret',
+};
+
 config.ensure_login = {
   exclude: [
     /^\/callback/,
@@ -144,7 +148,7 @@ config.sentry = {
 
 config.session = {
   name: 'session',
-  secret: process.env.COOKIE_SECRET || 'shh-its-a-secret',
+  secret: config.cookie.secret,
   resave: false,
   saveUninitialized: false,
   logFn: console.log, // eslint-disable-line no-console

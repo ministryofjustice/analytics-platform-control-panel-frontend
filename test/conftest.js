@@ -1,4 +1,4 @@
-const cls = require('continuation-local-storage');
+const cls = require('cls-hooked');
 const config = require('../app/config');
 const { ControlPanelAPIClient } = require('../app/api_clients/control_panel_api');
 const { GithubAPIClient } = require('../app/api_clients/github');

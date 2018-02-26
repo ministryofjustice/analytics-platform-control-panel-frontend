@@ -1,4 +1,4 @@
-const cls = require('continuation-local-storage');
+const cls = require('cls-hooked');
 
 
 module.exports = (app, conf, log) => {

@@ -1,4 +1,4 @@
-const cls = require('continuation-local-storage');
+const cls = require('cls-hooked');
 const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
 const redislog = require('bole')('redis');
@@ -17,22 +17,22 @@ module.exports = (app, conf, log) => {
   return [
     (req, res, next) => {
       const ns = cls.getNamespace(conf.continuation_locals.namespace);
-      const resume = ns.bind(next);
+      next = ns.bind(next); // eslint-disable-line no-param-reassign
       let tries = 3;
 
       function lookup_session(error) {
         if (error) {
-          return resume(error);
+          return next(error);
         }
 
         tries -= 1;
 
         if (req.session !== undefined) {
-          return resume();
+          return next();
         }
 
         if (tries < 0) {
-          return resume(new Error('session lookup failed'));
+          return next(new Error('session lookup failed'));
         }
 
         return session_middleware(req, res, lookup_session);

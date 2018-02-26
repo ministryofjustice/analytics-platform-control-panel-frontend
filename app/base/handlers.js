@@ -1,6 +1,6 @@
 const { Deployment, User } = require('../models');
 const config = require('../config');
-const cls = require('continuation-local-storage');
+const cls = require('cls-hooked');
 const passport = require('passport');
 const { url_for } = require('../routes');
 const uuid = require('uuid');

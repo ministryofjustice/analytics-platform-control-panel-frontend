@@ -4,7 +4,7 @@ module.exports = (app, conf, log) => {
   return (req, res, next) => {
     if (req.session) {
       if (req.session.flash_messages) {
-        app.locals.messages = req.session.flash_messages;
+        res.locals.messages = req.session.flash_messages;
       }
       req.session.flash_messages = [];
     }

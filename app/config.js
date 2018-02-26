@@ -54,6 +54,10 @@ config.continuation_locals = {
   namespace: 'cpfrontend',
 };
 
+config.cookie = {
+  secret: process.env.COOKIE_SECRET || 'shh-its-a-secret',
+};
+
 config.ensure_login = {
   exclude: [
     /^\/callback/,
@@ -81,7 +85,7 @@ config.js = {
 config.log = {
   requests: process.env.ENABLE_ACCESS_LOGS !== 'false',
   stream: process.stdout,
-  level: process.env.LOG_LEVEL || 'debug',
+  level: process.env.NODE_LOG_LEVEL || 'debug',
 };
 
 // order is important!
@@ -143,11 +147,19 @@ config.sentry = {
 };
 
 config.session = {
+  cookie: {
+    maxAge: ((maxAge) => {
+      if (Number.isNaN(maxAge)) {
+        return 1 * 60 * 60 * 1000; // 1 hours
+      }
+      return maxAge;
+    })(Number.parseInt(process.env.COOKIE_MAXAGE, 10)),
+  },
+  logFn: console.log, // eslint-disable-line no-console
   name: 'session',
-  secret: process.env.COOKIE_SECRET || 'shh-its-a-secret',
   resave: false,
   saveUninitialized: false,
-  logFn: console.log, // eslint-disable-line no-console
+  secret: config.cookie.secret,
 };
 
 config.session_store = {

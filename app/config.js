@@ -149,11 +149,11 @@ config.sentry = {
 config.session = {
   cookie: {
     maxAge: ((maxAge) => {
-      if (isNaN(maxAge)) {
+      if (Number.isNaN(maxAge)) {
         return 1 * 60 * 60 * 1000; // 1 hours
       }
       return maxAge;
-    })(parseInt(process.env.COOKIE_MAXAGE)),
+    })(Number.parseInt(process.env.COOKIE_MAXAGE, 10)),
   },
   logFn: console.log, // eslint-disable-line no-console
   name: 'session',

@@ -1,19 +1,17 @@
 {% extends "layouts/base.html" %}
 
 {% macro breadcrumbs_list(crumbs) %}
-  {% if crumbs %}
-    <div class="breadcrumbs">
-      <ol>
-        {% for crumb in crumbs %}
-          {% if crumb.url %}
-            <li><a href="{{ crumb.url }}">{{ crumb.text }}</a></li>
-          {% else %}
-            <li aria-current="page">{{ crumb.text }}</li>
-          {% endif %}
-        {% endfor %}
-      </ol>
-    </div>
-  {% endif %}
+  <div class="breadcrumbs">
+    <ol>
+      {% for crumb in crumbs %}
+        {% if crumb.url %}
+          <li><a href="{{ crumb.url }}">{{ crumb.text }}</a></li>
+        {% else %}
+          <li aria-current="page">{{ crumb.text }}</li>
+        {% endif %}
+      {% endfor %}
+    </ol>
+  </div>
 {% endmacro %}
 
 {% block page_title %}

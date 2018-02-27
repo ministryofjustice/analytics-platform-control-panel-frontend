@@ -1,5 +1,21 @@
 {% extends "layouts/base.html" %}
 
+{% macro breadcrumbs_list(crumbs) %}
+  {% if crumbs %}
+    <div class="breadcrumbs">
+      <ol>
+        {% for crumb in crumbs %}
+          {% if crumb.url %}
+            <li><a href="{{ crumb.url }}">{{ crumb.text }}</a></li>
+          {% else %}
+            <li aria-current="page">{{ crumb.text }}</li>
+          {% endif %}
+        {% endfor %}
+      </ol>
+    </div>
+  {% endif %}
+{% endmacro %}
+
 {% block page_title %}
   {{ page_title }} | Analytical Platform Control Panel
 {% endblock %}
@@ -8,7 +24,9 @@
 
 <main id="content" role="main">
 
-  {% block breadcrumbs %}{% endblock %}
+  {% if breadcrumbs %}
+    {{ breadcrumbs_list(breadcrumbs) }}
+  {% endif %}
 
   {% for message in messages %}
     <p class="flash-message">{{ message }}</p>

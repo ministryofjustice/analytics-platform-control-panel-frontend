@@ -1,14 +1,7 @@
 {% extends "layouts/one-column.html" %}
 
 {% set page_title = "App data sources" %}
-
-{% block breadcrumbs %}
-<div class="breadcrumbs">
-  <ol>
-    <li><a href="/">Home</a></li>
-  </ol>
-</div>
-{% endblock %}
+{% set breadcrumbs = [{text: 'Home', url: '/'}, {text: 'List all data sources'}] %}
 
 {% block main_column %}
 

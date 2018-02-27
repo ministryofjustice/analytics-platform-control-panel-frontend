@@ -2,6 +2,14 @@
 
 {% set page_title = "Users" %}
 
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <ol>
+    <li><a href="/">Home</a></li>
+  </ol>
+</div>
+{% endblock %}
+
 {% block main_column %}
 
 <p>{{ users.length }} user{%- if users.length != 1 -%}s{%- endif -%}</p>

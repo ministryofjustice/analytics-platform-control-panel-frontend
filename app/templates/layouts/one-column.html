@@ -8,6 +8,8 @@
 
 <main id="content" role="main">
 
+  {% block breadcrumbs %}{% endblock %}
+
   {% for message in messages %}
     <p class="flash-message">{{ message }}</p>
   {% endfor %}

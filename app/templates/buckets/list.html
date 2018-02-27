@@ -2,6 +2,14 @@
 
 {% set page_title = "App data sources" %}
 
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <ol>
+    <li><a href="/">Home</a></li>
+  </ol>
+</div>
+{% endblock %}
+
 {% block main_column %}
 
 <p>{{ buckets.length }} app data source{%- if buckets.length != 1 -%}s{%- endif -%}</p>

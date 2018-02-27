@@ -2,6 +2,14 @@
 
 {% set page_title = "Apps" %}
 
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <ol>
+    <li><a href="/">Home</a></li>
+  </ol>
+</div>
+{% endblock %}
+
 {% block main_column %}
 
 <p>{{ apps.length }} app{%- if apps.length != 1 -%}s{%- endif -%}</p>

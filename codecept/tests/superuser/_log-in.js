@@ -9,7 +9,7 @@ const test_user = {
 const formatted_token = generateToken(test_user.key);
 
 
-Feature('Log in @current');
+Feature('Log in');
 
 Scenario('Log in', (I) => {
   I.login(test_user, formatted_token);

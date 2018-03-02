@@ -9,7 +9,7 @@ const test_user = {
 const formatted_token = generateToken(test_user.key);
 
 
-Feature('Log in');
+Feature('Log in @nonsuperuser @superuser');
 
 Scenario('Log in', (I) => {
   I.login(test_user, formatted_token);

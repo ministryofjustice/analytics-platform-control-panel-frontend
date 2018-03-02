@@ -8,53 +8,9 @@ const test_bucket_suffix = `test-e2e-bucket-${rand_suffix2}`;
 let bucket_prefix;
 let test_bucket_name;
 
-Feature('Create data source then app linked to it, then delete them');
 
+Feature('Create and delete app and data source @superuser');
 
-Scenario('Go to data sources tab', (I) => {
-  I.amOnPage('/');
-  I.seeElement('li.tab-data');
-  I.click('li.tab-data');
-  I.waitUrlEquals('/#Data');
-  I.say('This is the data tab');
-});
-
-Scenario('Create a data source page', (I) => {
-  I.see('Create new data source');
-  I.click('Create new data source');
-  I.waitUrlEquals('/buckets/new');
-  I.say('This is the create new data source page');
-});
-
-Scenario('Grab data source prefix', function* (I) {
-  I.seeElement('input#new-datasource-name');
-  bucket_prefix = yield I.grabValueFrom('input#new-datasource-name');
-  I.say('Data source prefix grabbed: ' + bucket_prefix);
-  test_bucket_name = bucket_prefix + test_bucket_suffix;
-  I.say(`Data source name: ${test_bucket_name}`);
-});
-
-Scenario('Enter bucket name', (I) => {
-  I.fillField('input#new-datasource-name', test_bucket_suffix);
-  I.seeInField('input#new-datasource-name', test_bucket_name);
-  I.say(`Data source name entered: ${test_bucket_name}`);
-});
-
-Scenario('Submit button enabled', (I) => {
-  I.seeElement('input[type="submit"]');
-});
-
-Scenario('Create data source', (I) => {
-  I.click('Create');
-});
-
-Scenario('Check data source', (I) => {
-  I.waitForText('Data source:', 5, 'h1');
-  I.see(test_bucket_name, 'h1');
-  I.say('Data source created');
-  I.see(test_user_name, 'table.bucket-admins');
-  I.say('Test user is admin for data source');
-});
 
 Scenario('Go to apps tab', (I) => {
   I.amOnPage('/');
@@ -90,17 +46,28 @@ Scenario('Submit button enabled', (I) => {
   I.say('Create app submit button is enabled');
 });
 
-Scenario('Select data source', (I) => {
-  I.dontSee('select#select-existing-datasource');
-  I.see('Connect an existing app data source');
-  I.click('Connect an existing app data source');
-  I.waitForElement('select#select-existing-datasource');
-  I.say('Select data source dropdown is visible');
-  I.selectOption('select#select-existing-datasource', test_bucket_name);
-  I.say(`Selected previously created data source ${test_bucket_name}`);
+Scenario('Name new data source', (I) => {
+  I.dontSee('input#new-datasource-name');
+  I.see('Create a new app data source');
+  I.click('Create a new app data source');
+  I.waitForElement('input#new-datasource-name');
+  I.say('Enter data source name box is visible');
 });
 
-Scenario('Create app', (I) => {
+Scenario('Grab data source prefix', function* (I) {
+  bucket_prefix = yield I.grabValueFrom('input#new-datasource-name');
+  I.say('Data source prefix grabbed: ' + bucket_prefix);
+  test_bucket_name = bucket_prefix + test_bucket_suffix;
+  I.say(`Data source name will be: ${test_bucket_name}`);
+});
+
+Scenario('Enter data source name', (I) => {
+  I.fillField('input#new-datasource-name', test_bucket_suffix);
+  I.seeInField('input#new-datasource-name', test_bucket_name);
+  I.say(`Data source name entered: ${test_bucket_name}`);
+});
+
+Scenario('Create app and data source', (I) => {
   I.click('Create');
 });
 
@@ -112,7 +79,7 @@ Scenario('Check app page', (I) => {
   I.say('Test user is admin for app');
   I.see('1 app data source connected to this app');
   I.see(test_bucket_name, 'table.app-data-sources');
-  I.say(`App is attached to previously created data source ${test_bucket_name}`);
+  I.say('App has newly created data source attached');
 });
 
 Scenario('Delete app', (I) => {

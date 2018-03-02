@@ -5,7 +5,7 @@ const rand_suffix = Math.round(Math.random() * 1000000).toString();
 const test_app_name = `TEST-E2E-APP-${rand_suffix}`;
 
 
-Feature('Create and delete app');
+Feature('Create and delete app @superuser');
 
 
 Scenario('Go to apps tab', (I) => {

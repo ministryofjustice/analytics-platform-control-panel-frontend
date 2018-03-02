@@ -1,5 +1,5 @@
 {
-  "tests": "./codecept/tests/superuser/*.js",
+  "tests": "./codecept/tests/*.js",
   "timeout": 10000,
   "output": "./codecept/output",
   "helpers": {

@@ -6,7 +6,7 @@ const test_bucket_suffix = `test-e2e-bucket-${rand_suffix}`;
 let bucket_prefix;
 let test_bucket_name;
 
-Feature('Create and delete data source');
+Feature('Create and delete data source @superuser');
 
 
 Scenario('Go to data sources tab', (I) => {

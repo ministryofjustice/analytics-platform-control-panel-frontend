@@ -2,7 +2,7 @@ require('dotenv').config();
 const test_user_username = process.env.TEST_USER_USERNAME;
 
 
-Feature('List all users page');
+Feature('List all users page @superuser');
 
 
 Scenario('Go to superuser homepage', (I) => {

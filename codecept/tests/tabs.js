@@ -1,4 +1,4 @@
-Feature('Check tabs');
+Feature('Check tabs @superuser');
 
 
 Scenario('Superuser tab', (I) => {

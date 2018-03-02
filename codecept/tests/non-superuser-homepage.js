@@ -1,4 +1,4 @@
-Feature('Log in, check non-superuser homepage');
+Feature('Log in, check non-superuser homepage @nonsuperuser');
 
 
 Scenario('Check non-superuser homepage', (I) => {

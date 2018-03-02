@@ -1,4 +1,4 @@
-Feature('Superuser homepage');
+Feature('Superuser homepage @superuser');
 
 
 Scenario('Check superuser homepage', (I) => {

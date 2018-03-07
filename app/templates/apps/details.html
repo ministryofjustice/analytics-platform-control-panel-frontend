@@ -22,7 +22,7 @@
 
 <h2 class="heading-medium">App admins</h2>
 {% if app.userapps.length %}
-  <table class="form-group">
+  <table class="app-admins form-group">
     <thead>
       <tr>
         <th>Name</th>
@@ -79,7 +79,7 @@
 <p>{{ app.apps3buckets.length }} app data source{%- if app.apps3buckets.length != 1 -%}s{%- endif %} connected to this app</p>
 
 {% if app.apps3buckets.length %}
-  <table class="form-group">
+  <table class="app-data-sources form-group">
     <thead>
       <tr>
         <th>Name</th>

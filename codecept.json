@@ -1,0 +1,25 @@
+{
+  "tests": "./codecept/tests/*.js",
+  "timeout": 10000,
+  "output": "./codecept/output",
+  "helpers": {
+    "WebDriverIO": {
+      "url": "http://localhost:3000",
+      "browser": "chrome",
+      "desiredCapabilities": {
+        "chromeOptions": {
+          "args": [ "--headless", "--disable-gpu", "--window-size=1024,768" ]
+        }
+      },
+      "uniqueScreenshotNames": true,
+      "restart": false,
+      "keepBrowserState": true
+    }
+  },
+  "include": {
+    "I": "./codecept/steps_file.js"
+  },
+  "bootstrap": false,
+  "mocha": {},
+  "name": "analytics-platform-control-panel-frontend"
+}

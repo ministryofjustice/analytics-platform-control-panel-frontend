@@ -11,8 +11,9 @@
       <li class="tab-superuser">Superuser</li>
     {% endif %}
     <li class="tab-analytical-tools">Analytical tools</li>
+    <li class="tab-warehouse-data">Warehouse data</li>
     {% if current_user.is_superuser %}
-      <li class="tab-data">Data</li>
+      <li class="tab-webapp-data">Webapp data</li>
       <li class="tab-webapps">Webapps</li>
     {% endif %}
   </ul>
@@ -34,47 +35,52 @@
     {% include 'tools/includes/list.html' %}
   </section>
 
-  <section class="tab-panel">
-    <div class="form-group">
-      <h2 class="heading-medium">{{ heading_prefix }} data sources</h2>
-      {% if user.users3buckets.length %}
-        <table class="form-group">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>User has admin access</th>
-              <th>User has read/write access</th>
-              <td><span class="visuallyhidden">Actions</span></td>
-            </tr>
-          </thead>
-          {% for users3bucket in user.users3buckets %}
-            <tr>
-              <td><a href="{{ url_for('buckets.details', { id: users3bucket.s3bucket.id }) }}">{{ users3bucket.s3bucket.name }}</a></td>
-              <td>
-                {{ yes_no(users3bucket.is_admin) }}
-              </td>
-              <td>
-                {{ yes_no(users3bucket.access_level, 'readwrite') }}
-              </td>
-              <td class="align-right no-wrap">
-                {% if users3bucket.is_admin %}
-                  <a class="button button-secondary" href="{{ url_for('buckets.details', { id: users3bucket.s3bucket.id }) }}">Manage data source access</a>
-                  <form action="{{ url_for('buckets.delete', { id: users3bucket.s3bucket.id }) }}" method="post" class="inline-form">
-                    <input type="hidden" id="redirect" name="redirect" value="{{ url_for('base.home') }}">
-                    <input type="submit" class="button button-secondary right js-confirm" value="Delete data source" data-confirm-message="Are you sure you want to delete this data source?">
-                  </form>
-                {% endif %}
-              </td>
-            </tr>
-          {% endfor %}
-        </table>
-      {% else %}
-        <p>None</p>
-      {% endif %}
+  {% set data_tabs = ['warehouse', 'webapp'] %}
+  {% for data_tab in data_tabs %}
+    {% if data_tab == "warehouse" or current_user.is_superuser %}
+      <section class="tab-panel">
+        <div class="form-group">
+          <h2 class="heading-medium">{{ heading_prefix }} {{ data_tab }} data sources</h2>
+          {% if buckets[data_tab].length %}
+            <table class="form-group">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>User has admin access</th>
+                  <th>User has read/write access</th>
+                  <td><span class="visuallyhidden">Actions</span></td>
+                </tr>
+              </thead>
+              {% for users3bucket in buckets[data_tab] %}
+                <tr>
+                  <td><a href="{{ url_for('buckets.details', { id: users3bucket.s3bucket.id }) }}">{{ users3bucket.s3bucket.name }}</a></td>
+                  <td>
+                    {{ yes_no(users3bucket.is_admin) }}
+                  </td>
+                  <td>
+                    {{ yes_no(users3bucket.access_level, 'readwrite') }}
+                  </td>
+                  <td class="align-right no-wrap">
+                    {% if users3bucket.is_admin %}
+                      <a class="button button-secondary" href="{{ url_for('buckets.details', { id: users3bucket.s3bucket.id }) }}">Manage {{ data_tab }} data source access</a>
+                      <form action="{{ url_for('buckets.delete', { id: users3bucket.s3bucket.id }) }}" method="post" class="inline-form">
+                        <input type="hidden" id="redirect" name="redirect" value="{{ url_for('base.home') }}">
+                        <input type="submit" class="button button-secondary right js-confirm" value="Delete {{ data_tab }} data source" data-confirm-message="Are you sure you want to delete this {{ data_tab }} data source?">
+                      </form>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </table>
+          {% else %}
+            <p>None</p>
+          {% endif %}
 
-      <p><a class="button button-secondary" href="/buckets/new">Create new data source</a></p>
-    </div>
-  </section>
+          <p><a class="button button-secondary" href="/buckets/new">Create new {{ data_tab }} data source</a></p>
+        </div>
+      </section>
+    {% endif %}
+  {% endfor %}
 
   <section class="tab-panel">
     <div class="form-group">

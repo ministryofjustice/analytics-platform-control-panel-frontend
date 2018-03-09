@@ -43,7 +43,6 @@ You should set these in a file named `.env` with each variable on a separate lin
 
 | name | value |
 | ---- | ----- |
-
 | `API_URL` | Base URL of the Control Panel API. Default `http://localhost:8000` |
 | `API_USER` | DEPRECATED. User name for Basic authentiation with the Control Panel API |
 | `API_PASSWORD` | DEPRECATED. Password for Basic authentication with the Control Panel API |

@@ -41,7 +41,7 @@ exports.error_test = (req, res, next) => {
 
 
 exports.auth_callback = [
-  passport.authenticate('oidc'),
+  passport.authenticate('oidc', { failureRedirect: '/login?prompt=true' }),
   (req, res) => {
     res.redirect(url_for('users.verify_email'));
   },
@@ -57,6 +57,7 @@ exports.login = (req, res, next) => {
   } else {
     passport.authenticate('oidc', {
       state: uuid(),
+      prompt: req.query.prompt || 'none',
     })(req, res, next);
   }
 };

@@ -62,6 +62,7 @@ config.ensure_login = {
   exclude: [
     /^\/callback/,
     /^\/error/,
+    /^\/healthz/,
     /^\/login/,
     /^\/logout/,
     /^\/static/,

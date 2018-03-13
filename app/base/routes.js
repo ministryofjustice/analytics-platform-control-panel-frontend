@@ -7,4 +7,5 @@ module.exports = [
   { name: 'login', pattern: '/login', handler: handlers.login },
   { name: 'logout', pattern: '/logout', handler: handlers.logout },
   { name: 'error', pattern: '/error', handler: handlers.error_test },
+  { name: 'healthz', pattern: '/healthz', handler: handlers.healthz },
 ];

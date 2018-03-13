@@ -77,3 +77,7 @@ exports.logout = (req, res) => {
     res.redirect(sso_logout_url());
   });
 };
+
+exports.healthz = (req, res) => {
+  res.sendStatus(200);
+};

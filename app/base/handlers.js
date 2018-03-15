@@ -19,17 +19,18 @@ exports.home = (req, res, next) => {
   Promise.all([Deployment.list(), User.get(req.user.auth0_id)])
     .then(([tools, user]) => {
       ns.run(() => {
-        const is_warehouse = bucket => !!bucket.s3bucket.is_data_warehouse;
-        const warehouse_buckets = user.users3buckets.filter(bucket => is_warehouse(bucket));
-        const webapp_buckets = user.users3buckets.filter(bucket => !is_warehouse(bucket));
+        const buckets = user.users3buckets.reduce(function (buckets, bucket) {
+          const group = !!bucket.s3bucket.is_data_warehouse ? 'warehouse' : 'webapp';
+          buckets[group] = buckets[group] || [];
+          buckets[group].push(bucket);
+          return buckets;
+        }, {});
+
         res.render('base/home.html', {
           tools,
           rstudio_is_deploying,
           user,
-          buckets: {
-            warehouse: warehouse_buckets,
-            webapp: webapp_buckets,
-          },
+          buckets,
         });
       });
     })

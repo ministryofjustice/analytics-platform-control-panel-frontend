@@ -7,8 +7,6 @@
 {% block main_column %}
 
 <p>{{ buckets.length }} data source{%- if buckets.length != 1 -%}s{%- endif -%}</p>
-<!-- <p>{{ warehouse_buckets.length }} warehouse data source{%- if warehouse_buckets.length != 1 -%}s{%- endif -%}</p>
-<p>{{ app_buckets.length }} app data source{%- if app_buckets.length != 1 -%}s{%- endif -%}</p> -->
 
 {% if buckets.length %}
   <table class="list">

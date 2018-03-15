@@ -19,10 +19,18 @@ exports.home = (req, res, next) => {
   Promise.all([Deployment.list(), User.get(req.user.auth0_id)])
     .then(([tools, user]) => {
       ns.run(() => {
+        const buckets = user.users3buckets.reduce((groupedBuckets, bucket) => {
+          const group = bucket.s3bucket.is_data_warehouse ? 'warehouse' : 'webapp';
+          groupedBuckets[group] = groupedBuckets[group] || [];
+          groupedBuckets[group].push(bucket);
+          return groupedBuckets;
+        }, {});
+
         res.render('base/home.html', {
           tools,
           rstudio_is_deploying,
           user,
+          buckets,
         });
       });
     })

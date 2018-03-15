@@ -18,7 +18,7 @@ exports.new = (req, res, next) => {
         orgs: config.github.orgs,
         repos,
         bucket_prefix: `${process.env.ENV}-`,
-        buckets,
+        buckets: buckets.filter(bucket => !bucket.is_data_warehouse),
         errors: req.form_errors,
       });
     })

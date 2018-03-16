@@ -36,13 +36,22 @@ function app_from_form(form_data) {
 }
 
 
-function app_data_source(form_data) {
+function app_data_source(req) {
+  const form_data = req.body;
+  let new_bucket;
   return new Promise((resolve) => {
     switch (form_data['new-app-datasource']) {
       case 'create':
         new Bucket({ name: form_data['new-datasource-name'] })
           .create()
-          .then(bucket => resolve(bucket.id));
+          .then((bucket) => {
+            new_bucket = bucket;
+            return User.get(req.user.auth0_id);
+          })
+          .then((user) => {
+            req.session.passport.user.users3buckets = user.data.users3buckets;
+          })
+          .then(() => resolve(new_bucket.id));
         break;
 
       case 'select':
@@ -59,7 +68,7 @@ function app_data_source(form_data) {
 exports.create = (req, res, next) => {
   let app;
 
-  Promise.all([app_from_form(req.body), app_data_source(req.body)])
+  Promise.all([app_from_form(req.body), app_data_source(req)])
     .then(([created_app, bucket_id]) => {
       app = created_app;
 

@@ -6,11 +6,6 @@
     "WebDriverIO": {
       "url": "http://localhost:3000",
       "browser": "chrome",
-      "desiredCapabilities": {
-        "chromeOptions": {
-          "args": [ "--headless", "--disable-gpu", "--window-size=1024,768" ]
-        }
-      },
       "uniqueScreenshotNames": true,
       "restart": false,
       "keepBrowserState": true

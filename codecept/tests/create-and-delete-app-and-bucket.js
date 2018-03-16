@@ -48,8 +48,8 @@ Scenario('Submit button enabled', (I) => {
 
 Scenario('Name new data source', (I) => {
   I.dontSee('input#new-datasource-name');
-  I.see('Create a new app data source');
-  I.click('Create a new app data source');
+  I.see('Create a new webapp data source');
+  I.click('Create a new webapp data source');
   I.waitForElement('input#new-datasource-name');
   I.say('Enter data source name box is visible');
 });

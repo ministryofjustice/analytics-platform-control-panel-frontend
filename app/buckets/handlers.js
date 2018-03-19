@@ -23,7 +23,7 @@ exports.create_bucket = (req, res) => {
   new Bucket({
     name: req.body['new-datasource-name'],
     apps3buckets: [],
-    is_data_warehouse: req.body['bucket_type'] === 'warehouse',
+    is_data_warehouse: req.body.bucket_type === 'warehouse',
   })
     .create()
     .then((bucket) => {

@@ -12,7 +12,10 @@ exports.list_buckets = (req, res, next) => {
 
 
 exports.new_bucket = (req, res) => {
-  res.render('buckets/new.html', { bucket_prefix: `${process.env.ENV}-` });
+  res.render('buckets/new.html', {
+    bucket_prefix: `${process.env.ENV}-`,
+    type: req.params.type,
+  });
 };
 
 
@@ -20,6 +23,7 @@ exports.create_bucket = (req, res) => {
   new Bucket({
     name: req.body['new-datasource-name'],
     apps3buckets: [],
+    is_data_warehouse: req.body['bucket_type'] === 'warehouse',
   })
     .create()
     .then((bucket) => {

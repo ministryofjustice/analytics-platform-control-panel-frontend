@@ -1,6 +1,7 @@
 {% extends "layouts/one-column.html" %}
 
-{% set page_title = "Connect app to secure app data source" %}
+{% set page_title = "Connect app to secure webapp data source" %}
+{% set breadcrumbs = [{text: 'Home', url: '/'}, {text: page_title}] %}
 
 {% block main_column %}
 
@@ -61,22 +62,23 @@
   <div class="form-group">
 
     <fieldset>
-      <h2 class="heading-medium">Connect a secure app data source</h2>
-      <p>Connect an existing app data source to your app, or create a new app data source.</p>
+      <h2 class="heading-medium">Connect a secure webapp data source</h2>
+      <p>Connect an existing app data source to your app, or create a new webapp data source.</p>
       <div class="multiple-choice" data-target="new-app-datasource-create-new-source">
         <input type="radio" id="new-app-datasource-create" name="new-app-datasource" value="create">
-        <label for="new-app-datasource-create">Create a new app data source</label>
+        <label for="new-app-datasource-create">Create a new webapp data source</label>
       </div>
       <div class="panel panel-border-narrow js-hidden" id="new-app-datasource-create-new-source">
+        {% set type = "webapp" %}
         {% include 'buckets/includes/new-bucket-name.html' %}
       </div>
 
       <div class="multiple-choice" data-target="new-app-datasource-existing-source">
         <input type="radio" id="new-app-datasource-select" name="new-app-datasource" value="select">
-        <label for="new-app-datasource-select">Connect an existing app data source</label>
+        <label for="new-app-datasource-select">Connect an existing webapp data source</label>
       </div>
       <div class="panel panel-border-narrow js-hidden" id="new-app-datasource-existing-source">
-        <label class="form-label" for="select-existing-datasource">Select app data source</label>
+        <label class="form-label" for="select-existing-datasource">Select webapp data source</label>
         <select name="select-existing-datasource" id="select-existing-datasource" class="form-control">
           <option value="">Select</option>
           {% for bucket in buckets %}

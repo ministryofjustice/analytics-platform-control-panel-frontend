@@ -1,13 +1,15 @@
 {% extends "layouts/one-column.html" %}
 {% from "includes/yesno.html" import yes_no %}
 
-{% set page_title = "Data source: " + bucket.name %}
+{% set bucket_type = 'warehouse' if bucket.is_data_warehouse else 'webapp' %}
+{% set page_title = bucket_type | capitalize + " data source: " + bucket.name %}
+{% set breadcrumbs = [{text: 'Home', url: '/'}, {text: 'Data source details'}] %}
 
 {% block main_column %}
 
 
 <h2 class="heading-medium">Users with admin access</h2>
-<p>{{ bucket.users3buckets.length }} user{%- if bucket.users3buckets.length != 1 -%}s are{% else %} is{% endif %} admin of this data source</p>
+<p>{{ bucket.users3buckets.length }} user{%- if bucket.users3buckets.length != 1 -%}s are{% else %} is{% endif %} admin of this {{ bucket_type }} data source</p>
 
 {% if bucket.users3buckets.length %}
   <table class="bucket-admins form-group">
@@ -60,7 +62,7 @@
     <form action="{{ url_for('users3buckets.create') }}" method="post">
       <input type="hidden" name="bucket_id" value="{{ bucket.id }}" />
       <div class="form-group">
-        <label class="form-label" for="user_id">Make user admin of this data source</label>
+        <label class="form-label" for="user_id">Make user admin of this {{ bucket_type }} data source</label>
         <select class="form-control no-blank" id="user_id" name="user_id">
           <option value="">Select a user</option>
           {% for user in users_options %}
@@ -73,7 +75,7 @@
       </div>
     </form>
   {% else %}
-    <p>(All available users are already admin of this data source.)</p>
+    <p>(All available users are already admin of this {{ bucket_type }} data source.)</p>
   {% endif %}
 
   <hr>

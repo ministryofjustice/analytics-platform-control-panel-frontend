@@ -40,7 +40,9 @@
 {% endif %}
 
 <div class="form-group">
-  <a href="{{ url_for('buckets.new') }}" class="button button-secondary">Create new data source</a>
+  {% for new_bucket_type in ['warehouse', 'webapp'] %}
+    <a href="{{ url_for('buckets.new', {type: new_bucket_type}) }}" class="button button-secondary">Create new {{ new_bucket_type }} data source</a>
+  {% endfor %}
 </div>
 
 {% endblock %}

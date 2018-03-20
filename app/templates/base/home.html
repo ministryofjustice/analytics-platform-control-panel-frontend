@@ -3,6 +3,7 @@
 
 {% set page_title = "Hello " + ( current_user.name if current_user ) %}
 {% set heading_prefix = "Your" %}
+{% set breadcrumbs = [{text: 'Home', url: '/'}] %}
 
 {% block main_column %}
 
@@ -76,7 +77,7 @@
             <p>None</p>
           {% endif %}
 
-          <p><a class="button button-secondary" href="/buckets/new">Create new {{ data_tab }} data source</a></p>
+          <p><a class="button button-secondary" href="{{ url_for('buckets.new', { type: data_tab }) }}">Create new {{ data_tab }} data source</a></p>
         </div>
       </section>
     {% endif %}

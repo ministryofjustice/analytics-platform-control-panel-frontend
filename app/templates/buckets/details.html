@@ -27,7 +27,7 @@
     <tbody>
       {% for users3bucket in bucket.users3buckets %}
         <tr>
-          <td><a class="{% if current_user.auth0_id == users3bucket.user.auth0_id %}highlight-current{% endif %}" href="{{ url_for('users.details', { id: users3bucket.user.auth0_id }) }}">{{ users3bucket.user.name }}</a></td>
+          <td><a class="{% if current_user.auth0_id == users3bucket.user.auth0_id %}highlight-current{% endif %}" href="{{ url_for('users.details', { id: users3bucket.user.auth0_id }) }}">{% if users3bucket.user.name %}{{ users3bucket.user.name }} {% endif %}({{ users3bucket.user.username }})</a></td>
           <td>{{ yes_no(users3bucket.access_level, 'readwrite') }}</td>
           <td class="align-right">
             {% if bucket.has_admin(current_user) or current_user.is_superuser %}
@@ -63,10 +63,21 @@
       <input type="hidden" name="bucket_id" value="{{ bucket.id }}" />
       <div class="form-group">
         <label class="form-label" for="user_id">Make user admin of this {{ bucket_type }} data source</label>
+
+        <div class="typeahead__container">
+          <div class="typeahead__field">
+            <span class="typeahead__query">
+              <input id="user_typeahead" class="form-control form-control-1-2" name="user_typeahead" type="search" autocomplete="off" placeholder="Start typing to find a user..." value="{{ req.body.user_typeahead }}">
+            </span>
+          </div>
+        </div>
+
         <select class="form-control no-blank" id="user_id" name="user_id">
           <option value="">Select a user</option>
           {% for user in users_options %}
-            <option value="{{ user.auth0_id }}">{{ user.name }}</option>
+            {% if user.auth0_id and user.auth0_id != "jenkins" %}
+              <option value="{{ user.auth0_id }}">{% if user.name %}{{ user.name }} {% endif %}({{ user.username }})</option>
+            {% endif %}
           {% endfor %}
         </select>
       </div>

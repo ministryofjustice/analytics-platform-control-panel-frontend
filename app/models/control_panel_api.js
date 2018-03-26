@@ -188,9 +188,14 @@ class Bucket extends Model {
     return new ModelSet(UserS3Bucket, this.data.users3buckets);
   }
 
-  has_admin(user_id) { // eslint-disable-line class-methods-use-this, no-unused-vars
-    return true;
-    // TODO: remove this and return real value once perms have been implemented
+  has_admin(user_id) {
+    const match_users3buckets = this.data.users3buckets.filter(us => us.user.auth0_id === user_id);
+    let user_has_admin = false;
+
+    if (match_users3buckets[0] && match_users3buckets[0].is_admin) {
+      user_has_admin = true;
+    }
+    return user_has_admin;
   }
 }
 

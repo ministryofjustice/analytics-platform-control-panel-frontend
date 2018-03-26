@@ -18,6 +18,6 @@ moj.Modules.accessPanels = {
 
   togglePanel($panel) {
     $panel.toggleClass('js-hidden');
-    $panel.siblings('.js-change-access-level').toggle();
+    $panel.siblings(`.${this.buttonClass}`).toggle();
   },
 };

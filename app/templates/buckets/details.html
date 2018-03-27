@@ -34,8 +34,7 @@
               {{ users3bucket.access_level }}
             {% endif %}
           </td>
-          {# % if current_user_is_bucket_admin or current_user.is_superuser % #}
-          {% if current_user_is_bucket_admin %}
+          {% if current_user_is_bucket_admin or current_user.is_superuser %}
             <td class="align-right">
 
               <div class="form-group change-data-access-level-panel panel panel-border-narrow js-hidden" id="users3bucket_{{ users3bucket.id }}_change-data-access-level-panel">

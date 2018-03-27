@@ -8,6 +8,13 @@ describe('users3buckets.update', () => {
     const users3bucket_id = 42;
     const data_access_level = 'readonly';
     const redirect_to = 'buckets/123';
+    const users3bucket_key = `users3bucket_${users3bucket_id}_data_access_level`;
+
+    const patchData = {
+      id: users3bucket_id,
+      access_level: data_access_level,
+      is_admin: false,
+    };
 
     const patchData = {
       id: users3bucket_id,

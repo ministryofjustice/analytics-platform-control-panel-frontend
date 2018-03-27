@@ -47,8 +47,7 @@
               <thead>
                 <tr>
                   <th>Name</th>
-                  <th>User has admin access</th>
-                  <th>User has read/write access</th>
+                  <th>Your access level <em>?</em></th>
                   <td><span class="visuallyhidden">Actions</span></td>
                 </tr>
               </thead>
@@ -56,10 +55,11 @@
                 <tr>
                   <td><a href="{{ url_for('buckets.details', { id: users3bucket.s3bucket.id }) }}">{{ users3bucket.s3bucket.name }}</a></td>
                   <td>
-                    {{ yes_no(users3bucket.is_admin) }}
-                  </td>
-                  <td>
-                    {{ yes_no(users3bucket.access_level, 'readwrite') }}
+                    {% if users3bucket.is_admin %}
+                      admin
+                    {% else %}
+                      {{ users3bucket.access_level }}
+                    {% endif %}
                   </td>
                   <td class="align-right no-wrap">
                     {% if users3bucket.is_admin %}

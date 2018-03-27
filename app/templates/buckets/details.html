@@ -16,8 +16,7 @@
       <tr>
         <th>User</th>
         <th>User access level</th>
-        {# % if current_user_is_bucket_admin or current_user.is_superuser % #}
-        {% if current_user_is_bucket_admin %}
+        {% if current_user_is_bucket_admin or current_user.is_superuser %}
           <th>
             <span class="visuallyhidden">Actions</span>
           </th>
@@ -89,10 +88,7 @@
   <p>None</p>
 {% endif %}
 
-<!-- <h1 class="heading-large">{{ current_user_is_bucket_admin }} - TODO: YOU ARE HERE</h1> -->
-
-{# % if current_user_is_bucket_admin or current_user.is_superuser % #}
-{% if current_user_is_bucket_admin %}
+{% if current_user_is_bucket_admin or current_user.is_superuser %}
   {% if users_options.length %}
     <form action="{{ url_for('users3buckets.create') }}" method="post">
       <input type="hidden" name="bucket_id" value="{{ bucket.id }}" />

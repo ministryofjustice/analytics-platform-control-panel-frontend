@@ -1,5 +1,6 @@
 moj.Modules.accessPanels = {
   buttonClass: 'js-change-access-level',
+  panelClass: 'change-data-access-level-panel',
 
   init() {
     if ($(`.${this.buttonClass}`).length) {
@@ -9,6 +10,7 @@ moj.Modules.accessPanels = {
 
   bindEvents() {
     $(`.${this.buttonClass}`).on('click', (e) => {
+      this.closeOpenPanels();
       this.togglePanel($(e.target).siblings('.panel'));
     });
     $('.js-close-panel').on('click', (e) => {
@@ -19,5 +21,11 @@ moj.Modules.accessPanels = {
   togglePanel($panel) {
     $panel.toggleClass('js-hidden');
     $panel.siblings(`.${this.buttonClass}`).toggle();
+  },
+
+  closeOpenPanels() {
+    $(`.${this.panelClass}:not(.js-hidden)`).each((n, panel) => {
+      this.togglePanel($(panel));
+    });
   },
 };

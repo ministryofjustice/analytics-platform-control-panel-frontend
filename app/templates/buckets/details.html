@@ -128,9 +128,12 @@
             <input type="radio" id="data_access_level-readwrite" name="data_access_level" value="readwrite">
             <label for="data_access_level-readwrite">Read/write</label>
           </div>
-          <div class="multiple-choice">
+          <div class="multiple-choice" data-target="admin-information">
             <input type="radio" id="data_access_level-admin" name="data_access_level" value="admin">
             <label for="data_access_level-admin">Admin</label>
+          </div>
+          <div class="panel panel-border-narrow js-hidden" id="admin-information">
+            <p><strong>NOTE:</strong> Making user admin will allow them to confer access rights on additional users.</p>
           </div>
         </fieldset>
       </div>

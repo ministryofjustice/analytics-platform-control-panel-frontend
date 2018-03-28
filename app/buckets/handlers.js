@@ -51,6 +51,7 @@ exports.bucket_details = (req, res, next) => {
     .catch(next);
 };
 
+
 exports.delete = (req, res, next) => {
   let bucket_name;
   Bucket.get(req.params.id)
@@ -62,6 +63,15 @@ exports.delete = (req, res, next) => {
       const redirect_to = req.body.redirect || url_for('base.home');
       req.session.flash_messages.push(`Bucket "${bucket_name}" deleted`);
       res.redirect(redirect_to);
+    })
+    .catch(next);
+};
+
+
+exports.aws = (req, res, next) => {
+  Bucket.get(req.params.id)
+    .then((bucket) => {
+      res.redirect(bucket.location_url);
     })
     .catch(next);
 };

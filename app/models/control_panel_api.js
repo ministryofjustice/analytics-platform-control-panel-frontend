@@ -187,11 +187,6 @@ class Bucket extends Model {
   get users3buckets() {
     return new ModelSet(UserS3Bucket, this.data.users3buckets);
   }
-
-  has_admin(user_id) { // eslint-disable-line class-methods-use-this, no-unused-vars
-    return true;
-    // TODO: remove this and return real value once perms have been implemented
-  }
 }
 
 exports.Bucket = Bucket;
@@ -220,6 +215,10 @@ class User extends Model {
 
   get kubernetes_namespace() {
     return get_namespace(this.data.username);
+  }
+
+  is_bucket_admin(bucket_id) {
+    return this.users3buckets.filter(u => u.s3bucket.id === bucket_id && u.is_admin).length > 0;
   }
 }
 

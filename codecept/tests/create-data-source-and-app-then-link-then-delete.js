@@ -52,7 +52,7 @@ Scenario('Check data source', (I) => {
   I.waitForText('Data source:', 5, 'h1');
   I.see(test_bucket_name, 'h1');
   I.say('Data source created');
-  I.see(test_user_name, 'table.bucket-admins');
+  I.see(test_user_name, 'table.bucket-users');
   I.say('Test user is admin for data source');
 });
 

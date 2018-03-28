@@ -16,12 +16,6 @@ describe('users3buckets.update', () => {
       is_admin: false,
     };
 
-    const patchData = {
-      id: users3bucket_id,
-      access_level: data_access_level,
-      is_admin: false,
-    };
-
     const patch_users3buckets = mock_api()
       .patch(`/users3buckets/${users3bucket_id}/`, patchData)
       .reply(201);

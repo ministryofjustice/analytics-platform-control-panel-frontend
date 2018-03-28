@@ -42,13 +42,10 @@ exports.create_bucket = (req, res) => {
 exports.bucket_details = (req, res, next) => {
   Promise.all([Bucket.get(req.params.id), App.list(), User.list()])
     .then(([bucket, apps, users]) => {
-      const current_user_is_bucket_admin = bucket.has_admin(req.user.auth0_id);
-
       res.render('buckets/details.html', {
         bucket,
         apps_options: apps.exclude(bucket.apps),
         users_options: users.exclude(bucket.users),
-        current_user_is_bucket_admin,
       });
     })
     .catch(next);

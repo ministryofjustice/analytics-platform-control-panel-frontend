@@ -8,7 +8,6 @@ describe('users3buckets.update', () => {
     const users3bucket_id = 42;
     const data_access_level = 'readonly';
     const redirect_to = 'buckets/123';
-    const users3bucket_key = `users3bucket_${users3bucket_id}_data_access_level`;
 
     const patchData = {
       id: users3bucket_id,
@@ -21,8 +20,7 @@ describe('users3buckets.update', () => {
       .reply(201);
 
     const params = { id: users3bucket_id };
-    let body = { redirect_to };
-    body[users3bucket_key] = data_access_level;
+    const body = { redirect_to, data_access_level };
 
     return dispatch(handlers.update, { params, body })
       .then(({ redirect_url }) => {

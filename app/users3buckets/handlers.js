@@ -29,15 +29,14 @@ exports.create = (req, res, next) => {
 
 exports.update = (req, res, next) => {
   const users3bucket_id = req.params.id;
-  const { redirect_to } = req.body;
-  const users3bucket_access_level = req.body[`users3bucket_${users3bucket_id}_data_access_level`];
+  const { redirect_to, data_access_level } = req.body;
   let access_level = 'readonly';
   let is_admin = false;
 
-  if (users3bucket_access_level === 'admin') {
+  if (data_access_level === 'admin') {
     is_admin = true;
   }
-  if (users3bucket_access_level !== 'readonly') {
+  if (data_access_level !== 'readonly') {
     access_level = 'readwrite';
   }
 

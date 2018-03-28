@@ -16,7 +16,7 @@
       <tr>
         <th>User</th>
         <th>User access level</th>
-        {% if current_user_is_bucket_admin or current_user.is_superuser %}
+        {% if current_user.is_bucket_admin(bucket.id) or current_user.is_superuser %}
           <th>
             <span class="visuallyhidden">Actions</span>
           </th>
@@ -34,7 +34,7 @@
               {{ users3bucket.access_level }}
             {% endif %}
           </td>
-          {% if current_user_is_bucket_admin or current_user.is_superuser %}
+          {% if current_user.is_bucket_admin(bucket.id) or current_user.is_superuser %}
             <td class="align-right">
 
               <div class="form-group change-data-access-level-panel panel panel-border-narrow js-hidden" id="users3bucket_{{ users3bucket.id }}_change-data-access-level-panel">
@@ -47,15 +47,15 @@
                     <fieldset>
                       <legend class="visuallyhidden">Data access level</legend>
                       <div class="multiple-choice">
-                        <input type="radio" id="users3bucket_{{ users3bucket.id }}_data_access_level-readonly" name="users3bucket_{{ users3bucket.id }}_data_access_level" value="readonly" {% if users3bucket.access_level == 'readonly' %}checked{% endif %}>
+                        <input type="radio" id="users3bucket_{{ users3bucket.id }}_data_access_level-readonly" name="data_access_level" value="readonly" {% if users3bucket.access_level == 'readonly' %}checked{% endif %}>
                         <label for="users3bucket_{{ users3bucket.id }}_data_access_level-readonly">Read only</label>
                       </div>
                       <div class="multiple-choice">
-                        <input type="radio" id="users3bucket_{{ users3bucket.id }}_data_access_level-readwrite" name="users3bucket_{{ users3bucket.id }}_data_access_level" value="readwrite" {% if users3bucket.access_level == 'readwrite' and users3bucket.is_admin == false %}checked{% endif %}>
+                        <input type="radio" id="users3bucket_{{ users3bucket.id }}_data_access_level-readwrite" name="data_access_level" value="readwrite" {% if users3bucket.access_level == 'readwrite' and users3bucket.is_admin == false %}checked{% endif %}>
                         <label for="users3bucket_{{ users3bucket.id }}_data_access_level-readwrite">Read/write</label>
                       </div>
                       <div class="multiple-choice">
-                        <input type="radio" id="users3bucket_{{ users3bucket.id }}_data_access_level-admin" name="users3bucket_{{ users3bucket.id }}_data_access_level" value="admin" {% if users3bucket.is_admin %}checked{% endif %}>
+                        <input type="radio" id="users3bucket_{{ users3bucket.id }}_data_access_level-admin" name="data_access_level" value="admin" {% if users3bucket.is_admin %}checked{% endif %}>
                         <label for="users3bucket_{{ users3bucket.id }}_data_access_level-admin">Admin</label>
                       </div>
                     </fieldset>
@@ -87,7 +87,7 @@
   <p>None</p>
 {% endif %}
 
-{% if current_user_is_bucket_admin or current_user.is_superuser %}
+{% if current_user.is_bucket_admin(bucket.id) or current_user.is_superuser %}
   {% if users_options.length %}
     <form action="{{ url_for('users3buckets.create') }}" method="post">
       <input type="hidden" name="bucket_id" value="{{ bucket.id }}" />

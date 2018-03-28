@@ -3,7 +3,7 @@
 
 {% set bucket_type = 'warehouse' if bucket.is_data_warehouse else 'webapp' %}
 {% set page_title = bucket_type | capitalize + " data source: " + bucket.name %}
-{% set breadcrumbs = [{text: 'Home', url: '/'}, {text: 'Data source details'}] %}
+{% set breadcrumbs = [{text: 'Home', url: '/'}, {text: bucket_type | capitalize + " data", url: '/#' + bucket_type | capitalize + '%20data'}, {text: 'Data source details'}] %}
 
 {% block main_column %}
 

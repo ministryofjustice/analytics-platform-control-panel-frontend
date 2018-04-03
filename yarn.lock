@@ -2726,6 +2726,10 @@ isurl@^1.0.0-alpha5:
     has-to-string-tag-x "^1.2.0"
     is-object "^1.0.1"
 
+jquery-modal@^0.9.1:
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/jquery-modal/-/jquery-modal-0.9.1.tgz#f22f13f0efa5ea3f2afaeb7981c1e20114c9d2f2"
+
 jquery-typeahead@^2.10.4:
   version "2.10.4"
   resolved "https://registry.yarnpkg.com/jquery-typeahead/-/jquery-typeahead-2.10.4.tgz#9a46d74fda419b0724ae0ff3663f800d280bc6ce"

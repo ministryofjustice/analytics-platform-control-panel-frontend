@@ -12,8 +12,8 @@
       <li class="tab-superuser">Superuser</li>
     {% endif %}
     <li class="tab-analytical-tools">Analytical tools</li>
+    <li class="tab-warehouse-data">Warehouse data</li>
     {% if current_user.is_superuser %}
-      <li class="tab-warehouse-data">Warehouse data</li>
       <li class="tab-webapp-data">Webapp data</li>
       <li class="tab-webapps">Webapps</li>
     {% endif %}
@@ -36,9 +36,9 @@
     {% include 'tools/includes/list.html' %}
   </section>
 
-  {% if current_user.is_superuser %}
     {% set data_tabs = ['warehouse', 'webapp'] %}
     {% for data_tab in data_tabs %}
+  {% if current_user.is_superuser or data_tab == 'warehouse' %}
       <section class="tab-panel">
         <div class="form-group">
           <h2 class="heading-medium">{{ heading_prefix }} {{ data_tab }} data sources</h2>
@@ -47,7 +47,17 @@
               <thead>
                 <tr>
                   <th>Name</th>
-                  <th>Your access level <em>?</em></th>
+                  <th>
+                    Your access level <em class="js-modal-trigger" data-content="access-levels"><span>What's this?</span></em>
+                    <div class="js-hidden js-modal-content" id="content-access-levels">
+                      <h3 class="heading-small">Data access levels</h3>
+                      <ul class="list list-bullet">
+                        <li><strong>Read only</strong> - user can read the data but not modify it</li>
+                        <li><strong>Read/write</strong> - user can read, modify and delete the data</li>
+                        <li><strong>Admin</strong> - user can read, modify and delete the data, and also grant/modify/revoke access rights to this data for other users</li>
+                      </ul>
+                    </div>
+                  </th>
                   <td><span class="visuallyhidden">Actions</span></td>
                 </tr>
               </thead>
@@ -74,8 +84,10 @@
           <p><a class="button button-secondary" href="{{ url_for('buckets.new', { type: data_tab }) }}">Create new {{ data_tab }} data source</a></p>
         </div>
       </section>
+      {% endif %}
     {% endfor %}
 
+  {% if current_user.is_superuser %}
     <section class="tab-panel">
       <div class="form-group">
         <h2 class="heading-medium">{{ heading_prefix }} apps</h2>

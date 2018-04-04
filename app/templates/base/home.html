@@ -12,8 +12,8 @@
       <li class="tab-superuser">Superuser</li>
     {% endif %}
     <li class="tab-analytical-tools">Analytical tools</li>
+    <li class="tab-warehouse-data">Warehouse data</li>
     {% if current_user.is_superuser %}
-      <li class="tab-warehouse-data">Warehouse data</li>
       <li class="tab-webapp-data">Webapp data</li>
       <li class="tab-webapps">Webapps</li>
     {% endif %}
@@ -38,7 +38,7 @@
 
   {% set data_tabs = ['warehouse', 'webapp'] %}
   {% for data_tab in data_tabs %}
-    {% if current_user.is_superuser %}
+    {% if current_user.is_superuser or data_tab == 'warehouse' %}
       <section class="tab-panel">
         <div class="form-group">
           <h2 class="heading-medium">{{ heading_prefix }} {{ data_tab }} data sources</h2>

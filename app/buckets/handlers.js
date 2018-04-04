@@ -20,6 +20,7 @@ exports.new_bucket = (req, res) => {
 
 
 exports.create_bucket = (req, res) => {
+  let new_bucket;
   new Bucket({
     name: req.body['new-datasource-name'],
     apps3buckets: [],
@@ -27,7 +28,14 @@ exports.create_bucket = (req, res) => {
   })
     .create()
     .then((bucket) => {
-      res.redirect(url_for('buckets.details', { id: bucket.id }));
+      new_bucket = bucket;
+      return User.get(req.user.auth0_id);
+    })
+    .then((user) => {
+      req.session.passport.user.users3buckets = user.data.users3buckets;
+    })
+    .then(() => {
+      res.redirect(url_for('buckets.details', { id: new_bucket.id }));
     })
     .catch((error) => {
       res.render('buckets/new.html', {

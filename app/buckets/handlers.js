@@ -1,4 +1,4 @@
-const { App, Bucket, User } = require('../models');
+const { Bucket, User } = require('../models');
 const { url_for } = require('../routes');
 
 
@@ -40,13 +40,12 @@ exports.create_bucket = (req, res) => {
 
 
 exports.bucket_details = (req, res, next) => {
-  Promise.all([Bucket.get(req.params.id), App.list(), User.list()])
-    .then(([bucket, apps, users]) => {
+  Promise.all([Bucket.get(req.params.id), User.list()]) // need to include App.list() in future
+    .then(([bucket, users]) => { // need to include apps in future
       res.render('buckets/details.html', {
         bucket,
-        apps_options: apps.exclude(bucket.apps),
         users_options: users.exclude(bucket.users),
-      });
+      }); // need to include apps_options: apps.exclude(bucket.apps) in future
     })
     .catch(next);
 };

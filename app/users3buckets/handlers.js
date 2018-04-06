@@ -21,9 +21,7 @@ exports.create = (req, res, next) => {
     is_admin,
   })
     .create()
-    .then(() => {
-      return User.get(req.user.auth0_id);
-    })
+    .then(() => User.get(req.user.auth0_id))
     .then((user) => {
       req.session.passport.user.users3buckets = user.data.users3buckets;
     })
@@ -52,9 +50,7 @@ exports.update = (req, res, next) => {
     is_admin,
   })
     .update()
-    .then(() => {
-      return User.get(req.user.auth0_id);
-    })
+    .then(() => User.get(req.user.auth0_id))
     .then((user) => {
       req.session.passport.user.users3buckets = user.data.users3buckets;
     })

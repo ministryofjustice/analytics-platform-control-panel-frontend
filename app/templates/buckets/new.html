@@ -1,6 +1,6 @@
 {% extends "layouts/one-column.html" %}
 
-{% set page_title = "Create new " + type + " data source" %}
+{% set page_title = "Create new secure data storage folder" %}
 {% set breadcrumbs = [{text: 'Home', url: '/'}, {text: page_title}] %}
 
 {% block main_column %}
@@ -11,7 +11,7 @@
 
   <div class="text">
     {% if type == "warehouse" %}
-      <p class="lede">Create a new folder to store data, and an associated data access group.</p>
+      <p class="lede">Create a new folder to store data, with an associated data access group.</p>
       <p><em>Only you will have access to this data until you add colleagues to the data access group.</em></p>
     {% elseif type == "webapp" %}
       <p class="lede">Lorem ipsum copy about webapp buckets</p>

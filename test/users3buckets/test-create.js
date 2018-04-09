@@ -39,6 +39,7 @@ describe('users3buckets.create', () => {
         assert(get_user.isDone());
         assert(post_users3buckets.isDone());
         assert.equal(redirect_url, url_for('buckets.details', { id: bucket_id }));
+        assert.deepEqual(req.session.passport.user.users3buckets, user.users3buckets);
       });
   });
 });

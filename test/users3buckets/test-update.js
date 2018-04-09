@@ -44,6 +44,7 @@ describe('users3buckets.update', () => {
         assert(get_user.isDone());
         assert(patch_users3buckets.isDone());
         assert.equal(redirect_url, redirect_to);
+        assert.deepEqual(req.session.passport.user.users3buckets, user.users3buckets);
       });
   });
 });

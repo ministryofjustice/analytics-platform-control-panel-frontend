@@ -1,4 +1,4 @@
-const { UserS3Bucket } = require('../models');
+const { UserS3Bucket, User } = require('../models');
 const { url_for } = require('../routes');
 
 
@@ -21,6 +21,10 @@ exports.create = (req, res, next) => {
     is_admin,
   })
     .create()
+    .then(() => User.get(req.user.auth0_id))
+    .then((user) => {
+      req.session.passport.user.users3buckets = user.data.users3buckets;
+    })
     .then(() => {
       res.redirect(url_for('buckets.details', { id: bucket_id }));
     })
@@ -46,6 +50,10 @@ exports.update = (req, res, next) => {
     is_admin,
   })
     .update()
+    .then(() => User.get(req.user.auth0_id))
+    .then((user) => {
+      req.session.passport.user.users3buckets = user.data.users3buckets;
+    })
     .then(() => { res.redirect(redirect_to); })
     .catch(next);
 };

@@ -1,4 +1,4 @@
-const { App, Bucket, User } = require('../models');
+const { Bucket, User } = require('../models');
 const { url_for } = require('../routes');
 
 
@@ -20,6 +20,7 @@ exports.new_bucket = (req, res) => {
 
 
 exports.create_bucket = (req, res) => {
+  let new_bucket;
   new Bucket({
     name: req.body['new-datasource-name'],
     apps3buckets: [],
@@ -27,7 +28,14 @@ exports.create_bucket = (req, res) => {
   })
     .create()
     .then((bucket) => {
-      res.redirect(url_for('buckets.details', { id: bucket.id }));
+      new_bucket = bucket;
+      return User.get(req.user.auth0_id);
+    })
+    .then((user) => {
+      req.session.passport.user.users3buckets = user.data.users3buckets;
+    })
+    .then(() => {
+      res.redirect(url_for('buckets.details', { id: new_bucket.id }));
     })
     .catch((error) => {
       res.render('buckets/new.html', {
@@ -40,16 +48,16 @@ exports.create_bucket = (req, res) => {
 
 
 exports.bucket_details = (req, res, next) => {
-  Promise.all([Bucket.get(req.params.id), App.list(), User.list()])
-    .then(([bucket, apps, users]) => {
+  Promise.all([Bucket.get(req.params.id), User.list()]) // need to include App.list() in future
+    .then(([bucket, users]) => { // need to include apps in future
       res.render('buckets/details.html', {
         bucket,
-        apps_options: apps.exclude(bucket.apps),
         users_options: users.exclude(bucket.users),
-      });
+      }); // need to include apps_options: apps.exclude(bucket.apps) in future
     })
     .catch(next);
 };
+
 
 exports.delete = (req, res, next) => {
   let bucket_name;
@@ -62,6 +70,15 @@ exports.delete = (req, res, next) => {
       const redirect_to = req.body.redirect || url_for('base.home');
       req.session.flash_messages.push(`Bucket "${bucket_name}" deleted`);
       res.redirect(redirect_to);
+    })
+    .catch(next);
+};
+
+
+exports.aws = (req, res, next) => {
+  Bucket.get(req.params.id)
+    .then((bucket) => {
+      res.redirect(bucket.location_url);
     })
     .catch(next);
 };

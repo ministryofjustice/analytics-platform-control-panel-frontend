@@ -1,0 +1,31 @@
+.js-modal-trigger {
+  display: inline-block;
+  position: relative;
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 50%;
+  background-color: $grey-3;
+  top: 4px;
+
+  span {
+    @include visually-hidden;
+  }
+
+  &:before {
+    content: '?';
+    position: absolute;
+    font-style: normal;
+    margin-left: 10px;
+    width: 20px;
+    height: 20px;
+    text-indent: center;
+    cursor: pointer;
+    left: -4px;
+    top: 1px;
+  }
+
+  &:hover {
+    background-color: $grey-2;
+  }
+}

@@ -178,6 +178,7 @@ config.static = {
       join(node_modules, 'govuk_frontend_toolkit'),
       join(node_modules, 'jquery/dist'),
       join(node_modules, 'jquery-typeahead/dist'),
+      join(node_modules, 'jquery-modal'),
     ],
     '/static/images/icons': [
       join(node_modules, 'govuk_frontend_toolkit/images'),

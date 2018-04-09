@@ -2,6 +2,8 @@ const { assert } = require('chai');
 const { config, dispatch, mock_api, url_for } = require('../conftest');
 const handlers = require('../../app/buckets/handlers');
 
+const user = require('../fixtures/user');
+
 
 describe('buckets/create', () => {
   it('created a new bucket and redirects', () => {
@@ -9,7 +11,6 @@ describe('buckets/create', () => {
     const body = {
       'new-datasource-name': bucket_name,
     };
-    const user = { auth0_id: 'github|12345', id_token: 'dummy-token' };
     const created_bucket = {
       id: 1,
       url: `${config.api.base_url}/s3buckets/1/`,
@@ -23,8 +24,23 @@ describe('buckets/create', () => {
       .post('/s3buckets/')
       .reply(201, created_bucket);
 
-    return dispatch(handlers.create_bucket, { body, user })
+    const get_user = mock_api()
+      .get(`/users/${escape(user.auth0_id)}/`)
+      .reply(200, user);
+
+    const req = {
+      body: { 'new-datasource-name': bucket_name },
+      user,
+      session: {
+        passport: {
+          user: {}
+        }
+      },
+    };
+
+    return dispatch(handlers.create_bucket, req)
       .then(({ redirect_url }) => {
+        assert(get_user.isDone());
         assert.equal(redirect_url, url_for('buckets.details', { id: created_bucket.id }));
       });
   });

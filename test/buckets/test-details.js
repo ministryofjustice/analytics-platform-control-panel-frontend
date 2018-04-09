@@ -28,7 +28,8 @@ describe('buckets/details', () => {
         assert.equal(template, 'buckets/details.html');
 
         assert.deepEqual(context.bucket, expected.bucket);
-        assert.deepEqual(context.apps_options, expected.apps);
+        // this was removed temporarily in the handler
+        // assert.deepEqual(context.apps_options, expected.apps);
         assert.deepEqual(context.users_options, expected.users);
       });
   });

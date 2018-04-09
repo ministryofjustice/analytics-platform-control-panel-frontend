@@ -7,4 +7,5 @@ module.exports = [
   { name: 'create', pattern: '/buckets/new', handler: handlers.create_bucket, method: 'POST' },
   { name: 'details', pattern: '/buckets/:id', handler: handlers.bucket_details },
   { name: 'delete', method: 'POST', pattern: '/buckets/:id/delete', handler: handlers.delete },
+  { name: 'aws', pattern: '/buckets/aws/:id', handler: handlers.aws },
 ];

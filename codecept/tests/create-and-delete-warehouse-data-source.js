@@ -2,26 +2,26 @@ require('dotenv').config();
 const test_user_username = process.env.TEST_USER_USERNAME;
 const test_user_name = process.env.TEST_USER_NAME;
 const rand_suffix = Math.round(Math.random() * 1000000).toString();
-const test_bucket_suffix = `test-e2e-bucket-${rand_suffix}`;
+const test_bucket_suffix = `test-e2e-warehouse-bucket-${rand_suffix}`;
 let bucket_prefix;
 let test_bucket_name;
 
-Feature('Create and delete data source @superuser');
+Feature('Create and delete warehouse data source @superuser');
 
 
-Scenario('Go to data sources tab', (I) => {
+Scenario('Go to warehouse data sources tab', (I) => {
   I.amOnPage('/');
-  I.seeElement('li.tab-data');
-  I.click('li.tab-data');
-  I.waitUrlEquals('/#Data');
-  I.say('This is the data tab');
+  I.seeElement('li.tab-warehouse-data');
+  I.click('li.tab-warehouse-data');
+  I.waitUrlEquals('/#Warehouse data');
+  I.say('This is the Warehouse data tab');
 });
 
-Scenario('Create a data source page', (I) => {
-  I.see('Create new data source');
-  I.click('Create new data source');
-  I.waitUrlEquals('/buckets/new');
-  I.say('This is the create new data source page');
+Scenario('Create a warehouse data source page', (I) => {
+  I.see('Create new warehouse data source');
+  I.click('Create new warehouse data source');
+  I.waitUrlEquals('/buckets/new?type=warehouse');
+  I.say('This is the create new warehouse data source page');
 });
 
 Scenario('Grab data source prefix', function* (I) {
@@ -47,7 +47,7 @@ Scenario('Create data source', (I) => {
 });
 
 Scenario('Check data source page', (I) => {
-  I.waitForText('Data source:', 5, 'h1');
+  I.waitForText('Warehouse data source:', 5, 'h1');
   I.see(test_bucket_name, 'h1');
   I.say('Data source created');
   I.see(test_user_name, 'table.bucket-users');

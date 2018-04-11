@@ -28,7 +28,7 @@
     "body-parser": "^1.18.2",
     "bole": "3.0.2",
     "cls-hooked": "^4.2.2",
-    "codeceptjs": "^1.1.4",
+    "codeceptjs": "^1.1.7",
     "concat-files": "^0.1.1",
     "connect-ensure-login": "^0.1.1",
     "connect-redis": "^3.3.2",
@@ -55,7 +55,7 @@
     "request": "^2.82.0",
     "request-promise": "^4.2.1",
     "request-promise-core": "^1.1.1",
-    "selenium-standalone": "^6.12.0",
+    "selenium-standalone": "^6.13.0",
     "uuid": "^3.1.0",
     "webdriverio": "^4.10.2"
   },

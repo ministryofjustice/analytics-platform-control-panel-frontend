@@ -13,17 +13,17 @@ Feature('Create data source then app linked to it, then delete them @superuser')
 
 Scenario('Go to data sources tab', (I) => {
   I.amOnPage('/');
-  I.seeElement('li.tab-data');
-  I.click('li.tab-data');
-  I.waitUrlEquals('/#Data');
-  I.say('This is the data tab');
+  I.seeElement('li.tab-webapp-data');
+  I.click('li.tab-webapp-data');
+  I.waitUrlEquals('/#Webapp data');
+  I.say('This is the webapp data tab');
 });
 
-Scenario('Create a data source page', (I) => {
-  I.see('Create new data source');
-  I.click('Create new data source');
-  I.waitUrlEquals('/buckets/new');
-  I.say('This is the create new data source page');
+Scenario('Create a webapp data source page', (I) => {
+  I.see('Create new webapp data source');
+  I.click('Create new webapp data source');
+  I.waitUrlEquals('/buckets/new?type=webapp');
+  I.say('This is the create new webapp data source page');
 });
 
 Scenario('Grab data source prefix', function* (I) {
@@ -49,7 +49,7 @@ Scenario('Create data source', (I) => {
 });
 
 Scenario('Check data source', (I) => {
-  I.waitForText('Data source:', 5, 'h1');
+  I.waitForText('Webapp data source:', 5, 'h1');
   I.see(test_bucket_name, 'h1');
   I.say('Data source created');
   I.see(test_user_name, 'table.bucket-users');
@@ -92,8 +92,8 @@ Scenario('Submit button enabled', (I) => {
 
 Scenario('Select data source', (I) => {
   I.dontSee('select#select-existing-datasource');
-  I.see('Connect an existing app data source');
-  I.click('Connect an existing app data source');
+  I.see('Connect an existing webapp data source');
+  I.click('Connect an existing webapp data source');
   I.waitForElement('select#select-existing-datasource');
   I.say('Select data source dropdown is visible');
   I.selectOption('select#select-existing-datasource', test_bucket_name);

@@ -78,7 +78,21 @@ exports.delete = (req, res, next) => {
 exports.aws = (req, res, next) => {
   Bucket.get(req.params.id)
     .then((bucket) => {
-      res.redirect(bucket.location_url);
+      if (bucket.location_url) {
+        res.redirect(bucket.location_url);
+      } else {
+        const aws_urls = {
+          alpha: 'https://alpha-analytics-moj.eu.auth0.com/samlp/NpfImg4P3ynU6HFx7ivYmqUZWQHfwi3Y',
+          dev: 'https://dev-analytics-moj.eu.auth0.com/samlp/GCTaoFKOc8MjhcfNJym2Fv9aD1YXoewt',
+        };
+        if (aws_urls[process.env.ENV]) {
+          res.redirect(aws_urls[process.env.ENV]);
+        } else {
+          const fragment = `${(bucket.is_data_warehouse ? 'Warehouse' : 'Webapp')}%20data`;
+          req.session.flash_messages.push(`No AWS URL found for environment: ${process.env.ENV}`);
+          res.redirect(`${url_for('base.home')}#${fragment}`);
+        }
+      }
     })
     .catch(next);
 };

@@ -13,11 +13,13 @@
 {% include 'users/includes/tables.html' %}
 
 
-<details class="debug">
-  <summary>Debug</summary>
-  <h2 class="heading-medium">User dump</h2>
-  <pre>{{ user | dump(2) }}</pre>
-</details>
+{% if current_user.is_superuser %}
+  <details class="debug">
+    <summary>Debug</summary>
+    <h2 class="heading-medium">User dump</h2>
+    <pre>{{ user | dump(2) }}</pre>
+  </details>
+{% endif %}
 
 
 {% endblock %}

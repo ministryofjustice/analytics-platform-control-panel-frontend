@@ -153,25 +153,27 @@
 {% endif %}
 
 
-<details class="debug">
-  <summary>Debug</summary>
+{% if current_user.is_superuser %}
+  <details class="debug">
+    <summary>Debug</summary>
 
-  current_user_is_app_admin
-  <h2 class="heading-medium">current_user_is_app_admin</h2>
-  <div>
-    <pre>{{ current_user_is_app_admin }}</pre>
-  </div>
+    current_user_is_app_admin
+    <h2 class="heading-medium">current_user_is_app_admin</h2>
+    <div>
+      <pre>{{ current_user_is_app_admin }}</pre>
+    </div>
 
-  <h2 class="heading-medium">App dump</h2>
-  <div>
-    <pre>{{ app | dump(2) }}</pre>
-  </div>
+    <h2 class="heading-medium">App dump</h2>
+    <div>
+      <pre>{{ app | dump(2) }}</pre>
+    </div>
 
-  <h2 class="heading-medium">Users dump</h2>
-  <div>
-    <pre>{{ users | dump(2) }}</pre>
-  </div>
-</details>
+    <h2 class="heading-medium">Users dump</h2>
+    <div>
+      <pre>{{ users | dump(2) }}</pre>
+    </div>
+  </details>
+{% endif %}
 
 
 {% endblock %}

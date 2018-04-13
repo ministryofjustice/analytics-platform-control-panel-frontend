@@ -132,7 +132,7 @@
     </section>
   {% endif %}
 
-  {% if current_user.is_superuser %}
+  {% if current_user.is_superuser or env.ENV == 'dev' %}
     <details class="debug">
       <summary>Debug</summary>
       <div class="panel">

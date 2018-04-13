@@ -13,7 +13,7 @@
 {% include 'users/includes/tables.html' %}
 
 
-{% if current_user.is_superuser %}
+{% if current_user.is_superuser or env.ENV == 'dev' %}
   <details class="debug">
     <summary>Debug</summary>
     <h2 class="heading-medium">User dump</h2>

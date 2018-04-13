@@ -149,17 +149,18 @@
 {% endif %}
 
 
-<!-- TODO: Remove me - Dump of available variables -->
-<details class="debug">
-  <summary>Debug</summary>
-  <div>
-    <pre>bucket = {{ bucket | dump(4) | safe }}</pre>
-    <br />
-    <pre>apps_options = {{ apps_options | dump(4) | safe }}</pre>
-    <br />
-    <pre>users_options = {{ users_options | dump(4) | safe }}</pre>
-  </div>
-</details>
+{% if current_user.is_superuser or env.ENV == 'dev' %}
+  <details class="debug">
+    <summary>Debug</summary>
+    <div>
+      <pre>bucket = {{ bucket | dump(4) | safe }}</pre>
+      <br />
+      <pre>apps_options = {{ apps_options | dump(4) | safe }}</pre>
+      <br />
+      <pre>users_options = {{ users_options | dump(4) | safe }}</pre>
+    </div>
+  </details>
+{% endif %}
 
 
 {% endblock %}

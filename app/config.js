@@ -42,6 +42,10 @@ config.auth0 = {
   sso_logout_url: '/v2/logout',
 };
 
+config.aws = {
+  login_url: process.env.AWS_LOGIN_URL,
+};
+
 config.babel = {
   presets: ['es2015'],
 };

@@ -2,6 +2,10 @@ const { Bucket, User } = require('../models');
 const config = require('../config');
 const { url_for } = require('../routes');
 
+if (!config.aws.login_url) {
+  throw new Error('AWS login URL not set');
+}
+
 
 exports.list_buckets = (req, res, next) => {
   Bucket.list()

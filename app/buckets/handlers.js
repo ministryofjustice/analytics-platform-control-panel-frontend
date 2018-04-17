@@ -1,4 +1,5 @@
 const { Bucket, User } = require('../models');
+const config = require('../config');
 const { url_for } = require('../routes');
 
 
@@ -81,13 +82,7 @@ exports.aws = (req, res, next) => {
       if (bucket.location_url) {
         res.redirect(bucket.location_url);
       } else {
-        if (config.aws.login_url) {
-          res.redirect(config.aws.login_url);
-        } else {
-          const fragment = `${(bucket.is_data_warehouse ? 'Warehouse' : 'Webapp')}%20data`;
-          req.session.flash_messages.push(`No AWS URL found for environment: ${process.env.ENV}`);
-          res.redirect(`${url_for('base.home')}#${fragment}`);
-        }
+        res.redirect(config.aws.login_url);
       }
     })
     .catch(next);

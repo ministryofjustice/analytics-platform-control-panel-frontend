@@ -31,6 +31,7 @@ exports.home = (req, res, next) => {
           rstudio_is_deploying,
           user,
           buckets,
+          aws_url: config.aws.login_url,
         });
       });
     })

@@ -7,6 +7,10 @@ const nock = require('nock');
 const { load_routes, url_for } = require('../app/routes');
 const { User } = require('../app/models');
 
+// Setting dummy variable to allow tests to pass
+config.aws = {
+  login_url: 'qwertyuiop'
+};
 
 exports.ns = cls.createNamespace(config.continuation_locals.namespace);
 

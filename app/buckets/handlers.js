@@ -83,11 +83,7 @@ exports.delete = (req, res, next) => {
 exports.aws = (req, res, next) => {
   Bucket.get(req.params.id)
     .then((bucket) => {
-      if (bucket.location_url) {
-        res.redirect(bucket.location_url);
-      } else {
-        res.redirect(config.aws.login_url);
-      }
+      res.redirect(bucket.location_url || config.aws.login_url);
     })
     .catch(next);
 };

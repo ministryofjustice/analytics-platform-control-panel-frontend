@@ -49,7 +49,7 @@ moj.Modules.userTypeahead = {
     const userText = this.$userTypeahead.val();
     const userIndex = this.users.indexOf(userText);
 
-    if (userIndex > 0) {
+    if (userIndex >= 0) {
       this.selectOption(userIndex + 1);
       this.setFormDisabled(false);
     } else {

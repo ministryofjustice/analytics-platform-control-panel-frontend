@@ -2,6 +2,7 @@
 {% from "includes/yesno.html" import yes_no %}
 
 {% set page_title = "App: " + app.name %}
+{% set breadcrumbs = [{text: 'Home', url: '/'}, {text: 'Webapps', url: '/#Webapps'}, {text: 'Webapp details'}] %}
 
 {% block main_column %}
 

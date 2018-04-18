@@ -60,6 +60,10 @@ exports.update = (req, res, next) => {
 
 exports.delete = (req, res, next) => {
   UserS3Bucket.delete(req.params.id)
+    .then(() => User.get(req.user.auth0_id))
+    .then((user) => {
+      req.session.passport.user.users3buckets = user.data.users3buckets;
+    })
     .then(() => { res.redirect(req.body.redirect_to); })
     .catch(next);
 };

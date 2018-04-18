@@ -147,12 +147,6 @@ class App extends Model {
       is_admin,
     }).create();
   }
-
-  has_admin(user_id) { // eslint-disable-line class-methods-use-this, no-unused-vars
-    return true;
-    // TODO: remove this and return real value once perms have been implemented
-    // return this.data.userapps.some(ua => ua.is_admin && ua.user.auth0_id === user_id);
-  }
 }
 
 exports.App = App;
@@ -219,6 +213,10 @@ class User extends Model {
 
   is_bucket_admin(bucket_id) {
     return this.users3buckets.filter(u => u.s3bucket.id === bucket_id && u.is_admin).length > 0;
+  }
+
+  is_app_admin(app_id) {
+    return this.userapps.filter(u => u.app.id === app_id && u.is_admin).length > 0;
   }
 }
 

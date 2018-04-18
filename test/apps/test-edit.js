@@ -6,11 +6,13 @@ const { App, Bucket, ModelSet, User } = require('../../app/models');
 const app = require('../fixtures/app');
 const buckets = require('../fixtures/buckets');
 const users = require('../fixtures/users');
+const customers = require('../fixtures/customers');
 
 
 describe('apps/edit', () => {
   it('loads app, buckets and users and shows a form', () => {
     mock_api().get(`/apps/${app.id}/`).reply(200, app);
+    mock_api().get(`/apps/${app.id}/customers/`).reply(200, customers);
     mock_api().get('/s3buckets/').reply(200, buckets);
     mock_api().get('/users/').reply(200, users);
 
@@ -19,6 +21,7 @@ describe('apps/edit', () => {
       buckets: new ModelSet(Bucket, buckets.results),
       users: new ModelSet(User, users.results),
     };
+
 
     return dispatch(handlers.details, { params: { id: app.id } })
       .then(({ template, context }) => {

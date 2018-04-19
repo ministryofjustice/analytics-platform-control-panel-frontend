@@ -117,6 +117,13 @@ class App extends Model {
     return new ModelSet(User, this.data.userapps.map(ua => ua.user));
   }
 
+  get customers() {
+    const pk_name = this.constructor.pk;
+    const pk = this.data[pk_name];
+
+    return this.cpanel.get(`${this.constructor.endpoint}/${pk}/customers`);
+  }
+
   grant_bucket_access(bucket, access_level = 'readonly') {
     if (!['readonly', 'readwrite'].includes(access_level)) {
       throw new Error(`Invalid access_level "${access_level}"`);

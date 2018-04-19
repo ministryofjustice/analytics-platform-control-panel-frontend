@@ -26,6 +26,17 @@
   </div>
 </div>
 
+<h2 class="heading-medium">App customers</h2>
+{% if customers.length %}
+  <ul class="list list-bullet">
+  {% for customer in customers %}
+    <li>{{ customer.email }}</li>
+  {% endfor %}
+  </ul>
+{% else %}
+<p>None</p>
+{% endif %}
+
 <h2 class="heading-medium">App admins <em class="js-modal-trigger" data-content="app-admins"><span>What's this?</span></em></h2>
 <div class="js-hidden js-modal-content" id="content-app-admins">
   <h3 class="heading-small">App admins</h3>

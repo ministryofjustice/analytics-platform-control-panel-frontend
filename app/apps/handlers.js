@@ -102,13 +102,24 @@ exports.list = (req, res, next) => {
 
 
 exports.details = (req, res, next) => {
+  let app;
+  let buckets;
+  let users;
+
   Promise.all([App.get(req.params.id), Bucket.list(), User.list()])
-    .then(([app, buckets, users]) => {
+    .then(([returned_app, returned_buckets, returned_users]) => {
+      app = returned_app;
+      buckets = returned_buckets;
+      users = returned_users;
+      return app.customers;
+    })
+    .then((customers) => {
       res.render('apps/details.html', {
         app,
         buckets_options: buckets.exclude(app.buckets),
         users,
         users_options: users.exclude(app.users),
+        customers,
       });
     })
     .catch(next);

@@ -3,7 +3,7 @@ const config = require('../config');
 const { url_for } = require('../routes');
 
 if (!config.aws.login_url) {
-  throw new Error('AWS login URL not set');
+  throw new Error('AWS_LOGIN_URL must be set');
 }
 
 

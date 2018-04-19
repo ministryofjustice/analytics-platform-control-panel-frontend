@@ -3,6 +3,8 @@ const config = require('../config');
 const { DoesNotExist } = require('./control_panel_api');
 const cls = require('cls-hooked');
 
+const IDLED = 'mojanalytics.xyz/idled';
+
 
 class Model extends base.Model {
   static get kubernetes() {
@@ -110,6 +112,10 @@ class Deployment extends Model {
 
   get available() {
     return this.data.pods.some(pod => pod.status.phase === 'Running');
+  }
+
+  get idled() {
+    return this.data.metadata.labels[IDLED] === 'true';
   }
 
   get app_label() {

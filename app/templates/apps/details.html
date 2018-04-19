@@ -28,13 +28,14 @@
 
 <h2 class="heading-medium">App admins <em class="js-modal-trigger" data-content="app-admins"><span>What's this?</span></em></h2>
 <div class="js-hidden js-modal-content" id="content-app-admins">
-  <p>Admins of an app are able to connect/disconnect the app to/from webapp data sources, delete the app, and may also confer these rights on other control panel users.</p>
+  <h3 class="heading-small">App admins</h3>
+  <p>Admins of an app are able to connect/disconnect the app to/from webapp data sources, remove the app from Control Panel, and may also confer these rights on other Control Panel users.</p>
 </div>
 {% if app.userapps.length %}
   <table class="app-admins form-group">
     <thead>
       <tr>
-        <th>Name</th>
+        <th>User</th>
         <th><span class="visuallyhidden">Actions</span></th>
       </tr>
     </thead>
@@ -42,7 +43,7 @@
       {% for userapp in app.userapps %}
         <tr>
           <td>
-            <a class="{% if current_user.auth0_id == userapp.user.auth0_id %}highlight-current{% endif %}" href="{{ url_for('users.details', { id: userapp.user.auth0_id }) }}">{{ userapp.user.name }}</a>
+            <a class="{% if current_user.auth0_id == userapp.user.auth0_id %}highlight-current{% endif %}" href="{{ url_for('users.details', { id: userapp.user.auth0_id }) }}">{% if userapp.user.name %}{{ userapp.user.name }} {% endif %}({{ userapp.user.username }})</a>
           </td>
           <td class="align-right">
             {% if current_user.is_app_admin(app.id) or current_user.is_superuser %}

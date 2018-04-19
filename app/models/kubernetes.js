@@ -3,7 +3,7 @@ const config = require('../config');
 const { DoesNotExist } = require('./control_panel_api');
 const cls = require('cls-hooked');
 
-const IDLED_LABEL = 'mojanalytics.xyz/idled';
+const IDLED = 'mojanalytics.xyz/idled';
 
 
 class Model extends base.Model {
@@ -115,7 +115,7 @@ class Deployment extends Model {
   }
 
   get idled() {
-    return this.data.metadata.labels[IDLED_LABEL] === 'true';
+    return this.data.metadata.labels[IDLED] === 'true';
   }
 
   get app_label() {

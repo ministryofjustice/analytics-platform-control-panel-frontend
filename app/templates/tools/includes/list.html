@@ -17,22 +17,22 @@
       <tr>
         <td>{{ tool.app_label }}</td>
         <td>
-          {%- if tool.idled -%}
+          {% if tool.idled %}
             Idled
-          {%- else -%}
-            {% for pod in tool.pods -%}
+          {% else %}
+            {% for pod in tool.pods %}
               {{ loop.index }}. {{ pod.display_status }}<br>
-            {%- endfor %}
-          {%- endif -%}
+            {% endfor %}
+          {% endif %}
         </td>
         <td class="align-right no-wrap">
-          {%- if tool.available -%}
+          {% if tool.available %}
             <a class="button button-secondary" target="_blank" href="{{ tool.url }}">Open</a>
-          {%- elif tool.idled -%}
+          {% elif tool.idled %}
             <a class="button button-secondary" target="_blank" href="{{ tool.url }}">Unidle</a>
-          {%- else -%}
+          {% else %}
             <a class="button button-secondary" href="{{ url_for('tools.restart', { name: tool.metadata.name }) }}">Restart</a>
-          {%- endif -%}
+          {% endif %}
         </td>
       </tr>
       {% endfor %}

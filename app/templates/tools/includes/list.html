@@ -28,10 +28,9 @@
         <td class="align-right no-wrap">
           {% if tool.available %}
             <a class="button button-secondary" target="_blank" href="{{ tool.url }}">Open</a>
+            <a class="button button-secondary" href="{{ url_for('tools.restart', { name: tool.metadata.name }) }}">Restart</a>
           {% elif tool.idled %}
             <a class="button button-secondary" target="_blank" href="{{ tool.url }}">Unidle</a>
-          {% else %}
-            <a class="button button-secondary" href="{{ url_for('tools.restart', { name: tool.metadata.name }) }}">Restart</a>
           {% endif %}
         </td>
       </tr>

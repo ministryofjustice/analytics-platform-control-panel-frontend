@@ -155,6 +155,10 @@ class App extends Model {
     }).create();
   }
 
+  add_customer(app_id, customer_email) {
+    return this.cpanel.post(`${this.constructor.endpoint}/${app_id}/customers/`, { email: customer_email });
+  }
+
   delete_customer(app_id, customer_id) {
     return this.cpanel.delete(`${this.constructor.endpoint}/${app_id}/customers/${customer_id}/`);
   }

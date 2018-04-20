@@ -149,3 +149,15 @@ exports.delete_customer = (req, res, next) => {
     })
     .catch(next);
 };
+
+
+exports.add_customer = (req, res, next) => {
+  App.get(req.params.id)
+    .then((app) => {
+      app.add_customer(req.params.id, req.body.customer_email);
+    })
+    .then(() => {
+      res.redirect(req.body.redirect_to);
+    })
+    .catch(next);
+};

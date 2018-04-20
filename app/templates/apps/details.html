@@ -37,7 +37,7 @@
   </div>
   {% if customers.length %}
     <table class="form-group">
-      <thead>
+      <thead class="visuallyhidden">
         <tr>
           <th>Customer email</th>
           {% if current_user.is_app_admin(app.id) or current_user.is_superuser %}
@@ -50,7 +50,7 @@
           <tr>
             <td>{{ customer.email }}</td>
             {% if current_user.is_app_admin(app.id) or current_user.is_superuser %}
-              <td>
+              <td class="align-right">
                 <!-- Button to remove app customer -->
                 <form action="{{ url_for('apps.delete_customer', { id: app.id, customer_id: customer.user_id }) }}" method="post" class="inline-form clearfix">
                   <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', { id: app.id }) }}">
@@ -64,7 +64,22 @@
       </tbody>
     </table>
   {% else %}
-  <p>None</p>
+    <p>None</p>
+  {% endif %}
+
+  {% if current_user.is_app_admin(app.id) or current_user.is_superuser %}
+    <form action="{{ url_for('apps.add_customer', { id: app.id }) }}" method="post" class="form-group">
+      <input type="hidden" name="app_id" value="{{ app.id }}" />
+      <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', { id: app.id }) }}">
+      <div class="form-group">
+        <label class="form-label" for="customer_email">Add an app customer by entering their email address</label>
+
+        <input id="customer_email" class="form-control form-control-1-2" name="customer_email" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <input type="submit" class="button button-secondary" value="Add customer">
+      </div>
+    </form>
   {% endif %}
 </div>
 

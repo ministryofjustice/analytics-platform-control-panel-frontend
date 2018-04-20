@@ -137,3 +137,15 @@ exports.delete = (req, res, next) => {
     })
     .catch(next);
 };
+
+
+exports.delete_customer = (req, res, next) => {
+  App.get(req.params.id)
+    .then((app) => {
+      app.delete_customer(req.params.id, req.params.customer_id);
+    })
+    .then(() => {
+      res.redirect(req.body.redirect_to);
+    })
+    .catch(next);
+};

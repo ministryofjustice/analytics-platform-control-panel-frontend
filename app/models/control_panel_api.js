@@ -154,6 +154,10 @@ class App extends Model {
       is_admin,
     }).create();
   }
+
+  delete_customer(app_id, customer_id) {
+    return this.cpanel.delete(`${this.constructor.endpoint}/${app_id}/customers/${customer_id}/`);
+  }
 }
 
 exports.App = App;

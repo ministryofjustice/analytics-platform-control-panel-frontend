@@ -7,6 +7,7 @@
 {% block main_column %}
 
 <div class="grid-row">
+
   <div class="column-half">
     <h2 class="heading-medium">Repo</h2>
     <p>
@@ -24,165 +25,200 @@
       {{ app.description if app.description else "None" }}
     </p>
   </div>
+
 </div>
 
-<h2 class="heading-medium">App customers</h2>
-{% if customers.length %}
-  <ul class="list list-bullet">
-  {% for customer in customers %}
-    <li>{{ customer.email }}</li>
-  {% endfor %}
-  </ul>
-{% else %}
-<p>None</p>
-{% endif %}
 
-<h2 class="heading-medium">App admins <em class="js-modal-trigger" data-content="app-admins"><span>What's this?</span></em></h2>
-<div class="js-hidden js-modal-content" id="content-app-admins">
-  <h3 class="heading-small">App admins</h3>
-  <p>Admins of an app are able to connect/disconnect the app to/from webapp data sources, remove the app from Control Panel, and may also confer these rights on other Control Panel users.</p>
-</div>
-{% if app.userapps.length %}
-  <table class="app-admins form-group">
-    <thead>
-      <tr>
-        <th>User</th>
-        <th><span class="visuallyhidden">Actions</span></th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for userapp in app.userapps %}
+<div class="form-group">
+  <h2 class="heading-medium">App customers <em class="js-modal-trigger" data-content="app-customers"><span>What's this?</span></em></h2>
+  <div class="js-hidden js-modal-content" id="content-app-customers">
+    <h3 class="heading-small">App customers</h3>
+    <p>App customers are end users of a webapp. They do not have to be Control Panel users, any email address can be added.</p>
+  </div>
+  {% if customers.length %}
+    <table class="form-group">
+      <thead>
         <tr>
-          <td>
-            <a class="{% if current_user.auth0_id == userapp.user.auth0_id %}highlight-current{% endif %}" href="{{ url_for('users.details', { id: userapp.user.auth0_id }) }}">{% if userapp.user.name %}{{ userapp.user.name }} {% endif %}({{ userapp.user.username }})</a>
-          </td>
-          <td class="align-right">
-            {% if current_user.is_app_admin(app.id) or current_user.is_superuser %}
-              <!-- Button to revoke user admin access -->
-              <form action="{{ url_for('userapps.delete', { id: userapp.id }) }}" method="post" class="inline-form clearfix">
-                <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', { id: app.id }) }}">
-
-                <input type="submit" class="js-confirm button button-secondary right" value="Revoke admin" />
-              </form>
-            {% endif %}
-          </td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-{% else %}
-  <p>None</p>
-{% endif %}
-
-{% if current_user.is_app_admin(app.id) or current_user.is_superuser %}
-  {% if users_options.length %}
-    <form action="{{ url_for('userapps.create') }}" method="post" class="form-group">
-      <input type="hidden" name="app_id" value="{{ app.id }}" />
-      <div class="form-group">
-        <label class="form-label" for="user_id">Give a user admin rights to this app</label>
-
-        <div class="typeahead__container">
-          <div class="typeahead__field">
-            <span class="typeahead__query">
-              <input id="user_typeahead" class="form-control form-control-1-2" name="user_typeahead" type="search" autocomplete="off" placeholder="Start typing to find a user..." value="{{ req.body.user_typeahead }}">
-            </span>
-          </div>
-        </div>
-
-        <select class="form-control no-blank" id="user_id" name="user_id">
-          <option value="">Select user</option>
-          {% for user in users_options %}
-            {% if user.auth0_id and user.auth0_id != "jenkins" %}
-              <option value="{{ user.auth0_id }}">{% if user.name %}{{ user.name }} {% endif %}({{ user.username }})</option>
-            {% endif %}
-          {% endfor %}
-        </select>
-      </div>
-      <div class="form-group">
-        <input type="submit" class="button button-secondary" value="Grant access">
-      </div>
-    </form>
-  {% else %}
-    <p>(All available users are already admins of this app.)</p>
-  {% endif %}
-{% endif %}
-
-<h2 class="heading-medium">App data sources</h2>
-<p>{{ app.apps3buckets.length }} app data source{%- if app.apps3buckets.length != 1 -%}s{%- endif %} connected to this app</p>
-
-{% if app.apps3buckets.length %}
-  <table class="app-data-sources form-group">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>App has read/write access</th>
-        <th>
+          <th>Customer email</th>
           {% if current_user.is_app_admin(app.id) or current_user.is_superuser %}
-            <span class="visuallyhidden">Actions</span>
+            <th>Actions</th>
           {% endif %}
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for apps3bucket in app.apps3buckets %}
-        <tr>
-          <td><a href="{{ url_for('buckets.details', { id: apps3bucket.s3bucket.id }) }}">{{ apps3bucket.s3bucket.name }}</a></td>
-          <td>{{ yes_no(apps3bucket.access_level, 'readwrite') }}</td>
-          <td class="align-right">
-            {% if current_user.is_app_admin(app.id) or current_user.is_superuser %}
-              <!-- Button to change access level -->
-              <form action="{{ url_for('apps3buckets.update', { id: apps3bucket.id }) }}" method="post" class="inline-form clearfix">
-                <input type="hidden" name="access_level" value="{{ yes_no(apps3bucket.access_level, 'readwrite', 'readonly', 'readwrite') }}">
-
-                <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', { id: app.id }) }}">
-
-                <input type="submit" class="js-confirm button button-secondary right" value="{{
-  yes_no(apps3bucket.access_level, 'readwrite', 'Revoke', 'Grant') }} read/write access" />
-              </form>
-
-              <!-- Button to revoke access -->
-              <form action="{{ url_for('apps3buckets.delete', { id: apps3bucket.id }) }}" method="post" class="inline-form clearfix">
-                <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', { id: app.id }) }}">
-
-                <input type="submit" class="js-confirm button button-secondary right" value="Disconnect data source" />
-              </form>
-            {% endif %}
-          </td>
         </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-{% endif %}
+      </thead>
+      <tbody>
+        {% for customer in customers %}
+          <tr>
+            <td>{{ customer.email }}</td>
+            {% if current_user.is_app_admin(app.id) or current_user.is_superuser %}
+              <td>
+                <!-- Button to remove app customer -->
+                <form action="{{ url_for('apps.delete_customer', { id: app.id, customer_id: customer.user_id }) }}" method="post" class="inline-form clearfix">
+                  <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', { id: app.id }) }}">
 
-
-{% if current_user.is_app_admin(app.id) or current_user.is_superuser %}
-  {% if buckets_options.length %}
-    <form action="{{ url_for('apps3buckets.create') }}" method="post">
-      <input type="hidden" name="app_id" value="{{ app.id }}" />
-      <div class="form-group">
-        <label class="form-label" for="bucket_id">Connect an app data source</label>
-        <select class="form-control no-blank" id="bucket_id" name="bucket_id">
-          <option value="">Select app data source</option>
-          {% for bucket in buckets_options %}
-            <option value="{{ bucket.id }}">{{ bucket.name }}</option>
-          {% endfor %}
-        </select>
-      </div>
-      <div class="form-group">
-        <input type="submit" class="button button-secondary" value="Grant access">
-      </div>
-    </form>
+                  <input type="submit" class="js-confirm button button-secondary right" value="Remove customer" />
+                </form>
+              </td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   {% else %}
-    <p>(All available app data sources are already connected to this app.)</p>
+  <p>None</p>
   {% endif %}
-{% endif %}
+</div>
 
-{% if current_user.is_app_admin(app.id) or current_user.is_superuser %}
-<hr>
-<form action="{{ url_for('apps.delete', { id: app.id }) }}" method="post" class="clearfix">
-  <input type="submit" class="button button-warning right js-confirm" value="Delete app" data-confirm-message="Are you sure you want to delete this app?">
-</form>
-{% endif %}
+<div class="form-group">
+  <h2 class="heading-medium">App admins <em class="js-modal-trigger" data-content="app-admins"><span>What's this?</span></em></h2>
+  <div class="js-hidden js-modal-content" id="content-app-admins">
+    <h3 class="heading-small">App admins</h3>
+    <p>Admins of an app are able to connect/disconnect the app to/from webapp data sources, remove the app from Control Panel, and may also confer these rights on other Control Panel users.</p>
+  </div>
+  {% if app.userapps.length %}
+    <table class="app-admins form-group">
+      <thead class="visuallyhidden">
+        <tr>
+          <th>User</th>
+          {% if current_user.is_app_admin(app.id) or current_user.is_superuser %}
+            <th>Actions</th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for userapp in app.userapps %}
+          <tr>
+            <td>
+              <a class="{% if current_user.auth0_id == userapp.user.auth0_id %}highlight-current{% endif %}" href="{{ url_for('users.details', { id: userapp.user.auth0_id }) }}">{% if userapp.user.name %}{{ userapp.user.name }} {% endif %}({{ userapp.user.username }})</a>
+            </td>
+            {% if current_user.is_app_admin(app.id) or current_user.is_superuser %}
+              <td class="align-right">
+                <!-- Button to revoke user admin access -->
+                <form action="{{ url_for('userapps.delete', { id: userapp.id }) }}" method="post" class="inline-form clearfix">
+                  <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', { id: app.id }) }}">
+
+                  <input type="submit" class="js-confirm button button-secondary right" value="Revoke admin" />
+                </form>
+              </td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>None</p>
+  {% endif %}
+
+  {% if current_user.is_app_admin(app.id) or current_user.is_superuser %}
+    {% if users_options.length %}
+      <form action="{{ url_for('userapps.create') }}" method="post" class="form-group">
+        <input type="hidden" name="app_id" value="{{ app.id }}" />
+        <div class="form-group">
+          <label class="form-label" for="user_id">Give a user admin rights to this app</label>
+
+          <div class="typeahead__container">
+            <div class="typeahead__field">
+              <span class="typeahead__query">
+                <input id="user_typeahead" class="form-control form-control-1-2" name="user_typeahead" type="search" autocomplete="off" placeholder="Start typing to find a user..." value="{{ req.body.user_typeahead }}">
+              </span>
+            </div>
+          </div>
+
+          <select class="form-control no-blank" id="user_id" name="user_id">
+            <option value="">Select user</option>
+            {% for user in users_options %}
+              {% if user.auth0_id and user.auth0_id != "jenkins" %}
+                <option value="{{ user.auth0_id }}">{% if user.name %}{{ user.name }} {% endif %}({{ user.username }})</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <input type="submit" class="button button-secondary" value="Grant access">
+        </div>
+      </form>
+    {% else %}
+      <p>(All available users are already admins of this app.)</p>
+    {% endif %}
+  {% endif %}
+
+  <h2 class="heading-medium">App data sources</h2>
+  <p>{{ app.apps3buckets.length }} app data source{%- if app.apps3buckets.length != 1 -%}s{%- endif %} connected to this app</p>
+
+  {% if app.apps3buckets.length %}
+    <table class="app-data-sources form-group">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>App has read/write access</th>
+          <th>
+            {% if current_user.is_app_admin(app.id) or current_user.is_superuser %}
+              <span class="visuallyhidden">Actions</span>
+            {% endif %}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for apps3bucket in app.apps3buckets %}
+          <tr>
+            <td><a href="{{ url_for('buckets.details', { id: apps3bucket.s3bucket.id }) }}">{{ apps3bucket.s3bucket.name }}</a></td>
+            <td>{{ yes_no(apps3bucket.access_level, 'readwrite') }}</td>
+            <td class="align-right">
+              {% if current_user.is_app_admin(app.id) or current_user.is_superuser %}
+                <!-- Button to change access level -->
+                <form action="{{ url_for('apps3buckets.update', { id: apps3bucket.id }) }}" method="post" class="inline-form clearfix">
+                  <input type="hidden" name="access_level" value="{{ yes_no(apps3bucket.access_level, 'readwrite', 'readonly', 'readwrite') }}">
+
+                  <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', { id: app.id }) }}">
+
+                  <input type="submit" class="js-confirm button button-secondary right" value="{{
+    yes_no(apps3bucket.access_level, 'readwrite', 'Revoke', 'Grant') }} read/write access" />
+                </form>
+
+                <!-- Button to revoke access -->
+                <form action="{{ url_for('apps3buckets.delete', { id: apps3bucket.id }) }}" method="post" class="inline-form clearfix">
+                  <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', { id: app.id }) }}">
+
+                  <input type="submit" class="js-confirm button button-secondary right" value="Disconnect data source" />
+                </form>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+
+
+  {% if current_user.is_app_admin(app.id) or current_user.is_superuser %}
+    {% if buckets_options.length %}
+      <form action="{{ url_for('apps3buckets.create') }}" method="post">
+        <input type="hidden" name="app_id" value="{{ app.id }}" />
+        <div class="form-group">
+          <label class="form-label" for="bucket_id">Connect an app data source</label>
+          <select class="form-control no-blank" id="bucket_id" name="bucket_id">
+            <option value="">Select app data source</option>
+            {% for bucket in buckets_options %}
+              <option value="{{ bucket.id }}">{{ bucket.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <input type="submit" class="button button-secondary" value="Grant access">
+        </div>
+      </form>
+    {% else %}
+      <p>(All available app data sources are already connected to this app.)</p>
+    {% endif %}
+  {% endif %}
+
+  {% if current_user.is_app_admin(app.id) or current_user.is_superuser %}
+  <hr>
+  <form action="{{ url_for('apps.delete', { id: app.id }) }}" method="post" class="clearfix">
+    <input type="submit" class="button button-warning right js-confirm" value="Delete app" data-confirm-message="Are you sure you want to delete this app?">
+  </form>
+  {% endif %}
+</div>
+
 
 
 {% if current_user.is_superuser or env.ENV == 'dev' %}

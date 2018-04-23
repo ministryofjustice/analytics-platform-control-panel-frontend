@@ -43,7 +43,11 @@ config.auth0 = {
 };
 
 config.aws = {
-  login_url: process.env.AWS_LOGIN_URL,
+  login_base_url: process.env.AWS_LOGIN_BASE_URL || `https://aws.services.${process.env.ENV}.mojanalytics.xyz`,
+  bucket_url: (name, region = 'eu-west-1') => {
+    const destination = escape(`/s3/buckets/${name}/?region=${region}&tab=overview`);
+    return `${config.aws.login_base_url}/?destination=${destination}`;
+  },
 };
 
 config.babel = {

@@ -7,6 +7,10 @@
 
 {% block main_column %}
 
+<div class="form-group">
+  <a class="button button-secondary" href="{{ url_for('buckets.aws', { id: bucket.id }) }}">Open on AWS</a>
+</div>
+
 <h2 class="heading-medium">Data access group</h2>
 <p>{{ bucket.users3buckets.length }} user{%- if bucket.users3buckets.length != 1 -%}s have{% else %} has{% endif %} access to this {{ bucket_type }} data source</p>
 

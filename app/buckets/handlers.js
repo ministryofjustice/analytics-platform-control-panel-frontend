@@ -79,8 +79,7 @@ exports.delete = (req, res, next) => {
 exports.aws = (req, res, next) => {
   Bucket.get(req.params.id)
     .then((bucket) => {
-      const bucket_url = encodeURI(`${config.aws.login_url.prefix}${bucket.name}${config.aws.login_url.suffix}`);
-      res.redirect(bucket_url);
+      res.redirect(config.aws.bucket_url(bucket.name));
     })
     .catch(next);
 };

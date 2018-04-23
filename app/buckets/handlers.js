@@ -2,10 +2,6 @@ const { Bucket, User } = require('../models');
 const config = require('../config');
 const { url_for } = require('../routes');
 
-if (!config.aws.login_url) {
-  throw new Error('AWS_LOGIN_URL must be set');
-}
-
 
 exports.list_buckets = (req, res, next) => {
   Bucket.list()
@@ -83,7 +79,8 @@ exports.delete = (req, res, next) => {
 exports.aws = (req, res, next) => {
   Bucket.get(req.params.id)
     .then((bucket) => {
-      res.redirect(bucket.location_url || config.aws.login_url);
+      const bucket_url = encodeURI(`${config.aws.login_url.prefix}${bucket.name}${config.aws.login_url.suffix}`);
+      res.redirect(bucket_url);
     })
     .catch(next);
 };

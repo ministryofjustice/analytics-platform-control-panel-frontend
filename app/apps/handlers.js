@@ -120,6 +120,7 @@ exports.details = (req, res, next) => {
         users,
         users_options: users.exclude(app.users),
         customers,
+        errors: req.form_errors,
       });
     })
     .catch(next);
@@ -153,11 +154,15 @@ exports.delete_customer = (req, res, next) => {
 
 exports.add_customer = (req, res, next) => {
   App.get(req.params.id)
-    .then((app) => {
-      app.add_customer(req.params.id, req.body.customer_email);
-    })
+    .then(app => app.add_customer(req.params.id, req.body.customer_email))
     .then(() => {
       res.redirect(req.body.redirect_to);
     })
-    .catch(next);
+    .catch((error) => {
+      if (error.statusCode === 400 && error.error.email) {
+        req.form_errors = error.error;
+        return exports.details(req, res, next);
+      }
+      return next(error);
+    });
 };

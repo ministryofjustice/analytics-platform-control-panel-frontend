@@ -65,7 +65,11 @@
       <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', { id: app.id }) }}">
       <div class="form-group">
         <label class="form-label" for="customer_email">Add an app customer by entering their email address</label>
-
+        {% if errors.email %}
+          {% for error in errors.email %}
+            <span class="error-message">{{ error }}</span>
+          {% endfor %}
+        {% endif %}
         <input id="customer_email" class="form-control form-control-1-2" name="customer_email" autocomplete="off">
       </div>
       <div class="form-group">

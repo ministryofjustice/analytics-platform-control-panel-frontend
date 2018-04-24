@@ -121,7 +121,13 @@ class App extends Model {
     const pk_name = this.constructor.pk;
     const pk = this.data[pk_name];
 
-    return this.cpanel.get(`${this.constructor.endpoint}/${pk}/customers`);
+    return this.cpanel.get(`${this.constructor.endpoint}/${pk}/customers`)
+      .catch((error) => {
+        if (error.statusCode && error.statusCode === 404) {
+          return [];
+        }
+        throw error;
+      });
   }
 
   grant_bucket_access(bucket, access_level = 'readonly') {

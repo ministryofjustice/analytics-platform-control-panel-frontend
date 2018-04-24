@@ -6,27 +6,19 @@
 
 {% block main_column %}
 
-<div class="grid-row">
+<h2 class="heading-medium">Repo</h2>
+<p>
+  {% if app.repo_url %}
+    <a href="{{ app.repo_url }}">{{ app.repo_url }}</a>
+  {% else %}
+    None
+  {% endif %}
+</p>
 
-  <div class="column-half">
-    <h2 class="heading-medium">Repo</h2>
-    <p>
-      {% if app.repo_url %}
-        <a href="{{ app.repo_url }}">{{ app.repo_url }}</a>
-      {% else %}
-        None
-      {% endif %}
-    </p>
-  </div>
-
-  <div class="column-half">
-    <h2 class="heading-medium">Description</h2>
-    <p>
-      {{ app.description if app.description else "None" }}
-    </p>
-  </div>
-
-</div>
+<h2 class="heading-medium">Description</h2>
+<p>
+  {{ app.description if app.description else "None" }}
+</p>
 
 
 <div class="form-group">

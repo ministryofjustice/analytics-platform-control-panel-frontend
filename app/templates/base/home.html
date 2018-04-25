@@ -98,7 +98,13 @@
             <thead>
               <tr>
                 <th>App name</th>
-                <th>User has admin access</th>
+                <th>
+                  Admin access <em class="js-modal-trigger" data-content="app-admins"><span>What's this?</span></em>
+                  <div class="js-hidden js-modal-content" id="content-app-admins">
+                    <h3 class="heading-small">App admins</h3>
+                    <p>Admins of an app are able to connect/disconnect the app to/from webapp data sources, remove the app from Control Panel, and may also confer these rights on other Control Panel users.</p>
+                  </div>
+                </th>
                 <th><span class="visuallyhidden">Actions</span></th>
               </tr>
             </thead>

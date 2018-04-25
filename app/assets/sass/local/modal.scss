@@ -1,6 +1,7 @@
 .js-modal-trigger {
   display: inline-block;
   position: relative;
+  @include core-16;
   width: 20px;
   height: 20px;
   border: none;
@@ -28,4 +29,8 @@
   &:hover {
     background-color: $grey-2;
   }
+}
+
+.blocker {
+  z-index: 2;
 }

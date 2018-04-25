@@ -2,6 +2,8 @@ const { assert } = require('chai');
 const { dispatch, mock_api } = require('../conftest');
 const handlers = require('../../app/users3buckets/handlers');
 
+const user = require('../fixtures/user');
+
 
 describe('users3buckets.delete', () => {
   it('deletes the specified users3bucket', () => {
@@ -12,11 +14,24 @@ describe('users3buckets.delete', () => {
       .delete(`/users3buckets/${users3bucket_id}/`)
       .reply(204);
 
-    const params = { id: users3bucket_id };
-    const body = { redirect_to };
+    const get_user = mock_api()
+      .get(`/users/${escape(user.auth0_id)}/`)
+      .reply(200, user);
 
-    return dispatch(handlers.delete, { params, body })
+    const req = {
+      user,
+      body: { redirect_to },
+      params: { id: users3bucket_id },
+      session: {
+        passport: {
+          user: {}
+        }
+      },
+    };
+
+    return dispatch(handlers.delete, req)
       .then(({ redirect_url }) => {
+        assert(get_user.isDone());
         assert(delete_users3buckets.isDone());
         assert.equal(redirect_url, redirect_to);
       });

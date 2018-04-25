@@ -102,15 +102,23 @@ exports.list = (req, res, next) => {
 
 
 exports.details = (req, res, next) => {
+  let app;
+  let buckets;
+  let users;
+
   Promise.all([App.get(req.params.id), Bucket.list(), User.list()])
-    .then(([app, buckets, users]) => {
-      const current_user_is_app_admin = app.has_admin(req.user.auth0_id);
+    .then((results) => {
+      [app, buckets, users] = results;
+      return app.customers;
+    })
+    .then((customers) => {
       res.render('apps/details.html', {
         app,
         buckets_options: buckets.exclude(app.buckets),
         users,
         users_options: users.exclude(app.users),
-        current_user_is_app_admin,
+        customers,
+        errors: req.form_errors,
       });
     })
     .catch(next);
@@ -127,4 +135,32 @@ exports.delete = (req, res, next) => {
       res.redirect(url_for(redirect_to));
     })
     .catch(next);
+};
+
+
+exports.delete_customer = (req, res, next) => {
+  App.get(req.params.id)
+    .then((app) => {
+      app.delete_customer(req.params.id, req.params.customer_id);
+    })
+    .then(() => {
+      res.redirect(url_for('apps.details', { id: req.params.id }));
+    })
+    .catch(next);
+};
+
+
+exports.add_customer = (req, res, next) => {
+  App.get(req.params.id)
+    .then(app => app.add_customer(req.params.id, req.body.customer_email))
+    .then(() => {
+      res.redirect(url_for('apps.details', { id: req.params.id }));
+    })
+    .catch((error) => {
+      if (error.statusCode === 400 && error.error.email) {
+        req.form_errors = error.error;
+        return exports.details(req, res, next);
+      }
+      return next(error);
+    });
 };

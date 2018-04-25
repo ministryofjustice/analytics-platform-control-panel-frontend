@@ -117,6 +117,18 @@ class App extends Model {
     return new ModelSet(User, this.data.userapps.map(ua => ua.user));
   }
 
+  get customers() {
+    const pk = this.data[this.constructor.pk];
+
+    return this.cpanel.get(`${this.constructor.endpoint}/${pk}/customers`)
+      .catch((error) => {
+        if (error.statusCode && error.statusCode === 404) {
+          return [];
+        }
+        throw error;
+      });
+  }
+
   grant_bucket_access(bucket, access_level = 'readonly') {
     if (!['readonly', 'readwrite'].includes(access_level)) {
       throw new Error(`Invalid access_level "${access_level}"`);
@@ -148,10 +160,12 @@ class App extends Model {
     }).create();
   }
 
-  has_admin(user_id) { // eslint-disable-line class-methods-use-this, no-unused-vars
-    return true;
-    // TODO: remove this and return real value once perms have been implemented
-    // return this.data.userapps.some(ua => ua.is_admin && ua.user.auth0_id === user_id);
+  add_customer(app_id, customer_email) {
+    return this.cpanel.post(`${this.constructor.endpoint}/${app_id}/customers/`, { email: customer_email });
+  }
+
+  delete_customer(app_id, customer_id) {
+    return this.cpanel.delete(`${this.constructor.endpoint}/${app_id}/customers/${customer_id}/`);
   }
 }
 
@@ -219,6 +233,10 @@ class User extends Model {
 
   is_bucket_admin(bucket_id) {
     return this.users3buckets.filter(u => u.s3bucket.id === bucket_id && u.is_admin).length > 0;
+  }
+
+  is_app_admin(app_id) {
+    return this.userapps.filter(u => u.app.id === app_id && u.is_admin).length > 0;
   }
 }
 

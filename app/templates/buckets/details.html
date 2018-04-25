@@ -19,7 +19,17 @@
     <thead>
       <tr>
         <th>User</th>
-        <th>User access level</th>
+        <th>
+          User access level <em class="js-modal-trigger" data-content="access-levels"><span>What's this?</span></em>
+          <div class="js-hidden js-modal-content" id="content-access-levels">
+            <h3 class="heading-small">Data access levels</h3>
+            <ul class="list list-bullet">
+              <li><strong>Read only</strong> - user can read the data but not modify it</li>
+              <li><strong>Read/write</strong> - user can read, modify and delete the data</li>
+              <li><strong>Admin</strong> - user can read, modify and delete the data, and also grant/modify/revoke access rights to this data for other users</li>
+            </ul>
+          </div>
+        </th>
         {% if current_user.is_bucket_admin(bucket.id) or current_user.is_superuser %}
           <th>
             <span class="visuallyhidden">Actions</span>

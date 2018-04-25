@@ -118,8 +118,7 @@ class App extends Model {
   }
 
   get customers() {
-    const pk_name = this.constructor.pk;
-    const pk = this.data[pk_name];
+    const pk = this.data[this.constructor.pk];
 
     return this.cpanel.get(`${this.constructor.endpoint}/${pk}/customers`)
       .catch((error) => {

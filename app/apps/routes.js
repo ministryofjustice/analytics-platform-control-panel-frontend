@@ -8,5 +8,5 @@ module.exports = [
   { name: 'details', pattern: '/apps/:id', handler: handlers.details },
   { name: 'delete', method: 'POST', pattern: '/apps/:id/delete', handler: handlers.delete },
   { name: 'delete_customer', method: 'POST', pattern: '/apps/:id/customers/:customer_id/delete', handler: handlers.delete_customer },
-  { name: 'add_customer', method: 'POST', pattern: '/apps/:id/customers/add', handler: handlers.add_customer },
+  { name: 'add_customer', method: 'POST', pattern: '/apps/:id/customers', handler: handlers.add_customer },
 ];

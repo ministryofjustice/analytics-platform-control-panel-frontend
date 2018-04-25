@@ -107,10 +107,8 @@ exports.details = (req, res, next) => {
   let users;
 
   Promise.all([App.get(req.params.id), Bucket.list(), User.list()])
-    .then(([returned_app, returned_buckets, returned_users]) => {
-      app = returned_app;
-      buckets = returned_buckets;
-      users = returned_users;
+    .then((results) => {
+      [app, buckets, users] = results;
       return app.customers;
     })
     .then((customers) => {
@@ -146,7 +144,7 @@ exports.delete_customer = (req, res, next) => {
       app.delete_customer(req.params.id, req.params.customer_id);
     })
     .then(() => {
-      res.redirect(req.body.redirect_to);
+      res.redirect(url_for('apps.details', { id: req.params.id }));
     })
     .catch(next);
 };
@@ -156,7 +154,7 @@ exports.add_customer = (req, res, next) => {
   App.get(req.params.id)
     .then(app => app.add_customer(req.params.id, req.body.customer_email))
     .then(() => {
-      res.redirect(req.body.redirect_to);
+      res.redirect(url_for('apps.details', { id: req.params.id }));
     })
     .catch((error) => {
       if (error.statusCode === 400 && error.error.email) {

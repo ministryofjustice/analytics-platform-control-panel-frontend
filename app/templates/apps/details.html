@@ -45,8 +45,6 @@
               <td class="align-right">
                 <!-- Button to remove app customer -->
                 <form action="{{ url_for('apps.delete_customer', { id: app.id, customer_id: customer.user_id }) }}" method="post" class="inline-form clearfix">
-                  <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', { id: app.id }) }}">
-
                   <input type="submit" class="js-confirm button button-secondary right" value="Remove customer" />
                 </form>
               </td>
@@ -62,7 +60,6 @@
   {% if current_user.is_app_admin(app.id) or current_user.is_superuser %}
     <form action="{{ url_for('apps.add_customer', { id: app.id }) }}" method="post" class="form-group">
       <input type="hidden" name="app_id" value="{{ app.id }}" />
-      <input type="hidden" name="redirect_to" value="{{ url_for('apps.details', { id: app.id }) }}">
       <div class="form-group">
         <label class="form-label" for="customer_email">Add an app customer by entering their email address</label>
         {% if errors.email %}

@@ -3,15 +3,19 @@ const express = require('express');
 const { join } = require('path');
 const log = require('bole')('middleware');
 const nunjucks = require('nunjucks');
+const markdown = require('nunjucks-markdown');
+const marked = require('marked');
 
 
 function init_app(app, conf) {
   app.set('env', conf.app.env);
 
-  nunjucks.configure(join(__dirname, 'templates'), {
+  const nunjucks_env = nunjucks.configure(join(__dirname, 'templates'), {
     autoescape: true,
     express: app,
   });
+
+  markdown.register(nunjucks_env, marked);
 }
 
 function init_middleware(app, conf) {

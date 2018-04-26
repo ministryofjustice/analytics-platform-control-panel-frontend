@@ -38,6 +38,11 @@ exports.home = (req, res, next) => {
 };
 
 
+exports.whats_new = (req, res) => {
+  res.render('base/whats-new.html');
+};
+
+
 exports.error_test = (req, res, next) => {
   const ns = cls.getNamespace(config.continuation_locals.namespace);
   if (req.query.forbidden) {

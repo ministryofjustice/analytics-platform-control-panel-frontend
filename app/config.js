@@ -115,6 +115,7 @@ config.middleware = [
   'flash-messages',
   'template-locals',
   'ensure-login',
+  'whats-new',
   'routes',
   '404',
   'raven-error-handler',

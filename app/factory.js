@@ -15,7 +15,7 @@ function init_app(app, conf) {
     express: app,
   });
 
-  marked.setOptions(config.marked);
+  marked.setOptions(conf.marked);
   markdown.register(nunjucks_env, marked);
 }
 

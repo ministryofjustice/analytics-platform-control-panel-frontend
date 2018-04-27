@@ -19,3 +19,41 @@
     color: $red;
   }
 }
+
+.whats-new-notification {
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 0;
+  @include core-19;
+
+  a {
+    display: block;
+    width: 20px;
+    height: 20px;
+    overflow: hidden;
+    padding: 5px;
+    border: none;
+    border-radius: 15px;
+    color: $black;
+    background-color: $grey-1;
+    text-decoration: none;
+    text-align: center;
+    transition-property: width, background-color;
+    transition-duration: .2s;
+
+    span {
+      display: none;
+    }
+
+    &:hover {
+      width: 120px;
+      background-color: $grey-2;
+
+      span {
+        display: inline-block;
+      }
+    }
+
+  }
+}

@@ -66,6 +66,10 @@ config.cookie = {
   secret: process.env.COOKIE_SECRET || 'shh-its-a-secret',
 };
 
+config.marked = {
+  gfm: true,
+};
+
 config.ensure_login = {
   exclude: [
     /^\/callback/,

@@ -1,6 +1,8 @@
 .markdown-container {
   // since markdown won't render classes, formatting needs to be cascaded from a container
 
+  padding-top: 20px;
+
   h1 {
     // from .heading-large
     @include bold-36();
@@ -40,7 +42,7 @@
   }
 
   ol, ul {
-    @include core-16;
+    @include core-19;
     padding: 0;
     margin-top: 5px;
     margin-bottom: 20px;
@@ -48,11 +50,15 @@
   }
 
   li {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     list-style-type: disc;
   }
 
   ol li {
     list-style-type: decimal;
+  }
+
+  h2:first-of-type { // hide heading pulled in from external file
+    display: none;
   }
 }

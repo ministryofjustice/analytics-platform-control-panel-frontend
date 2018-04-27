@@ -4,6 +4,7 @@ const cls = require('cls-hooked');
 const passport = require('passport');
 const { url_for } = require('../routes');
 const uuid = require('uuid');
+const request = require('request-promise');
 
 
 function sso_logout_url() {
@@ -38,8 +39,14 @@ exports.home = (req, res, next) => {
 };
 
 
-exports.whats_new = (req, res) => {
-  res.render('base/whats-new.html');
+exports.whats_new = (req, res, next) => {
+  request(config.whats_new.url)
+    .then((markdown_body) => {
+      res.render('base/whats-new.html', {
+        markdown_body,
+      });
+    })
+    .catch(next);
 };
 
 

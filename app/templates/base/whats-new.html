@@ -1,12 +1,14 @@
 {% extends "layouts/one-column.html" %}
 
-{% set page_title = "What's new" %}
-{% set breadcrumbs = [{text: 'Home', url: '/'}, {text: 'What\'s new'}] %}
+{% set page_title = "What's new?" %}
+{% set breadcrumbs = [{text: 'Home', url: '/'}, {text: page_title}] %}
 
 {% block main_column %}
 
   <div class="markdown-container">
-    {% markdown "markdown/whats-new.md" %}
+    {% markdown %}
+    {{ markdown_body }}
+    {% endmarkdown %}
   </div>
 
   {% if current_user.is_superuser or env.ENV == 'dev' %}

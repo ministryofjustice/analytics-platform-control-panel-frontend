@@ -193,3 +193,7 @@ config.static = {
     ],
   },
 };
+
+config.whats_new = {
+  url: 'https://raw.githubusercontent.com/moj-analytical-services/platform_user_guidance/master/changelog/whats_new.md',
+};

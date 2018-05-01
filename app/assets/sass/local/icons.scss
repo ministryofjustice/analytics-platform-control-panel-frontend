@@ -1,25 +1,3 @@
-#repo-checking p {
-  position: relative;
-
-  &.success,
-  &.error {
-    margin-left: 1.3em;
-    &:before {
-      position: absolute;
-      margin-left: -1.3em;
-      font-weight: bold;
-    }
-  }
-  &.success:before {
-    content: "\2713";
-    color: $green;
-  }
-  &.error:before {
-    content: "\2717";
-    color: $red;
-  }
-}
-
 .whats-new-notification {
   position: absolute;
   right: 0;

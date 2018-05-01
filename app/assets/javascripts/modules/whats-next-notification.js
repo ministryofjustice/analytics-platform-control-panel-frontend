@@ -15,11 +15,6 @@ moj.Modules.whatsNextNotification = {
       this.updateCookie();
       this.removeNotification();
     }
-
-    $('#wipeCookie').on('click', () => {
-      moj.Modules.cookies.erase(this.cookieName);
-      document.location.href = '/';
-    });
   },
 
   checkCookie(cookieValue) {

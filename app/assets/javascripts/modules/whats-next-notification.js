@@ -27,7 +27,7 @@ moj.Modules.whatsNextNotification = {
   },
 
   showNotification() {
-    $('#proposition-menu').append(`<span class="${this.notificationClass}">${this.notificationHTML}</span>`);
+    $(`.${this.notificationClass}`).show();
   },
 
   removeNotification() {

@@ -22,9 +22,7 @@
 
         {% include "includes/proposition-links.html" %}
 
-        {% if whats_new_notification %}
-          <a href="/whats-new" class="whats-new-notification">What's new?</a>
-        {% endif %}
+        <span class="whats-new-notification"><a href="{{ url_for('base.whats-new') }}"><span>What's new</span>?</a></span>
       </nav>
     </div>
   </div>
@@ -42,7 +40,7 @@
     <li><a href="https://asdslack.slack.com/messages/C1PUCG719/#">R Slack channel</a></li>
     <li><a href="https://asdslack.slack.com/messages/C1Q09V86S/#">Python slack channel</a></li>
     <li><a href="https://asdslack.slack.com/messages/C4PF7QAJZ#">Analytical platform slack channel</a></li>
-    <li><a href="/whats-new">What's new?</a></li>
+    <li><a href="{{ url_for('base.whats-new') }}">What's new?</a></li>
   </ul>
 {% endblock %}
 

@@ -1,18 +1,15 @@
 moj.Modules.cookies = {
   read(name) {
     const nameEQ = `${encodeURIComponent(name)}=`;
-    const ca = document.cookie.split(';');
+    const cookies = document.cookie.split(/\s*;\s*/);
+    let cookieValue;
 
-    for (let i = 0; i < ca.length; i += 1) {
-      let c = ca[i];
-      while (c.charAt(0) === ' ') {
-        c = c.substring(1, c.length);
+    cookies.forEach((cookie) => {
+      if (cookie.indexOf(nameEQ) === 0) {
+        cookieValue = decodeURIComponent(cookie.substring(nameEQ.length, cookie.length));
       }
-      if (c.indexOf(nameEQ) === 0) {
-        return decodeURIComponent(c.substring(nameEQ.length, c.length));
-      }
-    }
-    return null;
+    });
+    return cookieValue;
   },
 
   store(name, value, days) {
@@ -22,7 +19,7 @@ moj.Modules.cookies = {
     if (days) {
       const date = new Date();
       date.setTime(date.getTime() + (days * dayInMS));
-      expires = `; expires=${date.toGMTString()}`;
+      expires = `; expires=${encodeURIComponent(date.toGMTString())}`;
     } else {
       expires = '';
     }

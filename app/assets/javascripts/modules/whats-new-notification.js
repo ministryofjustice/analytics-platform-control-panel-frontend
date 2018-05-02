@@ -1,13 +1,13 @@
-moj.Modules.whatsNextNotification = {
-  cookieName: 'whats-next-hash',
+moj.Modules.whatsNewNotification = {
+  cookieName: 'whats-new-hash',
   metaTagName: 'whats-new-hash',
   whatsNewElementId: 'whats-new-container',
   notificationClass: 'whats-new-notification',
   notificationHTML: '<a href="/whats-new"><span>What\'s new</span>?</a>',
 
   init() {
-    const cookieValue = moj.Modules.cookies.read(this.cookieName);
-    if (this.checkCookie(cookieValue)) {
+    const hash = moj.Modules.cookies.read(this.cookieName);
+    if (this.checkHash(hash)) {
       this.showNotification();
     }
 
@@ -15,15 +15,17 @@ moj.Modules.whatsNextNotification = {
       this.updateCookie();
       this.removeNotification();
     }
+
+    $('#wipeCookie').on('click', (e) => {
+      e.preventDefault();
+      moj.Modules.cookies.erase(this.cookieName);
+    });
   },
 
-  checkCookie(cookieValue) {
+  checkHash(hash) {
     this.storedHash = $(`meta[name="${this.metaTagName}"]`).attr('content');
 
-    if (this.storedHash && this.storedHash === cookieValue) {
-      return false;
-    }
-    return true;
+    return !(this.storedHash && escape(this.storedHash) === escape(hash));
   },
 
   showNotification() {

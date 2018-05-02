@@ -67,6 +67,8 @@ config.cookie = {
 };
 
 config.marked = {
+  // since the markdown being pulled in for "What's new?" is viewed/edited via github,
+  // it would likely be a good idea to use github-flavoured markdown
   gfm: true,
 };
 

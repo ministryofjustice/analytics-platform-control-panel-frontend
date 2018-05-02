@@ -1,5 +1,4 @@
 const request = require('request-promise');
-const crypto = require('crypto');
 
 
 module.exports = (app, conf, log) => {
@@ -7,11 +6,13 @@ module.exports = (app, conf, log) => {
 
   return (req, res, next) => {
     if (req.session && !req.session.whats_new_hash) {
-      return request(conf.whats_new.url)
-        .then((markdown_body) => {
-          const hash = crypto.createHash('sha256').update(markdown_body, 'utf8').digest('hex');
-          req.session.whats_new_hash = hash;
-          res.locals.whats_new_hash = hash;
+      return request({
+        method: 'HEAD',
+        uri: conf.whats_new.url,
+      })
+        .then((result) => {
+          req.session.whats_new_hash = result.etag;
+          res.locals.whats_new_hash = result.etag;
           return next();
         })
         .catch((error) => {

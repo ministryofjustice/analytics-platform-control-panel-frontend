@@ -2,13 +2,12 @@ moj.Modules.cookies = {
   read(name) {
     const nameEQ = `${encodeURIComponent(name)}=`;
     const cookies = document.cookie.split(/\s*;\s*/);
+    const matchCookie = cookies.find(cookie => cookie.startsWith(nameEQ));
     let cookieValue;
 
-    cookies.forEach((cookie) => {
-      if (cookie.indexOf(nameEQ) === 0) {
-        cookieValue = decodeURIComponent(cookie.substring(nameEQ.length, cookie.length));
-      }
-    });
+    if (matchCookie) {
+      cookieValue = decodeURIComponent(matchCookie.substring(nameEQ.length, matchCookie.length));
+    }
     return cookieValue;
   },
 

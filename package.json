@@ -45,9 +45,11 @@
     "jquery": "^3.2.1",
     "jquery-modal": "^0.9.1",
     "jquery-typeahead": "^2.10.4",
+    "marked": "^0.3.19",
     "morgan": "^1.9.0",
     "node-sass": "^4.5.3",
     "nunjucks": "3.0.1",
+    "nunjucks-markdown": "^2.0.1",
     "openid-client": "^1.19.0",
     "passport": "^0.4.0",
     "raven": "^2.2.1",
@@ -79,7 +81,7 @@
     "watch": [
       "app/"
     ],
-    "ext": "js json scss sass css html",
+    "ext": "js json scss sass css html md",
     "delay": "500",
     "verbose": true
   }

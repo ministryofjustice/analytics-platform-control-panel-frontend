@@ -1,21 +1,38 @@
-#repo-checking p {
-  position: relative;
+.whats-new-notification {
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 0;
+  display: none;
+  @include core-19;
 
-  &.success,
-  &.error {
-    margin-left: 1.3em;
-    &:before {
-      position: absolute;
-      margin-left: -1.3em;
-      font-weight: bold;
+  a {
+    display: block;
+    width: 20px;
+    height: 20px;
+    overflow: hidden;
+    padding: 5px;
+    border: none;
+    border-radius: 15px;
+    color: $black;
+    background-color: $grey-1;
+    text-decoration: none;
+    text-align: center;
+    transition-property: width, background-color;
+    transition-duration: .2s;
+
+    span {
+      display: none;
     }
-  }
-  &.success:before {
-    content: "\2713";
-    color: $green;
-  }
-  &.error:before {
-    content: "\2717";
-    color: $red;
+
+    &:hover {
+      width: 120px;
+      background-color: $grey-2;
+
+      span {
+        display: inline-block;
+      }
+    }
+
   }
 }

@@ -3,6 +3,7 @@ const handlers = require('./handlers');
 
 module.exports = [
   { name: 'home', pattern: '/', handler: handlers.home },
+  { name: 'whats-new', pattern: '/whats-new', handler: handlers.whats_new },
   { name: 'callback', pattern: '/callback', handler: handlers.auth_callback },
   { name: 'login', pattern: '/login', handler: handlers.login },
   { name: 'logout', pattern: '/logout', handler: handlers.logout },

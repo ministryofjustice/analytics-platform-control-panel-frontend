@@ -66,6 +66,12 @@ config.cookie = {
   secret: process.env.COOKIE_SECRET || 'shh-its-a-secret',
 };
 
+config.marked = {
+  // since the markdown being pulled in for "What's new?" is viewed/edited via github,
+  // it would likely be a good idea to use github-flavoured markdown
+  gfm: true,
+};
+
 config.ensure_login = {
   exclude: [
     /^\/callback/,
@@ -111,6 +117,7 @@ config.middleware = [
   'flash-messages',
   'template-locals',
   'ensure-login',
+  'whats-new',
   'routes',
   '404',
   'raven-error-handler',
@@ -192,4 +199,8 @@ config.static = {
       join(node_modules, 'govuk_frontend_toolkit/images'),
     ],
   },
+};
+
+config.whats_new = {
+  url: 'https://raw.githubusercontent.com/moj-analytical-services/platform_user_guidance/master/changelog/whats_new.md',
 };

@@ -3,6 +3,11 @@
 
 {% set page_title = "App: " + app.name %}
 {% set breadcrumbs = [{text: 'Home', url: '/'}, {text: 'Webapps', url: '/#Webapps'}, {text: 'Webapp details'}] %}
+{% set debug_items = [
+  {name: 'current_user.is_app_admin(app.id)', value: current_user.is_app_admin(app.id)},
+  {name: 'app', value: app},
+  {name: 'users', value: users}
+] %}
 
 {% block main_column %}
 
@@ -226,29 +231,6 @@
   </form>
   {% endif %}
 </div>
-
-
-
-{% if current_user.is_superuser or env.ENV == 'dev' %}
-  <details class="debug">
-    <summary>Debug</summary>
-
-    <h2 class="heading-medium">current_user.is_app_admin(app.id)</h2>
-    <div>
-      <pre>{{ current_user.is_app_admin(app.id) }}</pre>
-    </div>
-
-    <h2 class="heading-medium">App dump</h2>
-    <div>
-      <pre>{{ app | dump(2) }}</pre>
-    </div>
-
-    <h2 class="heading-medium">Users dump</h2>
-    <div>
-      <pre>{{ users | dump(2) }}</pre>
-    </div>
-  </details>
-{% endif %}
 
 
 {% endblock %}

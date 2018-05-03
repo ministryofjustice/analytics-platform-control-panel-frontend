@@ -14,6 +14,17 @@
   </div>
 {% endmacro %}
 
+{% macro debug_blocks(items) %}
+  {% for item in items %}
+    <details>
+      <summary>{{ item.name }}</summary>
+      <div class="panel">
+        <pre>{{ item.value | dump(2) | safe }}</pre>
+      </div>
+    </details>
+  {% endfor %}
+{% endmacro %}
+
 {% block page_title %}
   {{ page_title }} | Analytical Platform Control Panel
 {% endblock %}
@@ -35,6 +46,22 @@
   </h1>
 
   {% block main_column %}{% endblock %}
+
+  {% block debug %}
+    {% if current_user.is_superuser or env.ENV == 'dev' %}
+      <div class="debug">
+        <h2 class="heading-medium">Debug</h2>
+
+        {% set items = [{name: 'current_user', value: current_user}, {name: 'req.session', value: req.session}] %}
+
+        {# always show these #}
+        {{ debug_blocks(items) }}
+        {# optional debug items sent from template #}
+        {{ debug_blocks(debug_items) }}
+
+      </div>
+    {% endif %}
+  {% endblock %}
 
 </main>
 

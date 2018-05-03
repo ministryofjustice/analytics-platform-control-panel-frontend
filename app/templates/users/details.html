@@ -2,6 +2,9 @@
 
 {% set page_title = "User: " + user.name %}
 {% set heading_prefix = "User's" %}
+{% set debug_items = [
+  {name: 'user', value: user}
+] %}
 
 {% block page_title %}
   {{ page_title }} | Analytical Platform Control Panel
@@ -11,15 +14,6 @@
 
 
 {% include 'users/includes/tables.html' %}
-
-
-{% if current_user.is_superuser or env.ENV == 'dev' %}
-  <details class="debug">
-    <summary>Debug</summary>
-    <h2 class="heading-medium">User dump</h2>
-    <pre>{{ user | dump(2) }}</pre>
-  </details>
-{% endif %}
 
 
 {% endblock %}

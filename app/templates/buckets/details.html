@@ -4,6 +4,11 @@
 {% set bucket_type = 'warehouse' if bucket.is_data_warehouse else 'webapp' %}
 {% set page_title = bucket_type | capitalize + " data source: " + bucket.name %}
 {% set breadcrumbs = [{text: 'Home', url: '/'}, {text: bucket_type | capitalize + " data", url: '/#' + bucket_type | capitalize + '%20data'}, {text: 'Data source details'}] %}
+{% set debug_items = [
+  {name: 'bucket', value: bucket},
+  {name: 'apps_options', value: apps_options},
+  {name: 'users_options', value: users_options}
+] %}
 
 {% block main_column %}
 
@@ -160,20 +165,6 @@
     <input type="hidden" id="redirect" name="redirect" value="{{ url_for('base.home') }}">
     <input type="submit" class="button button-warning right js-confirm" value="Delete data source" data-confirm-message="Are you sure you want to delete this data source?">
   </form>
-{% endif %}
-
-
-{% if current_user.is_superuser or env.ENV == 'dev' %}
-  <details class="debug">
-    <summary>Debug</summary>
-    <div>
-      <pre>bucket = {{ bucket | dump(4) | safe }}</pre>
-      <br />
-      <pre>apps_options = {{ apps_options | dump(4) | safe }}</pre>
-      <br />
-      <pre>users_options = {{ users_options | dump(4) | safe }}</pre>
-    </div>
-  </details>
 {% endif %}
 
 

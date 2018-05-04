@@ -1,4 +1,5 @@
 moj.Modules.toolsStatusPolling = {
+  toolsPath: '/tools',
   toolsSlug: 'Analytical%20tools',
   pollingFrequency: 10 * 1000,
   pollingTimer: null,
@@ -10,21 +11,30 @@ moj.Modules.toolsStatusPolling = {
   bindEvents() {
     moj.Events.on('tab-selected', (event, params) => {
       if (params.slug === this.toolsSlug) {
-        this.enablePolling();
+        this.enablePolling(params.panel);
       } else {
         this.disablePolling();
       }
     });
   },
 
-  enablePolling() {
+  enablePolling(panel) {
     this.pollingTimer = setInterval(() => {
-      document.location.reload(true);
+      this.update(panel);
     }, this.pollingFrequency);
   },
 
   disablePolling() {
-    clearTimeout(this.pollingTimer);
+    clearInterval(this.pollingTimer);
+  },
+
+  update(panel) {
+    $.ajax({
+      url: this.toolsPath,
+      dataType: 'html',
+    }).done((newContent) => {
+      panel.html(newContent);
+    });
   },
 
 };

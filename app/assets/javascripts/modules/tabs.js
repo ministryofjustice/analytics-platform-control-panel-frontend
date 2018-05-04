@@ -54,20 +54,20 @@ moj.Modules.tabs = {
   },
 
   showTab(index) {
+    const tab = this.$tabs.eq(index);
+    const panel = this.$panels.eq(index);
+    const slug = this.slugs[index];
+
     this.$tabs.removeClass(this.activeClass);
     this.$panels.removeClass(this.activeClass);
-    this.$tabs.eq(index).addClass(this.activeClass);
-    this.$panels.eq(index).addClass(this.activeClass);
+    tab.addClass(this.activeClass);
+    panel.addClass(this.activeClass);
 
-    document.location.hash = this.slugs[index];
+    document.location.hash = slug;
 
-    this.triggerTabSelected(index);
-  },
-
-  triggerTabSelected(index) {
     moj.Events.trigger('tab-selected', {
-      index,
-      slug: this.slugs[index],
+      slug,
+      panel,
     });
   },
 

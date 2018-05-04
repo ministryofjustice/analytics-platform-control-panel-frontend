@@ -60,5 +60,15 @@ moj.Modules.tabs = {
     this.$panels.eq(index).addClass(this.activeClass);
 
     document.location.hash = this.slugs[index];
+
+    this.triggerTabSelected(index);
   },
+
+  triggerTabSelected(index) {
+    moj.Events.trigger('tab-selected', {
+      index,
+      slug: this.slugs[index],
+    });
+  },
+
 };

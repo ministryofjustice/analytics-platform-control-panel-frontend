@@ -38,6 +38,23 @@ exports.home = (req, res, next) => {
     .catch(next);
 };
 
+exports.tools = (req, res, next) => {
+  const { rstudio_is_deploying } = req.session;
+  const ns = cls.getNamespace(config.continuation_locals.namespace);
+  req.session.rstudio_is_deploying = false;
+
+  Deployment.list()
+    .then((tools) => {
+      ns.run(() => {
+        res.render('tools/includes/list.html', {
+          tools,
+          rstudio_is_deploying,
+        });
+      });
+    })
+    .catch(next);
+};
+
 
 exports.whats_new = (req, res, next) => {
   request(config.whats_new.url)

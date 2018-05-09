@@ -71,7 +71,7 @@
     "eslint-plugin-import": "^2.8.0",
     "mocha": "^3.5.3",
     "nock": "^9.0.20",
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.17.4"
   },
   "nodemonConfig": {
     "ignore": [

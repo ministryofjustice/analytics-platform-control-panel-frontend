@@ -11,14 +11,4 @@
     {% endmarkdown %}
   </div>
 
-  {% if current_user.is_superuser or env.ENV == 'dev' %}
-    <details class="debug">
-      <summary>Debug</summary>
-      <div class="panel">
-        <h2 class="heading-medium">Logged-in user dump</h2>
-        <pre>{{ current_user | dump(2) | safe }}</pre>
-      </div>
-    </details>
-  {% endif %}
-
 {% endblock %}

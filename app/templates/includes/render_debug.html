@@ -1,0 +1,23 @@
+{% macro render_debug(debug_items, current_user_is_superuser, env_ENV) %}
+  {% if current_user_is_superuser or env_ENV == 'dev' %}
+  {% set default_items = [{name: 'current_user', value: current_user}, {name: 'req.session', value: req.session}] %}
+  <div class="debug">
+    <h2 class="heading-medium">Debug</h2>
+    {% for item in default_items %}
+      {{ debug_block(item) }}
+    {% endfor %}
+    {% for item in debug_items %}
+      {{ debug_block(item) }}
+    {% endfor %}
+    </div>
+  {% endif %}
+{% endmacro %}
+
+{% macro debug_block(item) %}
+  <details>
+    <summary>{{ item.name }}</summary>
+    <div class="panel">
+      <pre>{{ item.value | dump(2) | safe }}</pre>
+    </div>
+  </details>
+{% endmacro %}

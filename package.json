@@ -37,7 +37,7 @@
     "dotenv": "^5.0.1",
     "express": "4.16.3",
     "express-session": "^1.15.6",
-    "github": "^13.0.1",
+    "github": "^14.0.0",
     "glob": "^7.1.2",
     "govuk-elements-sass": "3.1.2",
     "govuk_frontend_toolkit": "7.5.0",

@@ -757,6 +757,10 @@ balanced-match@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
 
+base64-url@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/base64-url/-/base64-url-2.2.0.tgz#4bbd6a825df1be522d39e566a721ede51144041a"
+
 base64url@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/base64url/-/base64url-2.0.0.tgz#eac16e03ea1438eff9423d69baa36262ed1f70bb"
@@ -1383,7 +1387,7 @@ crc@^3.4.4:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/crc/-/crc-3.5.0.tgz#98b8ba7d489665ba3979f59b21381374101a1964"
 
-create-error-class@^3.0.0, create-error-class@^3.0.2:
+create-error-class@^3.0.0:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/create-error-class/-/create-error-class-3.0.2.tgz#06be7abef947a3f14a30fd610671d401bca8b7b6"
   dependencies:
@@ -3892,11 +3896,11 @@ object.pick@^1.3.0:
   dependencies:
     isobject "^3.0.1"
 
-oidc-token-hash@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/oidc-token-hash/-/oidc-token-hash-2.0.0.tgz#ea1f60db44c78a921268f9f8af37362ac9f6184e"
+oidc-token-hash@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/oidc-token-hash/-/oidc-token-hash-3.0.0.tgz#d201fa16f7addd4c5b1eccc7e9a6868bb2fc3c77"
   dependencies:
-    base64url "^2.0.0"
+    base64-url "^2.2.0"
 
 on-finished@~2.3.0:
   version "2.3.0"
@@ -3924,17 +3928,16 @@ onetime@^2.0.0:
   dependencies:
     mimic-fn "^1.0.0"
 
-openid-client@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/openid-client/-/openid-client-2.0.2.tgz#212f1a78fe5ca860507e869576bf8f915b614535"
+openid-client@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/openid-client/-/openid-client-2.0.3.tgz#9bf6ac8b61ea3a5dfd2b4c6ce80453c9936f7e30"
   dependencies:
-    base64url "^2.0.0"
-    create-error-class "^3.0.2"
+    base64-url "^2.2.0"
     got "^8.3.1"
     lodash "^4.17.10"
     lru-cache "^4.1.3"
     node-jose "^0.11.0"
-    oidc-token-hash "^2.0.0"
+    oidc-token-hash "^3.0.0"
     uuid "^3.2.1"
 
 optimist@~0.6.1:

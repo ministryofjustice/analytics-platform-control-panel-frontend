@@ -88,6 +88,10 @@ config.express = {
   host: process.env.EXPRESS_HOST || '127.0.0.1',
 };
 
+config.grafana = {
+  dashboard_url: `https://grafana.services.${process.env.ENV}.mojanalytics.xyz/d/000000002/platform-users?refresh=10s&orgId=1`,
+};
+
 config.js = {
   sourceFiles: join(__dirname, 'assets/javascripts/**/*.js'),
   ignorePaths: [

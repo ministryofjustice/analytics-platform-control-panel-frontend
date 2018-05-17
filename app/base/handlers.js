@@ -26,12 +26,14 @@ exports.home = (req, res, next) => {
           groupedBuckets[group].push(bucket);
           return groupedBuckets;
         }, {});
+        const grafana_url = encodeURI(`${config.grafana.dashboard_url}&var-Username=${user.username}`);
 
         res.render('base/home.html', {
           tools,
           rstudio_is_deploying,
           user,
           buckets,
+          grafana_url,
         });
       });
     })

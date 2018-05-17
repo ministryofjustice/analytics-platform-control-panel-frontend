@@ -57,4 +57,12 @@
     </tbody>
   </table>
 
+  <p>
+    {% if env.ENV == 'alpha' %}
+      You can <a href="{{ grafana_url }}" target="_blank">view your resource utilisation on Grafana (opens in new tab)</a>.
+    {% else %}
+      <em>(Grafana not available on environment: {{ env.ENV }})</em>
+    {% endif %}
+  </p>
+
 {% endblock %}

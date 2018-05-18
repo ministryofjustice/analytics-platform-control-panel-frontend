@@ -2,6 +2,15 @@ const sentry = require('raven');
 const errlog = require('bole')('error-handler');
 
 
+const handle_state_mismatch = (req, res, conf) => {
+  errlog.info('Handling "state mismatch" error by redirecting user to login page...');
+
+  req.session.destroy(() => {
+    res.clearCookie(conf.session.name);
+    res.redirect('/login');
+  });
+};
+
 module.exports = (app, conf, log) => {
   log.info('adding errors');
 
@@ -12,6 +21,12 @@ module.exports = (app, conf, log) => {
 
   return (err, req, res, next) => {
     errlog.error(err);
+
+    if (err.message.startsWith('state mismatch')) {
+      handle_state_mismatch(req, res, conf);
+      return true;
+    }
+
     sentry.captureException(err);
 
     if (res.headersSent) {

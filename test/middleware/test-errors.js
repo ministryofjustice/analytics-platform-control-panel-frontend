@@ -1,43 +1,34 @@
-const { assert } = require('chai');
+const chai = require('chai');
+const { expect } = require('chai');
+const spies = require('chai-spies');
+
 const app = require('express')();
 const config = require('../../app/config');
 const log = require('bole')('middleware');
 const errors_middleware = require('../../app/middleware/errors')(app, config, log);
 
 
+chai.use(spies);
+
 describe('When a "state mismatch" error occurs', () => {
   it('redirects the user to /login', () => {
-    let spy_session_destroyed = false;
-    let spy_cookie_cleared = 'NOT CLEARED';
-    let spy_redirected_to = 'NOT REDIRECTED';
-    let spy_next_called = false;
-
     const err = Error('state mismatch, could not find [...]');
     const req = {
       session: {
-        destroy: (after_destroy) => {
-          spy_session_destroyed = true;
-          after_destroy();
-        },
+        destroy: chai.spy('req.session.destroy()', (fn) => fn()),
       },
     };
     const res = {
-      clearCookie: (name) => {
-        spy_cookie_cleared = name;
-      },
-      redirect: (url) => {
-        spy_redirected_to = url;
-      },
+      clearCookie: chai.spy('res.clearCookie()'),
+      redirect: chai.spy('res.redirect()'),
     };
-    const next = () => {
-      spy_next_called = true;
-    };
+    const next = chai.spy('next()');
 
-    errors_middleware(err, req, res, next)
+    errors_middleware(err, req, res, next);
 
-    assert.isTrue(spy_session_destroyed);
-    assert.equal(spy_cookie_cleared, config.session.name);
-    assert.equal(spy_redirected_to, '/login');
-    assert.isFalse(spy_next_called, 'next() called');
+    expect(req.session.destroy).to.have.been.called();
+    expect(res.clearCookie).to.have.been.called.with(config.session.name);
+    expect(res.redirect).to.have.been.called.with('/login');
+    expect(next).to.not.have.been.called();
   });
 });

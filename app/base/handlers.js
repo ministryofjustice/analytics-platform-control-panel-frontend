@@ -3,7 +3,6 @@ const config = require('../config');
 const cls = require('cls-hooked');
 const passport = require('passport');
 const { url_for } = require('../routes');
-const uuid = require('uuid');
 const request = require('request-promise');
 
 
@@ -95,7 +94,6 @@ exports.login = (req, res, next) => {
     }
   } else {
     passport.authenticate('oidc', {
-      state: uuid(),
       prompt: req.query.prompt || 'none',
     })(req, res, next);
   }

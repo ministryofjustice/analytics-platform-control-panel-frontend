@@ -49,11 +49,19 @@ exports.create_bucket = (req, res) => {
 
 
 exports.bucket_details = (req, res, next) => {
+  let bucket;
+  let users;
   Promise.all([Bucket.get(req.params.id), User.list()]) // need to include App.list() in future
-    .then(([bucket, users]) => { // need to include apps in future
+    .then(([returned_bucket, returned_users]) => {
+      bucket = returned_bucket;
+      users = returned_users;
+    })
+    .then(() => bucket.access_logs)
+    .then((access_logs) => { // need to include apps in future
       res.render('buckets/details.html', {
         bucket,
         users_options: users.exclude(bucket.users),
+        access_logs,
       }); // need to include apps_options: apps.exclude(bucket.apps) in future
     })
     .catch(next);

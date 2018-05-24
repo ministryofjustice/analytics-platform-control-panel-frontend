@@ -201,6 +201,18 @@ class Bucket extends Model {
   get users3buckets() {
     return new ModelSet(UserS3Bucket, this.data.users3buckets);
   }
+
+  get access_logs() {
+    const pk = this.data[this.constructor.pk];
+
+    return this.cpanel.get(`${this.constructor.endpoint}/${pk}/access_logs`)
+      .catch((error) => {
+        if (error.statusCode && error.statusCode === 404) {
+          return [];
+        }
+        throw error;
+      });
+  }
 }
 
 exports.Bucket = Bucket;

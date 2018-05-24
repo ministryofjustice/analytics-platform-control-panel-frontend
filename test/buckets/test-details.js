@@ -6,6 +6,7 @@ const { App, Bucket, ModelSet, User } = require('../../app/models');
 const bucket = require('../fixtures/bucket');
 const apps = require('../fixtures/apps');
 const users = require('../fixtures/users');
+const access_logs = require('../fixtures/access_logs');
 
 
 describe('buckets/details', () => {
@@ -14,6 +15,7 @@ describe('buckets/details', () => {
     const user = { auth0_id: 'github|12345', id_token: 'dummy-token' };
 
     mock_api().get(`/s3buckets/${bucket.id}/`).reply(200, bucket);
+    mock_api().get(`/s3buckets/${bucket.id}/access_logs/`).reply(200, access_logs);
     mock_api().get('/apps/').reply(200, apps);
     mock_api().get('/users/').reply(200, users);
 

@@ -1,4 +1,4 @@
-FROM node:8.11.1-alpine
+FROM node:8.11.2-alpine
 
 MAINTAINER Andy Driver <andy.driver@digital.justice.gov.uk>
 

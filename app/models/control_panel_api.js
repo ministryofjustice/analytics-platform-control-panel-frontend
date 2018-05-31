@@ -202,10 +202,52 @@ class Bucket extends Model {
     return new ModelSet(UserS3Bucket, this.data.users3buckets);
   }
 
-  get access_logs() {
+  access_logs(num_days) {
     const pk = this.data[this.constructor.pk];
+    const dummyaccesslogs = [
+      {
+        accessed_by: 'rosswyatt',
+        count: 46,
+        type: 'user',
+      },
+      {
+        accessed_by: 'robinl',
+        count: 40,
+        type: 'user',
+      },
+      {
+        accessed_by: 'sentencing-policy-model',
+        count: 23,
+        type: 'app',
+      },
+      {
+        accessed_by: 'pavanchalamalasetti',
+        count: 6,
+        type: 'user',
+      },
+      {
+        accessed_by: 'haydensansum',
+        count: 5,
+        type: 'user',
+      },
+    ];
+    let params = {};
 
-    return this.cpanel.get(`${this.constructor.endpoint}/${pk}/access_logs`)
+    if (num_days) {
+      params = {
+        num_days,
+      };
+    }
+
+    if (num_days == 7) {
+      dummyaccesslogs.length = 1;
+    } else if (num_days == 30) {
+      dummyaccesslogs.length = 3;
+    }
+
+    // return Promise.resolve(dummyaccesslogs);
+
+    return this.cpanel.get(`${this.constructor.endpoint}/${pk}/access_logs`, params)
       .catch((error) => {
         if (error.statusCode && error.statusCode === 404) {
           return [];

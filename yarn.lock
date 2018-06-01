@@ -757,14 +757,6 @@ balanced-match@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
 
-base64-url@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/base64-url/-/base64-url-2.2.0.tgz#4bbd6a825df1be522d39e566a721ede51144041a"
-
-base64url@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/base64url/-/base64url-2.0.0.tgz#eac16e03ea1438eff9423d69baa36262ed1f70bb"
-
 base64url@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/base64url/-/base64url-3.0.0.tgz#f2ba30b15f80413d88e3e6116c4f3f7f61e28a2a"
@@ -3328,9 +3320,9 @@ lodash@~4.5.1:
   version "4.5.1"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.5.1.tgz#80e8a074ca5f3893a6b1c10b2a636492d710c316"
 
-long@^3.1.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/long/-/long-3.2.0.tgz#d821b7138ca1cb581c172990ef14db200b5c474b"
+long@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/long/-/long-4.0.0.tgz#9a7b71cfb7d361a194ea555241c92f7468d5bf28"
 
 loose-envify@^1.0.0:
   version "1.3.1"
@@ -3720,11 +3712,11 @@ node-gyp@^3.3.1:
     tar "^2.0.0"
     which "1"
 
-node-jose@^0.11.0:
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/node-jose/-/node-jose-0.11.0.tgz#5a737580bc3a39b01ff7938d2398335c458d8587"
+node-jose@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/node-jose/-/node-jose-1.0.0.tgz#fe0c17244f5496aec973a7a274c542d18355ece5"
   dependencies:
-    base64url "^2.0.0"
+    base64url "^3.0.0"
     es6-promise "^4.0.5"
     lodash.assign "^4.0.8"
     lodash.clone "^4.3.2"
@@ -3736,7 +3728,7 @@ node-jose@^0.11.0:
     lodash.partialright "^4.1.3"
     lodash.pick "^4.2.0"
     lodash.uniq "^4.2.1"
-    long "^3.1.0"
+    long "^4.0.0"
     node-forge "^0.7.1"
     uuid "^3.0.1"
 
@@ -3952,11 +3944,11 @@ object.pick@^1.3.0:
   dependencies:
     isobject "^3.0.1"
 
-oidc-token-hash@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/oidc-token-hash/-/oidc-token-hash-3.0.0.tgz#d201fa16f7addd4c5b1eccc7e9a6868bb2fc3c77"
+oidc-token-hash@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/oidc-token-hash/-/oidc-token-hash-3.0.1.tgz#f9e2496a3eea5f755671be54a97f57170a74081d"
   dependencies:
-    base64-url "^2.2.0"
+    base64url "^3.0.0"
 
 on-finished@~2.3.0:
   version "2.3.0"
@@ -3984,16 +3976,16 @@ onetime@^2.0.0:
   dependencies:
     mimic-fn "^1.0.0"
 
-openid-client@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/openid-client/-/openid-client-2.0.4.tgz#5665066e360d0bd07e2711ae823da59eead7c723"
+openid-client@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/openid-client/-/openid-client-2.1.0.tgz#89ec7640333eef738f82a208a76f49fca42bdc84"
   dependencies:
     base64url "^3.0.0"
     got "^8.3.1"
     lodash "^4.17.10"
     lru-cache "^4.1.3"
-    node-jose "^0.11.0"
-    oidc-token-hash "^3.0.0"
+    node-jose "^1.0.0"
+    oidc-token-hash "^3.0.1"
     uuid "^3.2.1"
 
 optimist@~0.6.1:

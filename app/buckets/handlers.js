@@ -49,14 +49,11 @@ exports.create_bucket = (req, res) => {
 
 
 exports.bucket_details = (req, res, next) => {
-  const default_access_log_period = 30;
-
   Promise.all([Bucket.get(req.params.id), User.list()]) // need to include App.list() in future
     .then(([bucket, users]) => { // need to include apps in future
       res.render('buckets/details.html', {
         bucket,
         users_options: users.exclude(bucket.users),
-        default_access_log_period,
       }); // need to include apps_options: apps.exclude(bucket.apps) in future
     })
     .catch(next);

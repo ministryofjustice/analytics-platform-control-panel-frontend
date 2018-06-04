@@ -68,6 +68,7 @@ exports.access_logs = (req, res, next) => {
     Bucket.get(req.params.id)
       .then(bucket => bucket.access_logs(days))
       .then((access_log_data) => {
+        res.header('Content-Type', 'application/json');
         res.send(access_log_data);
       })
       .catch(next);

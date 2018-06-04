@@ -1,8 +1,8 @@
 moj.Modules.accessLogs = {
-  dropdownName: 'js-access-log-period-dropdown',
+  dropdownId: '#js-access-log-period-dropdown',
 
   init() {
-    this.$dropdown = $(`#${this.dropdownName}`);
+    this.$dropdown = $(this.dropdownId);
 
     if (this.$dropdown.length) {
       this.$form = this.$dropdown.closest('form');
@@ -21,12 +21,12 @@ moj.Modules.accessLogs = {
   },
 
   getAccessLogs() {
-    const days = this.$dropdown.val();
+    const days = parseInt(this.$dropdown.val(), 10);
     const url = this.$form.attr('action');
     const data = {};
 
-    if (parseInt(days, 10)) {
-      data.num_days = parseInt(days, 10);
+    if (days) {
+      data.num_days = days;
     }
 
     $('#loading-message').show();

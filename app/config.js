@@ -4,6 +4,26 @@ const { join } = require('path');
 const config = module.exports;
 const node_modules = join(__dirname, '../node_modules');
 
+config.access_logs = {
+  ranges: [
+    {
+      text: '7 days',
+      value: 7,
+      default: false,
+    },
+    {
+      text: '30 days',
+      value: 30,
+      default: true,
+    },
+    {
+      text: 'All',
+      value: 0,
+      default: false,
+    },
+  ],
+};
+
 config.api = {
   base_url: process.env.API_URL || 'http://localhost:8000',
   username: process.env.API_USER,

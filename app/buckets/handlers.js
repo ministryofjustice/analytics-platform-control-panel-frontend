@@ -49,22 +49,32 @@ exports.create_bucket = (req, res) => {
 
 
 exports.bucket_details = (req, res, next) => {
-  let bucket;
-  let users;
   Promise.all([Bucket.get(req.params.id), User.list()]) // need to include App.list() in future
-    .then(([returned_bucket, returned_users]) => {
-      bucket = returned_bucket;
-      users = returned_users;
-    })
-    .then(() => bucket.access_logs)
-    .then((access_logs) => { // need to include apps in future
+    .then(([bucket, users]) => { // need to include apps in future
       res.render('buckets/details.html', {
+        access_log_ranges: config.access_logs.ranges,
         bucket,
         users_options: users.exclude(bucket.users),
-        access_logs,
       }); // need to include apps_options: apps.exclude(bucket.apps) in future
     })
     .catch(next);
+};
+
+
+exports.access_logs = (req, res, next) => {
+  const days = req.query.num_days || 0;
+  const arrayOfRanges = config.access_logs.ranges.map(range => range.value);
+  if (arrayOfRanges.includes(parseInt(days, 10))) {
+    Bucket.get(req.params.id)
+      .then(bucket => bucket.access_logs(days))
+      .then((access_log_data) => {
+        res.header('Content-Type', 'application/json');
+        res.send(access_log_data);
+      })
+      .catch(next);
+  } else {
+    res.send([]);
+  }
 };
 
 

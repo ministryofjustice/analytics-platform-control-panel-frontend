@@ -202,10 +202,17 @@ class Bucket extends Model {
     return new ModelSet(UserS3Bucket, this.data.users3buckets);
   }
 
-  get access_logs() {
+  access_logs(num_days) {
     const pk = this.data[this.constructor.pk];
+    let params = {};
 
-    return this.cpanel.get(`${this.constructor.endpoint}/${pk}/access_logs`)
+    if (num_days) {
+      params = {
+        num_days,
+      };
+    }
+
+    return this.cpanel.get(`${this.constructor.endpoint}/${pk}/access_logs`, params)
       .catch((error) => {
         if (error.statusCode && error.statusCode === 404) {
           return [];

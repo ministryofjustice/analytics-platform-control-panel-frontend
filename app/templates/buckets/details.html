@@ -7,8 +7,7 @@
 {% set debug_items = [
   {name: 'bucket', value: bucket},
   {name: 'apps_options', value: apps_options},
-  {name: 'users_options', value: users_options},
-  {name: 'access_logs', value: access_logs}
+  {name: 'users_options', value: users_options}
 ] %}
 
 {% block main_column %}
@@ -161,11 +160,27 @@
     <p>(All available users already have access to this data source.)</p>
   {% endif %}
 
-  <hr>
   <form action="{{ url_for('buckets.delete', { id: bucket.id }) }}" method="post" class="clearfix">
     <input type="hidden" id="redirect" name="redirect" value="{{ url_for('base.home') }}">
     <input type="submit" class="button button-warning right js-confirm" value="Delete data source" data-confirm-message="Are you sure you want to delete this data source?">
   </form>
+
+  <hr>
+  <h2 class="heading-medium">Data access log</h2>
+  <form action="{{ url_for('buckets.access_logs', { id: bucket.id }) }}">
+    <p>Bucket access log period:
+      <select class="form-control" id="js-access-log-period-dropdown">
+        {% for range in access_log_ranges %}
+          <option value="{{ range.value }}" {% if range.default %}selected{% endif %}>{{ range.text }}</option>
+        {% endfor %}
+      </select>
+    </p>
+  </form>
+  <div id="access-log-results">
+    <p id="loading-message"><em>Fetching...</em></p>
+    <div id="results"></div>
+  </div>
+
 {% endif %}
 
 

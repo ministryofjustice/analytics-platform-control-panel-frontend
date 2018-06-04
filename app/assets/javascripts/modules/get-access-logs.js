@@ -47,22 +47,21 @@ moj.Modules.accessLogs = {
 
   showAccessLogs(logs) {
     const tableHead = '<thead><tr><th>Accessed by</th><th>Count</th><th>Type</th></tr></thead>';
-    let rows = '';
     let logsHTML;
     let tableBody;
-    let i = 0;
 
     if (logs.length) {
+      const rows = [];
+      let i = 0;
       while (i < logs.length) {
         const cells = [];
         cells.push(`<td>${logs[i].accessed_by}</td>`);
         cells.push(`<td>${logs[i].count}</td>`);
         cells.push(`<td>${logs[i].type}</td>`);
-        rows += `<tr>${cells.join('')}</tr>`;
+        rows.push(`<tr>${cells.join('')}</tr>`);
         i += 1;
       }
-
-      tableBody = `<tbody>${rows}</tbody>`;
+      tableBody = `<tbody>${rows.join('')}</tbody>`;
       logsHTML = `<table>${tableHead}${tableBody}</table>`;
     } else {
       logsHTML = '<p><em>No access recorded for this period.</em></p>';

@@ -175,38 +175,6 @@
     <div id="results"></div>
   </div>
 
-
-
-  {#
-  {% if access_logs.length %}
-    <details>
-      <summary>{{ access_logs.length }} entries</summary>
-      <div class="panel">
-        <table class="form-group">
-          <thead>
-            <tr>
-              <th>Accessed by</th>
-              <th>Type</th>
-              <th>Count</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for access_log_item in access_logs %}
-              <tr>
-                <td>{{ access_log_item.accessed_by }}</td>
-                <td>{{ access_log_item.type }}</td>
-                <td>{{ access_log_item.count }}</td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    </details>
-  {% else %}
-    <p>No access recorded</p>
-  {% endif %}
-  #}
-
 {% endif %}
 
 

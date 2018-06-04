@@ -1,4 +1,4 @@
-FROM node:8.11.2-alpine
+FROM node:8.11.2-alpine AS image
 
 MAINTAINER Andy Driver <andy.driver@digital.justice.gov.uk>
 
@@ -20,3 +20,11 @@ ENV NODE_RESTART "0"
 EXPOSE 3000
 
 CMD ["/usr/local/bin/yarn", "start"]
+
+
+FROM image AS test
+ADD test test/
+RUN yarn run test
+
+
+FROM image

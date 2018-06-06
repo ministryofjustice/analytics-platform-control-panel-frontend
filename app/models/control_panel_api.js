@@ -44,7 +44,7 @@ class Model extends base.Model {
   }
 
   static list() {
-    return this.cpanel.get(this.endpoint)
+    return this.cpanel.get(this.endpoint, { page_size: 0 })
       .then(result => new ModelSet(this.prototype.constructor, result.results));
   }
 

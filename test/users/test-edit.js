@@ -12,8 +12,8 @@ describe('users', () => {
   describe('edit', () => {
     it('loads user, apps and buckets and shows a form', () => {
       mock_api().get(`/users/${escape(user.auth0_id)}/`).reply(200, user);
-      mock_api().get('/apps/').reply(200, apps);
-      mock_api().get('/s3buckets/').reply(200, buckets);
+      mock_api().get('/apps/?page_size=0').reply(200, apps);
+      mock_api().get('/s3buckets/?page_size=0').reply(200, buckets);
 
       const expected = {
         user: new User(user),

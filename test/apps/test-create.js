@@ -58,7 +58,7 @@ describe('apps/create', () => {
     });
 
     mock_api()
-      .get('/s3buckets/')
+      .get('/s3buckets/?page_size=0')
       .reply(200, []);
 
     return dispatch(handlers.create, { body: form_data })

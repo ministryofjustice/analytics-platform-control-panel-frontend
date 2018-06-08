@@ -13,7 +13,7 @@
 {% block main_column %}
 
 <div class="form-group">
-  <a class="button button-secondary" href="{{ url_for('buckets.aws', { id: bucket.id }) }}">Open on AWS</a>
+  <a class="button button-secondary" href="{{ url_for('buckets.aws', { id: bucket.id }) }}" target="_blank" rel="noopener">Open on AWS</a>
 </div>
 
 <h2 class="heading-medium">Data access group</h2>

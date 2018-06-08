@@ -29,10 +29,10 @@
         </td>
         <td class="align-right no-wrap">
           {% if tool.available %}
-            <a class="button button-secondary" target="_blank" href="{{ tool.url }}">Open</a>
+            <a class="button button-secondary" target="_blank" rel="noopener" href="{{ tool.url }}">Open</a>
             <a class="button button-secondary" href="{{ url_for('tools.restart', { name: tool.metadata.name }) }}">Restart</a>
           {% elif tool.idled %}
-            <a class="button button-secondary" target="_blank" href="{{ tool.url }}">Unidle</a>
+            <a class="button button-secondary" target="_blank" rel="noopener" href="{{ tool.url }}">Unidle</a>
           {% endif %}
         </td>
       </tr>
@@ -59,7 +59,7 @@
 
   <p>
     {% if env.ENV == 'alpha' %}
-      You can <a href="{{ grafana_url }}" target="_blank">view your resource utilisation on Grafana (opens in new tab)</a>.
+      You can <a href="{{ grafana_url }}" target="_blank" rel="noopener">view your resource utilisation on Grafana (opens in new tab)</a>.
     {% else %}
       <em>(Grafana not available on environment: {{ env.ENV }})</em>
     {% endif %}

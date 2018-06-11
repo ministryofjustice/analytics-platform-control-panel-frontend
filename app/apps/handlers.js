@@ -13,6 +13,7 @@ exports.new = (req, res, next) => {
   github_api.authenticate(req.user)
     .then(() => Promise.all([Repo.list(), Bucket.list()]))
     .then(([repos, buckets]) => {
+      console.log(`length: ${repos.length}`);
       res.render('apps/new.html', {
         repo_prefix: config.github.web_host,
         orgs: config.github.orgs,

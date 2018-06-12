@@ -37,7 +37,17 @@
         </td>
       </tr>
       {% endfor %}
-    {% else %}
+    {% endif %}
+
+    {% set showRstudio = true %}
+    {% for tool in tools %}
+      {% if tool.name == 'rstudio' %}
+        {% set showRstudio = false %}
+      {% endif %}
+    {% endfor %}
+    {% if showRstudio %}
+
+    <tr>
       <td>RStudio</td>
       <td>
         {% if rstudio_is_deploying %}
@@ -53,6 +63,8 @@
           </form>
         {% endif %}
       </td>
+    </tr>
+
     {% endif %}
     </tbody>
   </table>

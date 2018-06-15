@@ -41,7 +41,7 @@
 
     {% set showRstudio = true %}
     {% for tool in tools %}
-      {% if tool.name == 'rstudio' %}
+      {% if tool.app_label == 'rstudio' %}
         {% set showRstudio = false %}
       {% endif %}
     {% endfor %}

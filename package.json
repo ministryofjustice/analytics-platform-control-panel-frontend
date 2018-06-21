@@ -52,7 +52,7 @@
     "nunjucks-markdown": "^2.0.1",
     "openid-client": "^2.1.0",
     "passport": "^0.4.0",
-    "raven": "^2.6.2",
+    "raven": "^2.6.3",
     "redis": "^2.8.0",
     "request": "^2.87.0",
     "request-promise": "^4.2.1",

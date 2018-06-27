@@ -5001,9 +5001,9 @@ scss-tokenizer@^0.2.3:
     js-base64 "^2.1.8"
     source-map "^0.4.2"
 
-selenium-standalone@^6.15.0:
-  version "6.15.0"
-  resolved "https://registry.yarnpkg.com/selenium-standalone/-/selenium-standalone-6.15.0.tgz#c8dc77bd45154afbda7509ec53dc599809f63ee4"
+selenium-standalone@^6.15.1:
+  version "6.15.1"
+  resolved "https://registry.yarnpkg.com/selenium-standalone/-/selenium-standalone-6.15.1.tgz#4b99241445034d0c652eb5a645da46788adc8274"
   dependencies:
     async "^2.1.4"
     commander "^2.9.0"

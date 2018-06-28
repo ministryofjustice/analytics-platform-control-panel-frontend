@@ -1,6 +1,6 @@
-const { APIClient, APIError } = require('./base');
 const log = require('bole')('control_panel_api');
 const passport = require('passport');
+const { APIClient, APIError } = require('./base');
 
 
 class ControlPanelAPIClient extends APIClient {

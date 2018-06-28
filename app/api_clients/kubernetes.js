@@ -1,5 +1,5 @@
-const { ControlPanelAPIClient } = require('./control_panel_api');
 const url = require('url');
+const { ControlPanelAPIClient } = require('./control_panel_api');
 
 
 function get_namespace(username) {

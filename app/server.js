@@ -1,8 +1,8 @@
+const log = require('bole')('server');
+
 const app = require('./index');
 const assets = require('./assets');
 const config = require('./config').express;
-
-const log = require('bole')('server');
 
 
 log.info('Server process starting');

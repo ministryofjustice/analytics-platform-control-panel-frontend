@@ -1,10 +1,10 @@
-const config = require('./config');
 const express = require('express');
 const { join } = require('path');
 const log = require('bole')('middleware');
 const nunjucks = require('nunjucks');
 const markdown = require('nunjucks-markdown');
 const marked = require('marked');
+const config = require('./config');
 
 
 function init_app(app, conf) {

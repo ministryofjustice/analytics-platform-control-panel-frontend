@@ -58,9 +58,7 @@ class APIClient {
       };
       log.debug(`${method} ${options.uri}`);
       return request(options)
-        .then(result =>
-          // console.dir(result);
-          result)
+        .then(result => result)
         .catch((error) => {
           log.error(`${method} ${options.uri} ${error.statusCode || 'errored'}`);
           log.error(`Query: ${JSON.stringify(params, null, 2)}`);

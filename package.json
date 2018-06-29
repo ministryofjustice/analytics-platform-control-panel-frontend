@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/ministryofjustice/analytics-platform-control-panel-frontend#readme",
   "dependencies": {
+    "@octokit/rest": "^15.9.3",
     "auth0": "^2.10.0",
     "authenticator-cli": "^1.0.5",
     "babel-core": "^6.26.3",
@@ -37,7 +38,6 @@
     "dotenv": "^6.0.0",
     "express": "4.16.3",
     "express-session": "^1.15.6",
-    "github": "^13.0.1",
     "glob": "^7.1.2",
     "govuk-elements-sass": "3.1.2",
     "govuk_frontend_toolkit": "7.5.0",

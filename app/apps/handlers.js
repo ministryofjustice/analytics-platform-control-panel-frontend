@@ -14,7 +14,6 @@ exports.new = (req, res, next) => {
     .then(() => Promise.all([Repo.list(), Bucket.list()]))
     .then(([repos, buckets]) => {
       res.render('apps/new.html', {
-        repo_prefix: config.github.web_host,
         orgs: config.github.orgs,
         repos,
         bucket_prefix: `${process.env.ENV}-`,

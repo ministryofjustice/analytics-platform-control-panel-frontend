@@ -20,8 +20,7 @@
         <span class="error-message">{{ error }}</span>
       {% endfor %}
     {% endif %}
-    <input type="hidden" name="repo_prefix" id="repo_prefix" value="{{ repo_prefix }}">
-    <label for="name" class="form-control-prefix">{{ repo_prefix }}</label>
+    <label for="name" class="form-control-prefix">https://github.com</label>
     <span>/</span>
     <select name="repo_org" id="repo_org" class="form-control form-control-1-3">
       {% for org in orgs %}

@@ -1,6 +1,6 @@
+const cls = require('cls-hooked');
 const { APIError } = require('../api_clients/base');
 const base = require('./base');
-const cls = require('cls-hooked');
 const config = require('../config');
 const { get_namespace } = require('../api_clients/kubernetes');
 

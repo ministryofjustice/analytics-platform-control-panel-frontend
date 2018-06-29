@@ -1,7 +1,7 @@
+const cls = require('cls-hooked');
 const base = require('./base');
 const config = require('../config');
 const { DoesNotExist } = require('./control_panel_api');
-const cls = require('cls-hooked');
 
 const IDLED = 'mojanalytics.xyz/idled';
 

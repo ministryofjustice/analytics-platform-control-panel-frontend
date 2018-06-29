@@ -1,8 +1,8 @@
-const config = require('../config');
 const passport = require('passport');
-const { User } = require('../models');
 const { Issuer, Strategy } = require('openid-client');
 const auth_log = require('bole')('authentication middleware');
+const { User } = require('../models');
+const config = require('../config');
 
 
 let client = null;

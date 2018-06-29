@@ -1,9 +1,9 @@
-const { Deployment, User } = require('../models');
-const config = require('../config');
 const cls = require('cls-hooked');
 const passport = require('passport');
-const { url_for } = require('../routes');
 const request = require('request-promise');
+const config = require('../config');
+const { Deployment, User } = require('../models');
+const { url_for } = require('../routes');
 
 
 function sso_logout_url() {

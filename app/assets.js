@@ -6,8 +6,8 @@ const concatfiles = require('concat-files');
 const path = require('path');
 const babel = require('babel-core');
 
-const config = require('./config');
 const log = require('bole')('assets');
+const config = require('./config');
 
 
 function relative(filepath) {

@@ -149,8 +149,6 @@ config.middleware = [
 ];
 
 config.github = {
-  host: 'api.github.com',
-  web_host: 'https://github.com',
   orgs: [
     'moj-analytical-services',
     'ministryofjustice',

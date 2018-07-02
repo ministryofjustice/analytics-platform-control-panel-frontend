@@ -69,7 +69,7 @@
     "eslint-config-airbnb-base": "^13.0.0",
     "eslint-plugin-import": "^2.13.0",
     "mocha": "^5.2.0",
-    "nock": "^9.3.3",
+    "nock": "^9.4.0",
     "nodemon": "^1.17.5"
   },
   "nodemonConfig": {

@@ -12,10 +12,14 @@
   <p><strong>Python traceback:</strong></p>
   <ul>
     {% for line in error.python_traceback %}
-    <li>
-      File "{{ line.file }}" in <code>{{ line.func }}</code>:<br>
-      <pre><span>{{ line.line_no }}.</span> {{ line.code }}</pre><br>
-    </li>
+      {% if line.file %}
+        <li>
+          File "{{ line.file }}" in <code>{{ line.func }}</code>:<br>
+          <pre><span>{{ line.line_no }}.</span> {{ line.code }}</pre><br>
+        </li>
+      {% else %}
+        <p>{{ line }}</p>
+      {% endif %}
     {% endfor %}
   </ul>
   {% endif %}

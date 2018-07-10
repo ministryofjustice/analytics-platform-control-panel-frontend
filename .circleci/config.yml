@@ -53,12 +53,13 @@ jobs:
             IMAGE: quay.io/mojanalytics/control-panel-frontend
           command: |
             docker login -u ${QUAY_USERNAME} -p ${QUAY_PASSWORD} quay.io
+            BRANCH_TAG=$(echo $CIRCLE_BRANCH | tr '/' '-')
             docker tag app "${IMAGE}:${CIRCLE_SHA1}"
-            docker tag app "${IMAGE}:${CIRCLE_BRANCH}"
+            docker tag app "${IMAGE}:${BRANCH_TAG}"
             docker push "${IMAGE}:${CIRCLE_SHA1}"
             echo "Pushed Docker image to ${IMAGE}:${CIRCLE_SHA1}"
-            docker push "${IMAGE}:${CIRCLE_BRANCH}"
-            echo "Pushed Docker image to ${IMAGE}:${CIRCLE_BRANCH}"
+            docker push "${IMAGE}:${BRANCH_TAG}"
+            echo "Pushed Docker image to ${IMAGE}:${BRANCH_TAG}"
 
 workflows:
   version: 2

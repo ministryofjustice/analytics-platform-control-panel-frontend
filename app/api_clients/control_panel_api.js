@@ -42,6 +42,11 @@ class DjangoError extends APIError {
   constructor(error) {
     super(error);
     this.original_message = this.message;
+    const pattern = /500 - "(.*)Request Method:/;
+    const match = this.original_message.match(pattern);
+    this.message = match[1]
+      .trim()
+      .replace(/\\n/g, '<br>\n');
   }
 
   static match(error) {
@@ -49,24 +54,27 @@ class DjangoError extends APIError {
   }
 
   get python_traceback() {
-    let pattern = /\\nTraceback:\s+\\n\\n(.*)\\n\\nException Type/;
-    const match = this.original_message.match(pattern);
+    if (!this.original_message) {
+      return [];
+    }
+    let pattern = /Traceback:(.*)Exception Type/;
+    let match = this.original_message.match(pattern);
     const traceback = match[1]
       .replace(/\\n/g, '\n')
+      .trim()
       .replace(/\\"/g, '"')
       .split(/\n\n/);
 
     return traceback.map((line) => {
       pattern = /^File "([^"]+)" in ([^\n]+)[^0-9]+([0-9]+). ([^\n]+)/;
-      const [file, func, line_no, code] = line.match(pattern).slice(1);
-      return { file, func, line_no, code };
-    });
-  }
+      match = line.match(pattern);
+      if (match) {
+        const [file, func, line_no, code] = match.slice(1);
+        return { file, func, line_no, code };
+      }
 
-  get message() {
-    const pattern = /500 - "(.*)\\n\\nRequest Method:/;
-    const match = this.original_message.match(pattern);
-    return match[1].replace(/\\n/g, '\n');
+      return line;
+    });
   }
 }
 

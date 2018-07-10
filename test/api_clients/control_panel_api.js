@@ -1,7 +1,7 @@
 const { assert } = require('chai');
 const { config, mock_api } = require('../conftest');
-
-const { ControlPanelAPIClient } = require('../../app/api_clients/control_panel_api');
+const { ControlPanelAPIClient, DjangoError } = require('../../app/api_clients/control_panel_api');
+const api_error = require('../fixtures/django_error.json');
 
 
 describe('Control Panel API Client', () => {
@@ -55,5 +55,18 @@ describe('Control Panel API Client', () => {
 
     return client.get('apps')
       .then((response) => { assert.deepEqual(response, apps_response); });
+  });
+
+  it('parses a Python traceback', () => {
+    assert(DjangoError.match(api_error));
+    const error = new DjangoError(api_error);
+    const traceback = error.python_traceback;
+    assert(traceback.length);
+    assert.equal(traceback[0].file, '/home/control-panel/control_panel_api/k8s.py');
+    assert.equal(traceback[0].func, 'load');
+    assert.equal(traceback[0].line_no, 69);
+    assert.equal(traceback[0].code, '                k8s_config.load_incluster_config()');
+    assert.equal(traceback[4], 'During handling of the above exception (Service host/port is not set.), another exception occurred:');
+    assert.equal(traceback.length, 26);
   });
 });

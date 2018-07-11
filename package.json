@@ -70,7 +70,7 @@
     "eslint-plugin-import": "^2.13.0",
     "mocha": "^5.2.0",
     "nock": "^9.4.1",
-    "nodemon": "^1.17.5"
+    "nodemon": "^1.18.0"
   },
   "nodemonConfig": {
     "ignore": [

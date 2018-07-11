@@ -14,15 +14,18 @@ class Repo extends Model {
   }
 
   static list(params = {}) {
-    return Promise.all(config.github.orgs.map(org => this.github.repos.getForOrg({
-      org,
-      type: 'all',
-      page: params.page || 1,
-      per_page: params.per_page || 500,
-    })))
-      .then(results => new ModelSet(
+    return Promise.all(
+      config.github.orgs.map(org => this.github.getAllPages(
+        this.github.repos.getForOrg, {
+          org,
+          type: 'all',
+          ...params,
+        },
+      )),
+    )
+      .then(data => new ModelSet(
         this.prototype.constructor,
-        [].concat(...results.map(result => result.data)),
+        [].concat(...data),
       ));
   }
 

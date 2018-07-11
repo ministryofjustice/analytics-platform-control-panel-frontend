@@ -7,9 +7,11 @@ class GithubAPIClient extends GithubAPI {
     super(conf.github);
     this.auth0_config = conf.auth0;
 
+    // shadow the authenticate method
+    const { authenticate } = this;
     this.authenticate = user => this.get_access_token(user)
       .then((token) => {
-        this.authenticate({ type: 'token', token });
+        authenticate({ type: 'token', token });
       });
 
     this.get_access_token = (user) => {

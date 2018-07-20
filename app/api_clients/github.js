@@ -1,15 +1,18 @@
 const GithubAPI = require('@octokit/rest');
 const { ManagementClient } = require('auth0');
-
+const { parse: parseUrl } = require('url');
+const { parse: parseQuery } = require('querystring');
 
 class GithubAPIClient extends GithubAPI {
   constructor(conf) {
     super(conf.github);
     this.auth0_config = conf.auth0;
 
+    // shadow the authenticate method
+    const { authenticate } = this;
     this.authenticate = user => this.get_access_token(user)
       .then((token) => {
-        this.authenticate({ type: 'token', token });
+        authenticate({ type: 'token', token });
       });
 
     this.get_access_token = (user) => {
@@ -29,6 +32,31 @@ class GithubAPIClient extends GithubAPI {
 
       return Promise.resolve(user.github_access_token);
     };
+
+    async function getAllPages(method, params = {}) {
+      const defaultParams = { per_page: 100 };
+      const requestParams = { ...defaultParams, ...params };
+      const firstPageResponse = await method(requestParams);
+      let { data } = firstPageResponse;
+      const lastPage = await this.hasLastPage(firstPageResponse);
+      const requests = [];
+
+      if (lastPage) {
+        const lastPageNum = parseInt(parseQuery(parseUrl(lastPage).query).page, 10);
+
+        // queue up a bunch of requests
+        for (let i = 2; i <= lastPageNum; i += 1) {
+          requests.push(method({ ...requestParams, page: i }));
+        }
+        // wait for them to finish and add to the data from the initial request
+        const responses = await Promise.all(requests);
+        const pagedData = responses.map(x => x.data);
+        data = data.concat(...pagedData);
+      }
+
+      return data;
+    }
+    this.getAllPages = getAllPages;
   }
 }
 

@@ -16,7 +16,7 @@ describe('Github model', () => {
 
       config.github.orgs.forEach((org) => {
         nock(`https://${config.github.host}`)
-          .get(`/orgs/${org}/repos?type=all&page=1&per_page=500`)
+          .get(`/orgs/${org}/repos?type=all&page=1&per_page=100`)
           .reply(200, repos_response);
       });
 

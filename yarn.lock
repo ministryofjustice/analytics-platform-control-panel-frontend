@@ -342,9 +342,9 @@ atob@~1.1.0:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/atob/-/atob-1.1.3.tgz#95f13629b12c3a51a5d215abdce2aa9f32f80773"
 
-auth0@^2.10.0:
-  version "2.10.0"
-  resolved "https://registry.yarnpkg.com/auth0/-/auth0-2.10.0.tgz#8f08e45773405cc121e0fdbc3828524dbfaa53dc"
+auth0@^2.11.0:
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/auth0/-/auth0-2.11.0.tgz#a069abb3a33a236aa78855f87afa37adba961195"
   dependencies:
     bluebird "^2.10.2"
     lru-memoizer "^1.11.1"

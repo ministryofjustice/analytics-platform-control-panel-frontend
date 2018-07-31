@@ -16,11 +16,11 @@ exports.create = (req, res, next) => {
 exports.update = (req, res, next) => {
   const { access_level, redirect_to } = req.body;
 
-  new AppS3Bucket({
-    id: req.params.id,
-    access_level,
-  })
-    .update()
+  AppS3Bucket.get(req.params.id)
+    .then((bucket) => {
+      bucket.access_level = access_level;
+      return bucket.update();
+    })
     .then(() => {
       res.redirect(redirect_to);
     })

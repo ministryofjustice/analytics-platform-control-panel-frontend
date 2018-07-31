@@ -3326,9 +3326,9 @@ jquery-modal@^0.9.1:
   version "0.9.1"
   resolved "https://registry.yarnpkg.com/jquery-modal/-/jquery-modal-0.9.1.tgz#f22f13f0efa5ea3f2afaeb7981c1e20114c9d2f2"
 
-jquery-typeahead@^2.10.5:
-  version "2.10.5"
-  resolved "https://registry.yarnpkg.com/jquery-typeahead/-/jquery-typeahead-2.10.5.tgz#36226ed3570c08f55071f7e377821cfa6c90da9c"
+jquery-typeahead@^2.10.6:
+  version "2.10.6"
+  resolved "https://registry.yarnpkg.com/jquery-typeahead/-/jquery-typeahead-2.10.6.tgz#97409d6dfb61e659a3b5d9a75d5f424812a7344a"
   dependencies:
     gulp-cli "^2.0.1"
     jquery ">=1.7.2"

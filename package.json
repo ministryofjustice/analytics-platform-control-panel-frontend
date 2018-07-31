@@ -44,7 +44,7 @@
     "govuk_template_jinja": "0.24.1",
     "jquery": "^3.3.1",
     "jquery-modal": "^0.9.1",
-    "jquery-typeahead": "^2.10.5",
+    "jquery-typeahead": "^2.10.6",
     "marked": "^0.4.0",
     "morgan": "^1.9.0",
     "node-sass": "^4.9.2",

@@ -3942,9 +3942,9 @@ nice-try@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.4.tgz#d93962f6c52f2c1558c0fbda6d512819f1efe1c4"
 
-nock@^9.4.3:
-  version "9.4.3"
-  resolved "https://registry.yarnpkg.com/nock/-/nock-9.4.3.tgz#26bbc1280898f442c9814085f05199cab857a04c"
+nock@^9.5.0:
+  version "9.5.0"
+  resolved "https://registry.yarnpkg.com/nock/-/nock-9.5.0.tgz#ff778e9e6ad0556c25757d4e979f2191e58d2d74"
   dependencies:
     chai "^4.1.2"
     debug "^3.1.0"

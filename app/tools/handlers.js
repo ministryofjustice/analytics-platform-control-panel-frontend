@@ -19,8 +19,8 @@ exports.restart = (req, res, next) => {
 
 exports.deploy = (req, res) => {
   Deployment.create({ tool_name: req.params.name });
-
-  req.session.rstudio_is_deploying = true;
+  req.session.is_deploying = req.session.is_deploying || {};
+  req.session.is_deploying[req.params.name] = true;
   req.session.flash_messages.push(`Deploying '${req.params.name}'...this may take up to 5 minutes`);
 
   res.redirect(`${url_for('base.home')}#${escape('Analytical tools')}`);

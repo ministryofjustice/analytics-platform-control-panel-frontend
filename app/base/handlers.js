@@ -2,7 +2,7 @@ const cls = require('cls-hooked');
 const passport = require('passport');
 const request = require('request-promise');
 const config = require('../config');
-const { Deployment, User } = require('../models');
+const { Deployment, User, Tool } = require('../models');
 const { url_for } = require('../routes');
 
 
@@ -11,13 +11,21 @@ function sso_logout_url() {
   return `https://${config.auth0.domain}${config.auth0.sso_logout_url}?returnTo=${returnTo}&client_id=${config.auth0.clientID}`;
 }
 
-exports.home = (req, res, next) => {
-  const { rstudio_is_deploying } = req.session;
-  const ns = cls.getNamespace(config.continuation_locals.namespace);
-  req.session.rstudio_is_deploying = false;
+function get_tools_context(deployed_tools, deployable_tools) {
+  const deployed_app_labels = new Set(deployed_tools.map(x => x.app_label));
+  return {
+    tools: deployed_tools,
+    deployable_tools: deployable_tools.filter(x => !deployed_app_labels.has(x.name)),
+  };
+}
 
-  Promise.all([Deployment.list(), User.get(req.user.auth0_id)])
-    .then(([tools, user]) => {
+exports.home = (req, res, next) => {
+  const { is_deploying } = req.session;
+  const ns = cls.getNamespace(config.continuation_locals.namespace);
+  req.session.is_deploying = {};
+
+  Promise.all([Deployment.list(), User.get(req.user.auth0_id), Tool.list()])
+    .then(([tools, user, deployable_tools]) => {
       ns.run(() => {
         const buckets = user.users3buckets.reduce((groupedBuckets, bucket) => {
           const group = bucket.s3bucket.is_data_warehouse ? 'warehouse' : 'webapp';
@@ -26,10 +34,9 @@ exports.home = (req, res, next) => {
           return groupedBuckets;
         }, {});
         const grafana_url = encodeURI(`${config.grafana.dashboard_url}&var-Username=${user.username}`);
-
         res.render('base/home.html', {
-          tools,
-          rstudio_is_deploying,
+          ...get_tools_context(tools, deployable_tools),
+          is_deploying,
           user,
           buckets,
           grafana_url,
@@ -40,16 +47,16 @@ exports.home = (req, res, next) => {
 };
 
 exports.tools = (req, res, next) => {
-  const { rstudio_is_deploying } = req.session;
+  const { is_deploying } = req.session;
   const ns = cls.getNamespace(config.continuation_locals.namespace);
-  req.session.rstudio_is_deploying = false;
+  req.session.is_deploying = {};
 
-  Deployment.list()
-    .then((tools) => {
+  Promise.all([Deployment.list(), Tool.list()])
+    .then(([tools, deployable_tools]) => {
       ns.run(() => {
         res.render('tools/includes/list.html', {
-          tools,
-          rstudio_is_deploying,
+          ...get_tools_context(tools, deployable_tools),
+          is_deploying,
         });
       });
     })

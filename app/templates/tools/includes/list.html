@@ -39,34 +39,28 @@
       {% endfor %}
     {% endif %}
 
-    {% set showRstudio = true %}
-    {% for tool in tools %}
-      {% if tool.app_label == 'rstudio' %}
-        {% set showRstudio = false %}
-      {% endif %}
-    {% endfor %}
-    {% if showRstudio %}
 
+    {% for deployable_tool in deployable_tools %}
     <tr>
-      <td>RStudio</td>
+      <td>{{ deployable_tool.name }}</td>
       <td>
-        {% if rstudio_is_deploying %}
-          Deploying
+        {% if is_deploying[deployable_tool.name] %}
+        Deploying
         {% else %}
-          Not deployed
+        Not deployed
         {% endif %}
       </td>
       <td class="align-right no-wrap">
-        {% if not rstudio_is_deploying %}
-          <form action="{{ url_for('tools.deploy', { name: 'rstudio' }) }}" method="post" class="inline-form clearfix">
-            <input type="submit" class="button button-secondary right" value="Deploy" />
-          </form>
+        {% if not is_deploying[deployable_tool.name] %}
+        <form action="{{ url_for('tools.deploy', { name: deployable_tool.name }) }}" method="post" class="inline-form clearfix">
+          <input type="submit" class="button button-secondary right" value="Deploy" />
+        </form>
         {% endif %}
       </td>
     </tr>
+    {% endfor %}
 
-    {% endif %}
-    </tbody>
+  </tbody>
   </table>
 
   <p>

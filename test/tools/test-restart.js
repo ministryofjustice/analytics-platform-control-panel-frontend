@@ -45,7 +45,7 @@ describe('tools', () => {
       ])
         .then(([{ redirect_url, req }, deploy_request_done]) => {
           assert.equal(expected_redirect_url, redirect_url);
-          assert(req.session.rstudio_is_deploying);
+          assert(req.session.is_deploying[name]);
           assert(deploy_request_done);
         });
     });

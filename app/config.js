@@ -63,7 +63,7 @@ config.auth0 = {
 };
 
 config.aws = {
-  login_base_url: process.env.AWS_LOGIN_BASE_URL || `https://aws.services.${process.env.ENV}.mojanalytics.xyz`,
+  login_base_url: process.env.AWS_LOGIN_BASE_URL || `https://aws.${process.env.SERVICES_DOMAIN}`,
   bucket_url: (name, region = 'eu-west-1') => {
     const destination = escape(`/s3/buckets/${name}/?region=${region}&tab=overview`);
     return `${config.aws.login_base_url}/?destination=${destination}`;
@@ -109,7 +109,7 @@ config.express = {
 };
 
 config.grafana = {
-  dashboard_url: `https://grafana.services.${process.env.ENV}.mojanalytics.xyz/d/000000002/platform-users?refresh=10s&orgId=1`,
+  dashboard_url: `https://grafana.${process.env.SERVICES_DOMAIN}/d/000000002/platform-users?refresh=10s&orgId=1`,
 };
 
 config.js = {

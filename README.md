@@ -48,6 +48,7 @@ You should set these in a file named `.env` with each variable on a separate lin
 | `API_PASSWORD` | DEPRECATED. Password for Basic authentication with the Control Panel API |
 | `APP_PROTOCOL` | `http` (default) or `https`. The protocol used for fully qualified links into the Control Panel |
 | `APP_HOST` | The hostname (and optional port) of the Control Panel. Default `localhost:3000` |
+| `AWS_LOGIN_BASE_URL` | URL of the `aws-login` app e.g. `https://aws.services.dev.mojanalytics.xyz` | `https://aws.${SERVICES_DOMAIN}` |
 | `AUTH0_DOMAIN` | Domain of Auth0 tenant, eg: `dev-analytics-moj.eu.auth0.com` |
 | `AUTH0_CLIENT_ID` | Client ID from Auth0 |
 | `AUTH0_CLIENT_SECRET` | Client Secret from Auth0 |
@@ -69,6 +70,7 @@ You should set these in a file named `.env` with each variable on a separate lin
 | `SAML_PROVIDER` | Used to contruct ARN of SAML provider |
 | `SENTRY_DSN` | Optional. Credentials and URL of Sentry instance for error logging. |
 | `TOOLS_DOMAIN` | The domain where tools (eg: RStudio) are hosted, used to build URLs to tools. |
+| `SERVICES_DOMAIN` | The domain where services (eg: control-panel) are hosted. Used to build URLs to services. |
  
 ### Run a Redis server
 ```sh

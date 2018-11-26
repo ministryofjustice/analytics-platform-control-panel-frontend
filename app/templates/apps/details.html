@@ -66,7 +66,9 @@
     <form action="{{ url_for('apps.add_customer', { id: app.id }) }}" method="post" class="form-group">
       <input type="hidden" name="app_id" value="{{ app.id }}" />
       <div class="form-group">
-        <label class="form-label" for="customer_email">Add an app customer by entering their email address</label>
+        <label class="form-label" for="customer_email">
+          Add app customers by entering their email addresses (separated by spaces)
+        </label>
         {% if errors.email %}
           {% for error in errors.email %}
             <span class="error-message">{{ error }}</span>

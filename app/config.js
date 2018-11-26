@@ -109,7 +109,7 @@ config.express = {
 };
 
 config.grafana = {
-  dashboard_url: `https://grafana.${process.env.SERVICES_DOMAIN}/d/000000002/platform-users?refresh=10s&orgId=1`,
+  dashboard_url: `https://grafana.${process.env.SERVICES_DOMAIN}/d/platformusers/platform-users?refresh=10s&orgId=1`,
 };
 
 config.js = {

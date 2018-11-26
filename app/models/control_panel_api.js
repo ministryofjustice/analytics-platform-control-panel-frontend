@@ -278,3 +278,15 @@ class UserApp extends Model {
 }
 
 exports.UserApp = UserApp;
+
+class Tool extends Model {
+  static get endpoint() {
+    return 'tools';
+  }
+
+  static get pk() {
+    return 'name';
+  }
+}
+
+exports.Tool = Tool;

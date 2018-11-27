@@ -60,7 +60,7 @@ You should set these in a file named `.env` with each variable on a separate lin
 | `EXPRESS_PORT` | Port to listen on. Default `3000` |
 | `IAM_ARN_BASE` | Used to construct ARNs |
 | `K8S_WORKER_ROLE_NAME` | Used to construct ARN of IAM role |
-| `LOG_LEVEL` | Controls verbosity of logging. One of `debug` (default), `info`, `warn` or `error` |
+| `LOG_LEVEL` | Controls verbosity of logging. One of `DEBUG` (default), `INFO`, `WARN` or `ERROR` |
 | `NODE_RESTART` | Set to `1` to enable restarting the app on file changes |
 | `OIDC_CLIENT_ID` | Same value as `AUTH0_CLIENT_ID` - only required for `docker-compose` |
 | `OIDC_CLIENT_SECRET` | Same value as `AUTH0_CLIENT_SECRET` - only required for `docker-compose` |

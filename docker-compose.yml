@@ -49,6 +49,17 @@ services:
     environment:
       POSTGRES_USER: "controlpanel"
       POSTGRES_DB: "controlpanel"
+  migration:
+    image: "quay.io/mojanalytics/control-panel:master"
+    command: ["sh", "-c", "python3 wait_for_db && python3 manage.py migrate"]
+    environment:
+      DB_HOST: "db"
+      DB_NAME: "controlpanel"
+      DB_USER: "controlpanel"
+    links:
+      - db
+    depends_on:
+      - db
   redis:
     image: "redis:4.0.2-alpine"
     env_file:

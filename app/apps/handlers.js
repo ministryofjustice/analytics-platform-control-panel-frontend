@@ -1,5 +1,5 @@
 const cls = require('cls-hooked');
-const { App, Bucket, User } = require('../models');
+const { App, Bucket, Ingress, User } = require('../models');
 const { Repo } = require('../models/github');
 const config = require('../config');
 const { GithubAPIClient } = require('../api_clients/github');
@@ -108,15 +108,23 @@ exports.details = (req, res, next) => {
   Promise.all([App.get(req.params.id), Bucket.list(), User.list()])
     .then((results) => {
       [app, buckets, users] = results;
-      return app.customers;
+      const repo_name = app.repo_url.replace(/\/*$/, '').split('/').slice(-1)[0];
+      return Ingress.list({ labelSelector: `repo=${repo_name}` }, 'apps-prod');
     })
-    .then((customers) => {
+    .then((ingresses) => {
+      if (ingresses.length !== 1) {
+        return next(new Error(`Found ${ingresses.length} ingresses for app ${app.name}`));
+      }
+      return ingresses[0].spec.rules[0].host;
+    })
+    .then((host) => {
       res.render('apps/details.html', {
         app,
         buckets_options: buckets.exclude(app.buckets),
+        host,
         users,
         users_options: users.exclude(app.users),
-        customers,
+        customers: app.customers,
         errors: req.form_errors,
       });
     })

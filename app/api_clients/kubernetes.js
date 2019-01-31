@@ -35,6 +35,7 @@ class KubernetesAPIClient extends ControlPanelAPIClient {
 
     const api = {
       deployments: 'apis/apps/v1beta2',
+      ingresses: 'apis/extensions/v1beta1',
       pods: 'api/v1',
     }[endpoint.split('/')[0]];
 

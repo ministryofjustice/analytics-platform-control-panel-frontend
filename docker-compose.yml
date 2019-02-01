@@ -17,6 +17,7 @@ services:
       EXPRESS_HOST: "0.0.0.0"
       API_URL: "http://api:8000"
       NODE_RESTART: "1"
+      REDIS_HOST: "redis"
     volumes:
       - ./app:/home/cpanel/app
       - ./static:/home/cpanel/static

@@ -226,6 +226,14 @@
     {% endif %}
   {% endif %}
 
+
+  {% if current_user.is_app_admin(app.id) or current_user.is_superuser %}
+  <h2 class="heading-medium">App logs</h2>
+  <p>
+    <a href="https://kibana.services.{{env}}.mojanalytics.xyz/app/kibana#/discover?_g=()&_a=(columns:!(message),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'logstash-apps-{{env}}-*',key:query,negate:!f,type:custom,value:'%7B%22constant_score%22:%7B%22filter%22:%7B%22bool%22:%7B%22must%22:%7B%22exists%22:%7B%22field%22:%22message%22%7D%7D,%22must_not%22:%7B%22term%22:%7B%22message%22:%22%22%7D%7D%7D%7D%7D%7D'),query:(constant_score:(filter:(bool:(must:(exists:(field:message)),must_not:(term:(message:''))))))),('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'logstash-apps-{{env}}-*',key:app_name,negate:!f,params:(query:{{app.name}}-webapp,type:phrase),type:phrase,value:{{app.name}}-webapp),query:(match:(app_name:(query:{{app.name}}-webapp,type:phrase))))),index:'logstash-apps-{{env}}-*',interval:auto,query:(language:lucene,query:''),sort:!(time_nano,asc),uiState:(spy:!n))">View logs in Kibana</a>
+  </p>
+  {% endif %}
+
   {% if current_user.is_app_admin(app.id) or current_user.is_superuser %}
   <hr>
   <form action="{{ url_for('apps.delete', { id: app.id }) }}" method="post" class="clearfix">

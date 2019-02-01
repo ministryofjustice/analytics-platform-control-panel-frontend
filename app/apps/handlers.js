@@ -117,6 +117,7 @@ exports.details = (req, res, next) => {
         users,
         users_options: users.exclude(app.users),
         customers,
+        env: config.app.env,
         errors: req.form_errors,
       });
     })

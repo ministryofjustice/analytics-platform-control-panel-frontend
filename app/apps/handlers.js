@@ -109,22 +109,23 @@ exports.details = (req, res, next) => {
     .then((results) => {
       [app, buckets, users] = results;
       const repo_name = app.repo_url.replace(/\/*$/, '').split('/').slice(-1)[0];
-      return Ingress.list({ labelSelector: `repo=${repo_name}` }, 'apps-prod');
+      return Promise.all([
+        Ingress.list({ labelSelector: `repo=${repo_name}` }, 'apps-prod'),
+        app.customers,
+      ]);
     })
-    .then((ingresses) => {
+    .then((results) => {
+      const [ingresses, customers] = results;
       if (ingresses.length !== 1) {
         return next(new Error(`Found ${ingresses.length} ingresses for app ${app.name}`));
       }
-      return ingresses[0].spec.rules[0].host;
-    })
-    .then((host) => {
-      res.render('apps/details.html', {
+      return res.render('apps/details.html', {
         app,
         buckets_options: buckets.exclude(app.buckets),
-        host,
+        host: ingresses[0].spec.rules[0].host,
         users,
         users_options: users.exclude(app.users),
-        customers: app.customers,
+        customers,
         errors: req.form_errors,
       });
     })

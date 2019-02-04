@@ -29,8 +29,12 @@ class Model extends base.Model {
     return 'name';
   }
 
-  static list(params = {}) {
-    return this.kubernetes.get(this.endpoint, params)
+  static list(params = {}, ns = null) {
+    let client = this.kubernetes;
+    if (ns) {
+      client = this.kubernetes.in_namespace(ns);
+    }
+    return client.get(this.endpoint, params)
       .then(result => new base.ModelSet(this.prototype.constructor, result.items));
   }
 
@@ -175,3 +179,16 @@ class Pod extends Model {
 }
 
 exports.Pod = Pod;
+
+
+class Ingress extends Model {
+  static get endpoint() {
+    return 'ingresses';
+  }
+
+  get hosts() {
+    return this.data.spec.rules.map(rule => rule.host);
+  }
+}
+
+exports.Ingress = Ingress;

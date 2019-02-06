@@ -1,4 +1,5 @@
 const cls = require('cls-hooked');
+const { ManagementClient } = require('auth0');
 const { APIError } = require('../api_clients/base');
 const base = require('./base');
 const config = require('../config');
@@ -256,6 +257,18 @@ class User extends Model {
 
   is_app_admin(app_id) {
     return this.userapps.filter(u => u.app.id === app_id && u.is_admin).length > 0;
+  }
+
+  reset_mfa() {
+    const management = new ManagementClient({
+      domain: config.auth0.domain,
+      clientId: config.auth0.clientID,
+      clientSecret: config.auth0.clientSecret,
+    });
+    return management.deleteUserMultifactor({
+      id: this.data.auth0_id,
+      provider: 'google-authenticator',
+    });
   }
 }
 

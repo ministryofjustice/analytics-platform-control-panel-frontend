@@ -1,4 +1,4 @@
-const { App, Bucket, User } = require('../models');
+const { User } = require('../models');
 const { url_for } = require('../routes');
 
 
@@ -27,13 +27,24 @@ exports.user_details = (req, res, next) => {
 
 
 exports.user_edit = (req, res, next) => {
-  Promise.all([User.get(req.params.id), App.list(), Bucket.list()])
-    .then(([user, apps, buckets]) => {
-      res.render('users/edit.html', {
-        user,
-        apps_options: apps.exclude(user.apps),
-        buckets_options: buckets.exclude(user.buckets),
-      });
+  User.get(req.params.id)
+    .then((user) => {
+      user.is_superuser = !!req.body.superadmin;
+
+      return user.update()
+        .then(() => {
+          req.session.flash_messages.push('Updated user');
+
+          let url = url_for('users.details', { id: user.auth0_id });
+
+          if (user.auth0_id === req.user.auth0_id) {
+            // force re-login
+            url = url_for('base.logout');
+          }
+
+          res.redirect(url);
+        })
+        .catch(next);
     })
     .catch(next);
 };
@@ -71,6 +82,17 @@ exports.delete = (req, res, next) => {
     .then(() => {
       req.session.flash_messages.push('User deleted - may take a few seconds to complete deletion');
       res.redirect(url_for('users.list'));
+    })
+    .catch(next);
+};
+
+
+exports.reset_mfa = (req, res, next) => {
+  const user = new User({ auth0_id: req.params.id });
+  user.reset_mfa()
+    .then(() => {
+      req.session.flash_messages.push('User MFA reset');
+      res.redirect(url_for('users.details', { id: user.auth0_id }));
     })
     .catch(next);
 };

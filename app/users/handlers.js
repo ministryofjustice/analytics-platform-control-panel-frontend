@@ -14,7 +14,7 @@ exports.list_users = (req, res, next) => {
 
 exports.new_user = (req, res) => { res.render('users/new.html'); };
 
-exports.user_details = (req, res, next) => {
+exports.details = (req, res, next) => {
   User.get(req.params.id)
     .then((user) => {
       res.render('users/details.html', {
@@ -26,7 +26,7 @@ exports.user_details = (req, res, next) => {
 };
 
 
-exports.user_edit = (req, res, next) => {
+exports.update = (req, res, next) => {
   User.get(req.params.id)
     .then((user) => {
       user.is_superuser = !!req.body.superadmin;

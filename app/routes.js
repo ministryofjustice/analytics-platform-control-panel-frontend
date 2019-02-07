@@ -19,7 +19,7 @@ function replace_route_params(pattern, param_values) {
       throw new Error(`missing value for route parameter "${param}"`);
     }
 
-    const value = param_values[param];
+    const value = encodeURIComponent(param_values[param]);
 
     // remove used values so that the rest can be appended as query string
     delete param_values[param];

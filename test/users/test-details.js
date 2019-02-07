@@ -8,15 +8,23 @@ const user = require('../fixtures/user');
 
 describe('users.details', () => {
   it('loads the user and shows a form', () => {
-    mock_api().get(`/users/${encodeURIComponent(user.auth0_id)}`).reply(200, user);
-
     const expected = {
+      template: 'users/details.html',
       user: new User(user),
     };
 
-    return dispatch(handlers.details, { params: { id: user.auth0_id } })
+    mock_api()
+      .get(`/users/${encodeURIComponent(user.auth0_id)}/`)
+      .reply(200, user);
+
+    return dispatch(
+      handlers.details,
+      {
+        params: { id: user.auth0_id },
+      },
+    )
       .then(({ template, context }) => {
-        assert.equal(template, 'users/details.html');
+        assert.equal(template, expected.template);
         assert.deepEqual(context.user, expected.user);
       });
   });

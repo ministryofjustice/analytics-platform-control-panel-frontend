@@ -1,15 +1,15 @@
 const cls = require('cls-hooked');
+const nock = require('nock');
 const config = require('../app/config');
 const { ControlPanelAPIClient } = require('../app/api_clients/control_panel_api');
 const { GithubAPIClient } = require('../app/api_clients/github');
 const { KubernetesAPIClient } = require('../app/api_clients/kubernetes');
-const nock = require('nock');
 const { load_routes, url_for } = require('../app/routes');
 const { User } = require('../app/models');
 
 // Setting dummy variable to allow tests to pass
 config.aws = {
-  login_url: 'qwertyuiop'
+  login_url: 'qwertyuiop',
 };
 
 exports.ns = cls.createNamespace(config.continuation_locals.namespace);

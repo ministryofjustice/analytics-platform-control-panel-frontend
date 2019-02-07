@@ -9,11 +9,11 @@ describe('Control Panel API Client', () => {
 
   it('rejects an invalid auth token', () => {
     const reason = { detail: 'Authentication credentials were not provided.' };
-    const expected = 'GET /apps was not permitted: Authentication credentials were not provided.';
+    const expected = 'GET /apps/ was not permitted: Authentication credentials were not provided.';
     const id_token = 'invalid token';
 
     const request = mock_api()
-      .get('/apps')
+      .get('/apps/')
       .matchHeader('Authorization', `JWT ${id_token}`)
       .reply(403, reason);
 
@@ -47,7 +47,7 @@ describe('Control Panel API Client', () => {
     };
 
     mock_api()
-      .get('/apps')
+      .get('/apps/')
       .matchHeader('Authorization', `JWT ${id_token}`)
       .reply(200, apps_response);
 

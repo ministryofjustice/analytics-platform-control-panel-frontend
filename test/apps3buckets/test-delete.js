@@ -9,7 +9,7 @@ describe('apps3buckets.delete', () => {
     const redirect_to = 'apps/123';
 
     const delete_apps3buckets = mock_api()
-      .delete(`/apps3buckets/${apps3bucket_id}`)
+      .delete(`/apps3buckets/${apps3bucket_id}/`)
       .reply(204);
 
     const params = { id: apps3bucket_id };

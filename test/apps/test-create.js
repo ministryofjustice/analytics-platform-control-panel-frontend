@@ -13,11 +13,11 @@ describe('apps/create', () => {
     const created_app = { id: 1 };
 
     mock_api()
-      .post('/apps')
+      .post('/apps/')
       .reply(201, created_app);
 
     mock_api()
-      .post('/userapps')
+      .post('/userapps/')
       .reply(201, {
         app: created_app.id,
         user: 'test-user',
@@ -44,7 +44,7 @@ describe('apps/create', () => {
     user.github_access_token = 'test-github-token';
 
     mock_api()
-      .post('/apps')
+      .post('/apps/')
       .reply(400, errors);
 
     config.github.orgs = [
@@ -59,7 +59,7 @@ describe('apps/create', () => {
     });
 
     mock_api()
-      .get('/s3buckets?page_size=0')
+      .get('/s3buckets/?page_size=0')
       .reply(200, []);
 
     return dispatch(handlers.create, { body: form_data })

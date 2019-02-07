@@ -12,10 +12,10 @@ const ingresses = require('../fixtures/ingresses');
 
 describe('apps/edit', () => {
   it('loads app, buckets and users and shows a form', () => {
-    mock_api().get(`/apps/${app.id}`).reply(200, app);
-    mock_api().get(`/apps/${app.id}/customers`).reply(200, customers);
-    mock_api().get('/s3buckets?page_size=0').reply(200, buckets);
-    mock_api().get('/users?page_size=0').reply(200, users);
+    mock_api().get(`/apps/${app.id}/`).reply(200, app);
+    mock_api().get(`/apps/${app.id}/customers/`).reply(200, customers);
+    mock_api().get('/s3buckets/?page_size=0').reply(200, buckets);
+    mock_api().get('/users/?page_size=0').reply(200, users);
     mock_api().get('/k8s/apis/extensions/v1beta1/namespaces/apps-prod/ingresses?labelSelector=repo%3Dtest-app').reply(200, ingresses);
 
     const expected = {

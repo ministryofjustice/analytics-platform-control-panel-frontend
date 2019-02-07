@@ -18,11 +18,11 @@ describe('users3buckets.update', () => {
     };
 
     const patch_users3buckets = mock_api()
-      .patch(`/users3buckets/${users3bucket_id}`, patchData)
+      .patch(`/users3buckets/${users3bucket_id}/`, patchData)
       .reply(201);
 
     const get_user = mock_api()
-      .get(`/users/${encodeURIComponent(user.auth0_id)}`)
+      .get(`/users/${escape(user.auth0_id)}/`)
       .reply(200, user);
 
     const req = {

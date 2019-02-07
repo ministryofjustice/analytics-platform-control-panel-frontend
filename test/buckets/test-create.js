@@ -13,7 +13,7 @@ describe('buckets/create', () => {
     };
     const created_bucket = {
       id: 1,
-      url: `${config.api.base_url}/s3buckets/1`,
+      url: `${config.api.base_url}/s3buckets/1/`,
       name: bucket_name,
       arn: `arn:aws:s3:::${bucket_name}`,
       apps3buckets: [],
@@ -21,11 +21,11 @@ describe('buckets/create', () => {
     };
 
     mock_api()
-      .post('/s3buckets')
+      .post('/s3buckets/')
       .reply(201, created_bucket);
 
     const get_user = mock_api()
-      .get(`/users/${encodeURIComponent(user.auth0_id)}`)
+      .get(`/users/${escape(user.auth0_id)}/`)
       .reply(200, user);
 
     const req = {
@@ -61,7 +61,7 @@ describe('buckets/create', () => {
     process.env.ENV = 'test';
 
     mock_api()
-      .post('/s3buckets')
+      .post('/s3buckets/')
       .reply(400, errors);
 
     return dispatch(handlers.create_bucket, { body: form_data })

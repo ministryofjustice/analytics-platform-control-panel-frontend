@@ -15,7 +15,7 @@ describe('Control Panel API Model', () => {
 
   it('lists all instances', withAPI(() => {
     mock_api()
-      .get('/apps')
+      .get('/apps/')
       .reply(200, apps_response);
 
     return App.list()
@@ -35,7 +35,7 @@ describe('Control Panel API Model', () => {
       name: app_data.name,
     };
     mock_api()
-      .post('/apps')
+      .post('/apps/')
       .reply(201, expected);
 
     return App.create(app_data)
@@ -47,7 +47,7 @@ describe('Control Panel API Model', () => {
 
   it('Retrieves an instance by primary key', withAPI(() => {
     mock_api()
-      .get('/apps/1')
+      .get('/apps/1/')
       .reply(200, apps_response.results[0]);
 
     return App.get(1)
@@ -58,7 +58,7 @@ describe('Control Panel API Model', () => {
 
   it('throws an exception if no instance found', withAPI(() => {
     mock_api()
-      .get('/apps/0')
+      .get('/apps/0/')
       .reply(404, 'Not Found');
 
     return App.get(0)
@@ -72,7 +72,7 @@ describe('Control Panel API Model', () => {
 
   it('Deletes an instance by primary key', withAPI(() => {
     mock_api()
-      .delete('/apps/1')
+      .delete('/apps/1/')
       .reply(204);
 
     return App.delete(1);
@@ -88,7 +88,7 @@ describe('Control Panel API Model', () => {
         name: app_data.name,
       };
       mock_api()
-        .post('/apps')
+        .post('/apps/')
         .reply(201, expected);
 
       return new App(app_data).create()
@@ -107,7 +107,7 @@ describe('Control Panel API Model', () => {
         name: app_data.name,
       };
       mock_api()
-        .patch('/apps/1')
+        .patch('/apps/1/')
         .reply(200, expected);
 
       const existing_app = new App({
@@ -125,7 +125,7 @@ describe('Control Panel API Model', () => {
       const existing_app = new App({ id: 1 });
 
       mock_api()
-        .delete('/apps/1')
+        .delete('/apps/1/')
         .reply(204);
 
       return existing_app.delete();

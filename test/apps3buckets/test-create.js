@@ -11,11 +11,11 @@ describe('apps3buckets/create', () => {
     const app_id = 1;
 
     mock_api()
-      .get(`/apps/${app_id}/`)
+      .get(`/apps/${app_id}`)
       .reply(200, app);
 
     const post_apps3buckets = mock_api()
-      .post('/apps3buckets/', {
+      .post('/apps3buckets', {
         app: app_id,
         s3bucket: bucket_id,
         access_level: 'readonly',

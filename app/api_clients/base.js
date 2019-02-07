@@ -94,12 +94,7 @@ class APIClient {
       throw new Error('Missing endpoint');
     }
 
-    let suffix = '';
-    if (!endpoint.endsWith('/')) {
-      suffix = '/';
-    }
-
-    return url.resolve(this.conf.base_url, endpoint + suffix);
+    return url.resolve(this.conf.base_url, endpoint);
   }
 }
 

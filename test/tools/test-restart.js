@@ -35,7 +35,7 @@ describe('tools', () => {
 
       const deploy_request = new Promise((resolve) => {
         mock_api()
-          .post(`/tools/${name}/deployments/`)
+          .post(`/tools/${name}/deployments`)
           .reply(201, () => { resolve(true); });
       });
 

@@ -14,10 +14,10 @@ describe('buckets/details', () => {
     const params = { id: bucket.id };
     const user = { auth0_id: 'github|12345', id_token: 'dummy-token' };
 
-    mock_api().get(`/s3buckets/${bucket.id}/`).reply(200, bucket);
-    mock_api().get(`/s3buckets/${bucket.id}/access_logs/`).reply(200, access_logs);
-    mock_api().get('/apps/?page_size=0').reply(200, apps);
-    mock_api().get('/users/?page_size=0').reply(200, users);
+    mock_api().get(`/s3buckets/${bucket.id}`).reply(200, bucket);
+    mock_api().get(`/s3buckets/${bucket.id}/access_logs`).reply(200, access_logs);
+    mock_api().get('/apps?page_size=0').reply(200, apps);
+    mock_api().get('/users?page_size=0').reply(200, users);
 
     const expected = {
       apps: new ModelSet(App, apps.results).slice(1),

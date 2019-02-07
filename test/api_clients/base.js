@@ -9,7 +9,7 @@ describe('Base API Client', () => {
 
   it('can make a GET request', () => {
     const expected = {
-      url: '/apps/?param1=1&param2=foo',
+      url: '/apps?param1=1&param2=foo',
     };
     const request = mock_api()
       .get(expected.url)
@@ -23,7 +23,7 @@ describe('Base API Client', () => {
 
   it('can make a POST request', () => {
     const expected = {
-      url: '/apps/',
+      url: '/apps',
       body: {
         foo: 'bar',
         baz: 'quux',
@@ -41,7 +41,7 @@ describe('Base API Client', () => {
 
   it('can make a DELETE request', () => {
     const expected = {
-      url: '/apps/1/',
+      url: '/apps/1',
     };
     const request = mock_api()
       .delete(expected.url)
@@ -55,7 +55,7 @@ describe('Base API Client', () => {
 
   it('can make a PATCH request', () => {
     const expected = {
-      url: '/apps/1/',
+      url: '/apps/1',
       body: {
         foo: 'bar',
       },
@@ -72,7 +72,7 @@ describe('Base API Client', () => {
 
   it('throws an exception if authentication fails', () => {
     const expected = {
-      url: '/apps/',
+      url: '/apps',
     };
     const request = mock_api()
       .get(expected.url)
@@ -90,7 +90,7 @@ describe('Base API Client', () => {
 
   it('throws an exception if there were other errors', () => {
     const expected = {
-      url: '/apps/',
+      url: '/apps',
     };
     const request = mock_api()
       .get(expected.url)

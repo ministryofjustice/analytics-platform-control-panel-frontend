@@ -10,7 +10,7 @@ describe('apps/delete', () => {
     const user = { id_token: 'dummy-token' };
 
     const delete_app = mock_api()
-      .delete(`/apps/${params.id}/`)
+      .delete(`/apps/${params.id}`)
       .reply(204);
 
     return dispatch(handlers.delete, { body, params, user })

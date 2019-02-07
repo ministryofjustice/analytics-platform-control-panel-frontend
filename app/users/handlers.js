@@ -33,7 +33,7 @@ exports.user_edit = (req, res, next) => {
 
       return user.update()
         .then(() => {
-          req.session.flash_messages.push('Updated user');
+          req.session.flash_messages.push('User updated');
 
           let url = url_for('users.details', { id: user.auth0_id });
 

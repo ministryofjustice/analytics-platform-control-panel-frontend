@@ -35,14 +35,11 @@ exports.update = (req, res, next) => {
         .then(() => {
           req.session.flash_messages.push('User updated');
 
-          let url = url_for('users.details', { id: user.auth0_id });
-
           if (user.auth0_id === req.user.auth0_id) {
-            // force re-login
-            url = url_for('base.logout');
+            req.user.is_superuser = user.is_superuser;
           }
 
-          res.redirect(url);
+          res.redirect(url_for('users.details', { id: user.auth0_id }));
         })
         .catch(next);
     })

@@ -19,7 +19,7 @@
 {% block main_column %}
 
 {% if current_user.is_superuser %}
-<form action="{{ url_for('users.update', { id: user.auth0_id | urlencode }) }}" method="post">
+<form action="{{ url_for('users.update', { id: user.auth0_id }) }}" method="post">
 
   {% call fieldset(
     "superadmin",
@@ -37,7 +37,7 @@
 
 </form>
 
-<form action="{{ url_for('users.reset_mfa', { id: user.auth0_id | urlencode }) }}" method="post">
+<form action="{{ url_for('users.reset_mfa', { id: user.auth0_id }) }}" method="post">
 
   {% call fieldset(
     "resetmfa",

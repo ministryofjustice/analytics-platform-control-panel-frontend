@@ -42,7 +42,7 @@ describe('Github API client', () => {
     return api.authenticate(test_user)
       .then(() => {
         assert(get_auth0_user.isDone());
-        return api.repos.getAll({});
+        return api.repos.list({});
       })
       .then((repos) => {
         assert.deepEqual(repos.data, repos_response);
@@ -66,7 +66,7 @@ describe('Github API client', () => {
       .reply(200, [], rawHeaders);
 
     return api.authenticate(test_user)
-      .then(() => api.getAllPages(api.repos.getForOrg, { org: 'test-org', type: 'all' }).then((data) => {
+      .then(() => api.getAllPages(api.repos.listForOrg, { org: 'test-org', type: 'all' }).then((data) => {
         assert(page1.isDone());
         assert(page2.isDone());
         assert(Array.isArray(data));

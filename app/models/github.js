@@ -16,7 +16,7 @@ class Repo extends Model {
   static list(params = {}) {
     return Promise.all(
       config.github.orgs.map(org => this.github.getAllPages(
-        this.github.repos.getForOrg, {
+        this.github.repos.listForOrg, {
           org,
           type: 'all',
           ...params,

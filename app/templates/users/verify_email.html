@@ -1,5 +1,5 @@
 {% extends "layouts/one-column.html" %}
-{% from "includes/forms.html" import form_field %}
+{% from "includes/forms.html" import text_field %}
 
 {% set page_title = "Verify Your Email Address" %}
 
@@ -7,7 +7,7 @@
 
 <form action="{{ url_for('users.verify_email', { id: user.auth0_id }) }}" method="post">
 
-  {{ form_field('email', 'Email', value=user.email) }}
+  {{ text_field('email', 'Email', value=user.email) }}
 
   <div class="form-group">
     <button class="button button-secondary">Verify</button>

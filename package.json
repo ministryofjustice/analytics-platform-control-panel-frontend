@@ -57,7 +57,7 @@
     "request": "^2.88.0",
     "request-promise": "^4.2.1",
     "request-promise-core": "^1.1.1",
-    "selenium-standalone": "^6.15.1",
+    "selenium-standalone": "^6.15.4",
     "webdriverio": "^5.4.17"
   },
   "devDependencies": {

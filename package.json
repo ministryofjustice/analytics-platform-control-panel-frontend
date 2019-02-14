@@ -45,7 +45,7 @@
     "jquery": "^3.3.1",
     "jquery-modal": "^0.9.1",
     "jquery-typeahead": "^2.10.6",
-    "marked": "^0.5.0",
+    "marked": "^0.6.0",
     "morgan": "^1.9.1",
     "node-sass": "^4.9.3",
     "nunjucks": "3.1.7",

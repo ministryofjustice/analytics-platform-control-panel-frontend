@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 {% from "includes/breadcrumbs.html" import breadcrumbs_list %}
-{% from "includes/render_debug.html" import render_debug %}
+{% from "includes/render_debug.html" import render_debug with context %}
 
 {% block page_title %}
   {{ page_title }} | Analytical Platform Control Panel
@@ -25,7 +25,7 @@
   {% block main_column %}{% endblock %}
 
   {% block debug %}
-    {{ render_debug(debug_items, current_user.is_superuser, env.ENV) }}
+    {{ render_debug(debug_items) }}
   {% endblock %}
 
 </main>

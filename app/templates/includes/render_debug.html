@@ -1,5 +1,5 @@
-{% macro render_debug(debug_items, current_user_is_superuser, env_ENV) %}
-  {% if current_user_is_superuser or env_ENV == 'dev' %}
+{% macro render_debug(debug_items) %}
+  {% if current_user.is_superuser or env.ENV == 'dev' %}
   {% set default_items = [{name: 'current_user', value: current_user}, {name: 'req.session', value: req.session}] %}
   <div class="debug">
     <h2 class="heading-medium">Debug</h2>

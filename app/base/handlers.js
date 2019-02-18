@@ -85,22 +85,31 @@ exports.error_test = (req, res, next) => {
 };
 
 
+function ensure_session_saved(req, next) {
+  if (req.session && req.session.save && typeof req.session.save === 'function') {
+    return req.session.save(next);
+  }
+  return next();
+}
+
+
 exports.auth_callback = [
   passport.authenticate('oidc', { failureRedirect: '/login?prompt=true' }),
   (req, res) => {
-    res.redirect(url_for('users.verify_email'));
+    ensure_session_saved(req, () => res.redirect(url_for('users.verify_email')));
   },
 ];
+
 
 exports.login = (req, res, next) => {
   if (req.isAuthenticated()) {
     if (/^http/.test(req.session.returnTo)) {
       throw new Error('URL must be relative');
     } else {
-      res.redirect(req.session.returnTo);
+      return ensure_session_saved(req, () => res.redirect(req.session.returnTo));
     }
   } else {
-    passport.authenticate('oidc', {
+    return passport.authenticate('oidc', {
       prompt: req.query.prompt || 'none',
     })(req, res, next);
   }

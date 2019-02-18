@@ -11,8 +11,13 @@ describe('OIDC callback', () => {
         id_token: 'test-token',
         username: 'test',
       };
+      const session = {
+        save: (next) => {
+          next();
+        },
+      };
 
-      return dispatch(handlers.auth_callback[1], { user })
+      return dispatch(handlers.auth_callback[1], { user, session })
         .then(({ redirect_url }) => {
           assert.equal(redirect_url, url_for('users.verify_email'));
         });

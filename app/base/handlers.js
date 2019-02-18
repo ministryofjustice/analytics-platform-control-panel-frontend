@@ -88,7 +88,9 @@ exports.error_test = (req, res, next) => {
 exports.auth_callback = [
   passport.authenticate('oidc', { failureRedirect: '/login?prompt=true' }),
   (req, res) => {
-    res.redirect(url_for('users.verify_email'));
+    req.session.save(() => {
+      res.redirect(url_for('users.verify_email'));
+    });
   },
 ];
 

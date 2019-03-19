@@ -65,7 +65,7 @@
     "bistre": "1.0.1",
     "chai": "^4.1.2",
     "chai-spies": "^1.0.0",
-    "eslint": "^5.2.0",
+    "eslint": "^5.15.3",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
     "mocha": "^5.2.0",

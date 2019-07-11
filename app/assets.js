@@ -4,7 +4,7 @@ const glob = Bluebird.promisify(require('glob').glob);
 const render = Bluebird.promisify(require('node-sass').render);
 const concatfiles = require('concat-files');
 const path = require('path');
-const babel = require('babel-core');
+const babel = require('@babel/core');
 
 const log = require('bole')('assets');
 const config = require('./config');

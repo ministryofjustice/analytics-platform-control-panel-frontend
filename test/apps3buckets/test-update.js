@@ -15,10 +15,10 @@ describe('apps3buckets.update', () => {
     const redirect_to = 'apps/123';
 
     const get_apps3bucket = mock_api()
-      .get(`/apps3buckets/${apps3bucket.id}/`)
+      .get(`/api/cpanel/v1/apps3buckets/${apps3bucket.id}/`)
       .reply(200, apps3bucket);
     const patch_apps3buckets = mock_api()
-      .patch(`/apps3buckets/${apps3bucket.id}/`, {
+      .patch(`/api/cpanel/v1/apps3buckets/${apps3bucket.id}/`, {
         id: apps3bucket.id,
         app_id: apps3bucket.app_id,
         s3bucket_id: apps3bucket.s3bucket_id,

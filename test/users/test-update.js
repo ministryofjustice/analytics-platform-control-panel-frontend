@@ -14,11 +14,11 @@ describe('users.update', () => {
     };
 
     mock_api()
-      .get(`/users/${encodeURIComponent(user.auth0_id)}/`)
+      .get(`/api/cpanel/v1/users/${encodeURIComponent(user.auth0_id)}/`)
       .reply(200, user);
 
     const request = mock_api()
-      .patch(`/users/${encodeURIComponent(user.auth0_id)}/`, expected.body)
+      .patch(`/api/cpanel/v1/users/${encodeURIComponent(user.auth0_id)}/`, expected.body)
       .reply(200);
 
     return dispatch(

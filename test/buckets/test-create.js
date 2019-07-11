@@ -21,11 +21,11 @@ describe('buckets/create', () => {
     };
 
     mock_api()
-      .post('/s3buckets/')
+      .post('/api/cpanel/v1/s3buckets/')
       .reply(201, created_bucket);
 
     const get_user = mock_api()
-      .get(`/users/${escape(user.auth0_id)}/`)
+      .get(`/api/cpanel/v1/users/${escape(user.auth0_id)}/`)
       .reply(200, user);
 
     const req = {
@@ -61,7 +61,7 @@ describe('buckets/create', () => {
     process.env.ENV = 'test';
 
     mock_api()
-      .post('/s3buckets/')
+      .post('/api/cpanel/v1/s3buckets/')
       .reply(400, errors);
 
     return dispatch(handlers.create_bucket, { body: form_data })

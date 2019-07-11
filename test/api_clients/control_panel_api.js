@@ -9,17 +9,17 @@ describe('Control Panel API Client', () => {
 
   it('rejects an invalid auth token', () => {
     const reason = { detail: 'Authentication credentials were not provided.' };
-    const expected = 'GET /apps/ was not permitted: Authentication credentials were not provided.';
+    const expected = 'GET /api/cpanel/v1/apps/ was not permitted: Authentication credentials were not provided.';
     const id_token = 'invalid token';
 
     const request = mock_api()
-      .get('/apps/')
+      .get('/api/cpanel/v1/apps/')
       .matchHeader('Authorization', `JWT ${id_token}`)
       .reply(403, reason);
 
     client.authenticate({ id_token });
 
-    return client.get('apps')
+    return client.get('api/cpanel/v1/apps')
       .then(() => {
         throw new Error('expected failure');
       })
@@ -47,13 +47,13 @@ describe('Control Panel API Client', () => {
     };
 
     mock_api()
-      .get('/apps/')
+      .get('/api/cpanel/v1/apps/')
       .matchHeader('Authorization', `JWT ${id_token}`)
       .reply(200, apps_response);
 
     client.authenticate({ id_token });
 
-    return client.get('apps')
+    return client.get('api/cpanel/v1/apps')
       .then((response) => { assert.deepEqual(response, apps_response); });
   });
 

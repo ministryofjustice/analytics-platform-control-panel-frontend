@@ -14,7 +14,7 @@ describe('users.details', () => {
     };
 
     mock_api()
-      .get(`/users/${encodeURIComponent(user.auth0_id)}/`)
+      .get(`/api/cpanel/v1/users/${encodeURIComponent(user.auth0_id)}/`)
       .reply(200, user);
 
     return dispatch(

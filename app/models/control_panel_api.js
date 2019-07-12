@@ -46,7 +46,13 @@ class Model extends base.Model {
 
   static list() {
     return this.cpanel.get(this.endpoint, { page_size: 0 })
-      .then(result => new ModelSet(this.prototype.constructor, result.results));
+      .then((result) => {
+        let items = result;
+        if (result.results !== undefined) {
+          items = result.results;
+        }
+        return new ModelSet(this.prototype.constructor, items);
+      });
   }
 
   static create(data, options = {}) {
@@ -103,7 +109,7 @@ class Model extends base.Model {
 
 class App extends Model {
   static get endpoint() {
-    return 'apps';
+    return 'api/cpanel/v1/apps';
   }
 
   get apps3buckets() {
@@ -175,7 +181,7 @@ exports.App = App;
 
 class AppS3Bucket extends Model {
   static get endpoint() {
-    return 'apps3buckets';
+    return 'api/cpanel/v1/apps3buckets';
   }
 }
 
@@ -184,7 +190,7 @@ exports.AppS3Bucket = AppS3Bucket;
 
 class Bucket extends Model {
   static get endpoint() {
-    return 's3buckets';
+    return 'api/cpanel/v1/s3buckets';
   }
 
   get apps() {
@@ -228,7 +234,7 @@ exports.Bucket = Bucket;
 
 class User extends Model {
   static get endpoint() {
-    return 'users';
+    return 'api/cpanel/v1/users';
   }
 
   static get pk() {
@@ -277,7 +283,7 @@ exports.User = User;
 
 class UserS3Bucket extends Model {
   static get endpoint() {
-    return 'users3buckets';
+    return 'api/cpanel/v1/users3buckets';
   }
 }
 
@@ -286,7 +292,7 @@ exports.UserS3Bucket = UserS3Bucket;
 
 class UserApp extends Model {
   static get endpoint() {
-    return 'userapps';
+    return 'api/cpanel/v1/userapps';
   }
 }
 
@@ -294,7 +300,7 @@ exports.UserApp = UserApp;
 
 class Tool extends Model {
   static get endpoint() {
-    return 'tools';
+    return 'api/cpanel/v1/tools';
   }
 
   static get pk() {

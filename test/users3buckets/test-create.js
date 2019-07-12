@@ -12,7 +12,7 @@ describe('users3buckets.create', () => {
     const data_access_level = 'readonly';
 
     const post_users3buckets = mock_api()
-      .post('/users3buckets/', {
+      .post('/api/cpanel/v1/users3buckets/', {
         user: user_id,
         s3bucket: bucket_id,
         access_level: data_access_level,
@@ -21,7 +21,7 @@ describe('users3buckets.create', () => {
       .reply(201);
 
     const get_user = mock_api()
-      .get(`/users/${escape(user_id)}/`)
+      .get(`/api/cpanel/v1/users/${escape(user_id)}/`)
       .reply(200, user);
 
     const req = {

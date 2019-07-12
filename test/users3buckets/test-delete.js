@@ -11,11 +11,11 @@ describe('users3buckets.delete', () => {
     const redirect_to = 'users/github|123';
 
     const delete_users3buckets = mock_api()
-      .delete(`/users3buckets/${users3bucket_id}/`)
+      .delete(`/api/cpanel/v1/users3buckets/${users3bucket_id}/`)
       .reply(204);
 
     const get_user = mock_api()
-      .get(`/users/${escape(user.auth0_id)}/`)
+      .get(`/api/cpanel/v1/users/${escape(user.auth0_id)}/`)
       .reply(200, user);
 
     const req = {

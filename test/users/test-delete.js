@@ -6,7 +6,9 @@ const handlers = require('../../app/users/handlers');
 describe('users', () => {
   describe('delete', () => {
     it('deletes user and redirects to list', () => {
-      const delete_request = mock_api().delete(`/users/${escape(user.auth0_id)}/`).reply(204);
+      const delete_request = mock_api()
+        .delete(`/api/cpanel/v1/users/${escape(user.auth0_id)}/`)
+        .reply(204);
 
       return dispatch(handlers.delete, { params: { id: user.auth0_id } })
         .then(({ redirect_url }) => {

@@ -71,7 +71,7 @@ config.aws = {
 };
 
 config.babel = {
-  presets: ['es2015'],
+  presets: ['@babel/preset-env'],
 };
 
 config.cluster = {

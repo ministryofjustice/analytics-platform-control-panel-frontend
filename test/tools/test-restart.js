@@ -35,7 +35,7 @@ describe('tools', () => {
 
       const deploy_request = new Promise((resolve) => {
         mock_api()
-          .post(`/tools/${name}/deployments/`)
+          .post(`/api/cpanel/v1/deployments/`, {"name": name})
           .reply(201, () => { resolve(true); });
       });
 

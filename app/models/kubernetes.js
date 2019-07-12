@@ -107,7 +107,7 @@ class Deployment extends Model {
   }
 
   static create(data) {
-    return this.cpanel.post(`tools/${data.tool_name}/deployments`, {});
+    return this.cpanel.post('/api/cpanel/v1/deployments/', { name: data.tool_name });
   }
 
   restart() {

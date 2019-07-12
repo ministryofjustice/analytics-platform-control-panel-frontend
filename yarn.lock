@@ -6237,7 +6237,7 @@ safe-buffer@5.1.2, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.2.tgz#991ec69d296e0313747d59bdfd2b745c35f8828d"
   integrity sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==
 
-safe-buffer@^5.0.1, safe-buffer@^5.1.1, safe-buffer@^5.1.2:
+safe-buffer@^5.0.1, safe-buffer@^5.1.1, safe-buffer@^5.1.2, safe-buffer@^5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.2.0.tgz#b74daec49b1148f88c64b68d49b1e815c1f2f519"
   integrity sha512-fZEwUGbVl7kouZs1jCdMLdt95hdIv0ZeHg6L7qPeciMZhZ+/gdesW4wgTARkrFWEpspjEATAzUGPG8N2jJiwbg==
@@ -7270,10 +7270,10 @@ webdriver@^5.11.0:
     lodash.merge "^4.6.1"
     request "^2.83.0"
 
-webdriverio@^5.4.17:
-  version "5.11.1"
-  resolved "https://registry.yarnpkg.com/webdriverio/-/webdriverio-5.11.1.tgz#5a2c709ec7d2e0feee4aaa1a2d4c6a032bfbe13e"
-  integrity sha512-UIXGoXLtU/yvwSe+WHa/wxBJ7gzMGUdniPBl6WasO2qltqdzzM2haasF9DVoFI0rYDaHmOuH9Nva6MYorjXMCQ==
+webdriverio@^5.11.2:
+  version "5.11.2"
+  resolved "https://registry.yarnpkg.com/webdriverio/-/webdriverio-5.11.2.tgz#1eb50623d8d1a8c31f238a34587e3ceafa2a6f68"
+  integrity sha512-r9z8CRGuUN7I83TM+pNQNkoieIeG42ymDCRkJMgpBBxMRnde+gMFH3MrYqgg5ViPHfwExuRqrI2MWY60czkAKw==
   dependencies:
     "@wdio/config" "^5.11.0"
     "@wdio/logger" "^5.11.0"
@@ -7287,6 +7287,7 @@ webdriverio@^5.4.17:
     lodash.zip "^4.2.0"
     resq "^1.5.0"
     rgb2hex "^0.1.0"
+    safe-buffer "^5.2.0"
     serialize-error "^4.1.0"
     webdriver "^5.11.0"
 

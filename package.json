@@ -32,7 +32,7 @@
     "codeceptjs": "^2.0.4",
     "concat-files": "^0.1.1",
     "connect-ensure-login": "^0.1.1",
-    "connect-redis": "^3.4.0",
+    "connect-redis": "^3.4.2",
     "continuation-local-storage": "^3.2.1",
     "cookie-parser": "^1.4.4",
     "dotenv": "^8.0.0",

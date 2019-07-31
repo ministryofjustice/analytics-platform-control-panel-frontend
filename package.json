@@ -58,7 +58,7 @@
     "request-promise": "^4.2.1",
     "request-promise-core": "^1.1.1",
     "selenium-standalone": "^6.16.0",
-    "webdriverio": "^5.11.5"
+    "webdriverio": "^5.11.11"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

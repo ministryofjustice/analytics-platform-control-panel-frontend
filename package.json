@@ -21,7 +21,7 @@
   "homepage": "https://github.com/ministryofjustice/analytics-platform-control-panel-frontend#readme",
   "dependencies": {
     "@octokit/rest": "^15.18.0",
-    "auth0": "^2.18.0",
+    "auth0": "^2.18.1",
     "authenticator-cli": "^1.0.5",
     "@babel/core": "^7.5.4",
     "@babel/preset-env": "^7.5.4",

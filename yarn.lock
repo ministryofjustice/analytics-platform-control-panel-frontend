@@ -1132,19 +1132,19 @@ atob@^2.1.1:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
-auth0@^2.18.0:
-  version "2.18.0"
-  resolved "https://registry.yarnpkg.com/auth0/-/auth0-2.18.0.tgz#9360d7b2cb7bb201dc44c774032cfeefd8762a98"
-  integrity sha512-ke++pr8Iaq1niuNQt0CLj+RlEoOFwk1LeTgsI30StvL4bYHT+rO0kaFr7QdWdXON5dDHxqtaVDE9p7OvxBcF5Q==
+auth0@^2.19.0:
+  version "2.19.0"
+  resolved "https://registry.yarnpkg.com/auth0/-/auth0-2.19.0.tgz#b5c153fe774be663cc5221289db21b7a6a757f56"
+  integrity sha512-mfOKmmJl+IUnv7bcvtaFh21ki8FQaALbcm1XYqkqrlNlDrq73uQVRiGtiAP/lpVWInPR+X8TQH6phYXMsrBPlw==
   dependencies:
-    bluebird "^2.10.2"
-    jsonwebtoken "^8.3.0"
-    jwks-rsa "^1.4.0"
-    lru-memoizer "^1.12.0"
-    object.assign "^4.0.4"
+    bluebird "^3.5.5"
+    jsonwebtoken "^8.5.1"
+    jwks-rsa "^1.6.0"
+    lru-memoizer "^2.0.1"
+    object.assign "^4.1.0"
     request "^2.88.0"
-    rest-facade "^1.10.1"
-    retry "^0.10.1"
+    rest-facade "^1.11.0"
+    retry "^0.12.0"
 
 authenticator-cli@^1.0.5:
   version "1.0.5"
@@ -1439,11 +1439,6 @@ block-stream@*:
   integrity sha1-E+v+d4oDIFz+A3UUgeu0szAMEmo=
   dependencies:
     inherits "~2.0.0"
-
-bluebird@^2.10.2:
-  version "2.11.0"
-  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-2.11.0.tgz#534b9033c022c9579c56ba3b3e5a5caafbb650e1"
-  integrity sha1-U0uQM8AiyVecVro7Plpcqvu2UOE=
 
 bluebird@^3.5.0, bluebird@^3.5.5:
   version "3.5.5"
@@ -4284,7 +4279,7 @@ jsonfile@^4.0.0:
   optionalDependencies:
     graceful-fs "^4.1.6"
 
-jsonwebtoken@^8.3.0, jsonwebtoken@^8.5.1:
+jsonwebtoken@^8.5.1:
   version "8.5.1"
   resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-8.5.1.tgz#00e71e0b8df54c2121a1f26137df2280673bcc0d"
   integrity sha512-XjwVfRS6jTMsqYs0EsuJ4LGxXV14zQybNd4L2r0UvbVnSF9Af8x7p5MzbJ90Ioz/9TI41/hTCvznF/loiSzn8w==
@@ -4319,7 +4314,7 @@ jwa@^1.4.1:
     ecdsa-sig-formatter "1.0.11"
     safe-buffer "^5.0.1"
 
-jwks-rsa@^1.4.0:
+jwks-rsa@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/jwks-rsa/-/jwks-rsa-1.6.0.tgz#d36356398a67619b237becfe8f2db2b66829b10f"
   integrity sha512-gLhpd7Ka7Jy8ofm9OVj0PFPtSdx3+W2dncF3UCA1wDTAbvfiB1GhHbbyQlz8bqLF5+rge7pgD/DALRfgZi8Fgg==
@@ -4465,6 +4460,11 @@ lodash.assign@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/lodash.assign/-/lodash.assign-4.2.0.tgz#0d99f3ccd7a6d261d19bdaeb9245005d285808e7"
   integrity sha1-DZnzzNem0mHRm9rrkkUAXShYCOc=
+
+lodash.clonedeep@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
+  integrity sha1-4j8/nE+Pvd6HJSnBBxhXoIblzO8=
 
 lodash.defaults@^4.2.0:
   version "4.2.0"
@@ -4642,6 +4642,14 @@ lru-memoizer@^1.12.0:
     lodash "^4.17.4"
     lru-cache "~4.0.0"
     very-fast-args "^1.1.0"
+
+lru-memoizer@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/lru-memoizer/-/lru-memoizer-2.0.1.tgz#f21e015bb6856483f574070be11ca16b0c010693"
+  integrity sha512-kGl+zlIqdQL24f0Q9IUSUZeSvA7nqXPFLA7suFh00v4KVqfXkZJtkPfTfXV/oQMSPfNr6VT4xGkRAUPhFnGyxQ==
+  dependencies:
+    lodash.clonedeep "^4.5.0"
+    lru-cache "~4.0.0"
 
 lz-string@^1.4.4:
   version "1.4.4"
@@ -5275,7 +5283,7 @@ object-visit@^1.0.0:
   dependencies:
     isobject "^3.0.0"
 
-object.assign@4.1.0, object.assign@^4.0.4, object.assign@^4.1.0:
+object.assign@4.1.0, object.assign@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/object.assign/-/object.assign-4.1.0.tgz#968bf1100d7956bb3ca086f006f846b3bc4008da"
   integrity sha512-exHJeq6kBKj58mqGyTQ9DFvrZC/eR6OwxzoM9YRoGBqrXYonaFyGiFMuc9VZrXf7DarreEwMpurG3dd+CNyW5w==
@@ -6317,7 +6325,7 @@ resq@^1.5.0:
   dependencies:
     fast-deep-equal "^2.0.1"
 
-rest-facade@^1.10.1:
+rest-facade@^1.11.0:
   version "1.11.0"
   resolved "https://registry.yarnpkg.com/rest-facade/-/rest-facade-1.11.0.tgz#96c99f3051ae3ea87600f90227d5ca7e1496f91d"
   integrity sha512-/LtQhugC4zRc+3qDF9gvyQCMbejeviYCPCpTT1Dj9/ty+eCLeUX1iUOR//iLGJvg3wikQShvphRB1MOufEmB0w==
@@ -6341,10 +6349,15 @@ ret@~0.1.10:
   resolved "https://registry.yarnpkg.com/ret/-/ret-0.1.15.tgz#b8a4825d5bdb1fc3f6f53c2bc33f81388681c7bc"
   integrity sha512-TTlYpa+OL+vMMNG24xSlQGEJ3B/RzEfUlLct7b5G/ytav+wPrplCpVMFuwzXbkecJrb6IYo1iFb0S9v37754mg==
 
-retry@^0.10.0, retry@^0.10.1:
+retry@^0.10.0:
   version "0.10.1"
   resolved "https://registry.yarnpkg.com/retry/-/retry-0.10.1.tgz#e76388d217992c252750241d3d3956fed98d8ff4"
   integrity sha1-52OI0heZLCUnUCQdPTlW/tmNj/Q=
+
+retry@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/retry/-/retry-0.12.0.tgz#1b42a6266a21f07421d1b0b54b7dc167b01c013b"
+  integrity sha1-G0KmJmoh8HQh0bC1S33BZ7AcATs=
 
 rgb2hex@^0.1.0:
   version "0.1.9"
